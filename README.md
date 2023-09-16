@@ -4,7 +4,7 @@
 
 This powershell module is built to be used with
 [Bernie White's](https://github.com/BernieWhite) excellent
-[PSRule]https://github.com/microsoft/PSRule) module to check
+[PSRule](https://github.com/microsoft/PSRule) module to check
 an Azure DevOps project against some best practices for a
 secure development environment.
 
@@ -15,7 +15,7 @@ Please consider opening an issue with your ideas.
 
 ## Usage
 
-To use this module, you need to have [PSRule] installed.
+To use this module, you need to have _PSRule_ installed.
 You can install it from the PowerShell Gallery:
 
 ```powershell
