@@ -1,0 +1,22 @@
+---
+# Synopsis: Example module configuration for Enterprise.Rules module.
+apiVersion: github.com/microsoft/PSRule/v1
+kind: ModuleConfig
+metadata:
+  name: PSRule.Rules.AzureDevOps
+spec:
+  binding:
+    targetName:
+    - name
+    - displayName
+    - id
+    targetType:
+    - ObjectType
+    field:
+      id: [ 'id' ]
+      name: [ 'name' ]
+  # convention:
+  #   include:
+  #   - 'AzureDevOps.Objects'
+  rule:
+    baseline: Baseline.Default

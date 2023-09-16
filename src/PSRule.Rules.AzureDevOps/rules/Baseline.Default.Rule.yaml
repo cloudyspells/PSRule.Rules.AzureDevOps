@@ -1,0 +1,9 @@
+apiVersion: github.com/microsoft/PSRule/v1
+kind: Baseline
+metadata:
+  name: Baseline.Default
+spec:
+  rule:
+    tag:
+      release: GA
+    

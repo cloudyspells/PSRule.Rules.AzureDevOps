@@ -8,11 +8,10 @@ function Get-AzDevOpsHeader {
         [string]
         $PAT
     )
-    header = @{
+    $header = @{
         Authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($PAT)"))
     }
     return $header
 }
 Export-ModuleMember -Function Get-AzDevOpsHeader
 # End of Function Get-AzDevOpsHeader
-

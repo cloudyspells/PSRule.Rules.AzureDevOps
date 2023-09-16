@@ -9,13 +9,13 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-# RootModule = ''
+RootModule = 'PSRule.Rules.AzureDevOps.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '0.0.2'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+CompatiblePSEditions = @('Core','Desk')
 
 # ID used to uniquely identify this module
 GUID = 'bb42e16e-b0af-46be-9ac1-51e2f6bb6e8d'
@@ -30,10 +30,10 @@ CompanyName = 'Private Entity'
 Copyright = '(c) Roderick Bant. All rights reserved.'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'PSRule rules for Azure DevOps project configuration best practices'
 
 # Minimum version of the PowerShell engine required by this module
-# PowerShellVersion = ''
+PowerShellVersion = '5.1'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -51,7 +51,7 @@ Copyright = '(c) Roderick Bant. All rights reserved.'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+RequiredModules = @('PSRule')
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -69,7 +69,7 @@ Copyright = '(c) Roderick Bant. All rights reserved.'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @()
+FunctionsToExport   = @('Export-AzDevOpsRuleData','*')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
@@ -95,13 +95,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'PSRule-rules'
+        Tags = @('PSRule-rules')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/cloudyspells/PSRule.Rules.AzureDevOps'
 
         # A URL to an icon representing this module.
         # IconUri = ''

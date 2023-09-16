@@ -1,0 +1,21 @@
+---
+apiVersion: github.com/microsoft/PSRule/v1
+kind: Selector
+metadata:
+  name: IsProduction
+spec:
+  if:
+    anyOf:
+    - field: 'name'
+      contains:
+      - 'production'
+      - 'prod'
+      - 'prd'
+      - 'live'
+      - 'master'
+      - 'main'
+      caseSensitive: false
+    - field: 'name'
+      match: 'prod|prd|live|master|main'
+      caseSensitive: false
+

@@ -1,0 +1,160 @@
+<#
+    .SYNOPSIS
+    Get all Azure Pipelines environments from Azure DevOps project
+
+    .DESCRIPTION
+    Get all Azure Pipelines environments named from Azure DevOps project using Azure DevOps Rest API
+
+    .PARAMETER PAT
+    Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
+
+    .PARAMETER Project
+    Project name for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsEnvironments -PAT $PAT -Organization $Organization -Project $Project
+#>
+function Get-AzDevOpsEnvironments {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]
+        $PAT,
+        [Parameter()]
+        [string]
+        $Organization,
+        [Parameter()]
+        [string]
+        $Project
+    )
+    $header = Get-AzDevOpsHeader -PAT $PAT
+
+    $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/environments?api-version=6.0-preview.1"
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+    }
+    catch {
+        Write-Warning "No environments found for project $Project"
+        return @()
+    }
+    $environments = $response.value
+    return $environments
+}
+Export-ModuleMember -Function Get-AzDevOpsEnvironments
+
+<#
+    .SYNOPSIS
+    Get all checks for an Azure Pipelines environment
+
+    .DESCRIPTION
+    Get all checks for an Azure Pipelines environment using Azure DevOps Rest API
+
+    .PARAMETER PAT
+    Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
+
+    .PARAMETER Project
+    Project name for Azure DevOps
+
+    .PARAMETER Environment
+    Environment name for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsEnvironmentChecks -PAT $PAT -Organization $Organization -Project $Project -Environment $Environment
+
+    .NOTES
+    Returns an empty array if no checks are found
+
+    .LINK
+    https://learn.microsoft.com/en-us/rest/api/azure/devops/approvalsandchecks/check-configurations/list?view=azure-devops-rest-7.2&tabs=HTTP
+#>
+function Get-AzDevOpsEnvironmentChecks {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]
+        $PAT,
+        [Parameter()]
+        [string]
+        $Organization,
+        [Parameter()]
+        [string]
+        $Project,
+        [Parameter()]
+        [string]
+        $Environment
+    )
+    $header = Get-AzDevOpsHeader -PAT $PAT
+
+    $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/checks/configurations?api-version=7.2-preview.1&resourceType=environment&resourceId=$($Environment)&"
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+    }
+    catch {
+        Write-Warning "No checks found for environment $Environment"
+        return @()
+    }
+    $checks = $response.value
+    if($null -eq $checks) {
+        return @()
+        # Else if $checks is not an array, but a single object
+    } elseif ($null -eq $checks.Count -or $checks.Count -eq 0) {
+        return @($checks)
+    }
+    return $checks
+}
+Export-ModuleMember -Function Get-AzDevOpsEnvironmentChecks
+<#
+    .SYNOPSIS
+    Export all Azure Pipelines environments to JSON files with their checks as nested objects
+
+    .DESCRIPTION
+    Export all Azure Pipelines environments to JSON files with their checks as nested objects using Azure DevOps Rest API
+
+    .PARAMETER PAT
+    Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
+
+    .PARAMETER Project
+    Project name for Azure DevOps
+
+    .EXAMPLE
+    Export-AzDevOpsEnvironmentChecks -PAT $PAT -Organization $Organization -Project $Project
+#>
+function Export-AzDevOpsEnvironmentChecks {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]
+        $PAT,
+        [Parameter()]
+        [string]
+        $Organization,
+        [Parameter()]
+        [string]
+        $Project,
+        [Parameter()]
+        [string]
+        $OutputPath
+
+    )
+    $environments = Get-AzDevOpsEnvironments -PAT $PAT -Organization $Organization -Project $Project
+    $environments | ForEach-Object {
+        if($null -ne $_) {
+            $environment = $_
+            # Add a ObjectType indicator for Azure.DevOps.Pipelines.Environment
+            $environment | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Pipelines.Environment'
+            $checks = @(Get-AzDevOpsEnvironmentChecks -PAT $PAT -Organization $Organization -Project $Project -Environment $environment.id)
+            $environment | Add-Member -MemberType NoteProperty -Name checks -Value $checks
+            $environment | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($environment.name).ado.env.json"
+        }
+    }
+}
+Export-ModuleMember -Function Export-AzDevOpsEnvironmentChecks
