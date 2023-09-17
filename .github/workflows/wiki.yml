@@ -1,0 +1,61 @@
+# File: .github/workflows/wiki.yml
+
+on:
+  release:
+    types:
+      - "published"
+  workflow_dispatch:
+
+name: Publish Wiki
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build-publish-wiki:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout PSRule.Rules.AzureDevOps
+        uses: actions/checkout@v3
+        with:
+          path: main
+
+      - name: Checkout Wiki
+        uses: actions/checkout@v3
+        with:
+          repository: ${{github.repository}}.wiki
+          path: wiki
+
+      - name: Copy wiki base sources
+        shell: bash
+        run: |
+          mkdir -p ./wiki
+          mkdir -p ./wiki/rules
+          cp ./*.md ./wiki/
+          cp ./src/PSRule.Rules.AzureDevOps/en-US/*.md ./wiki/
+
+      - name: Generate Module docs
+        shell: pwsh
+        run: |
+          New-Item -Path ./wiki -Name commands -ItemType Directory -Force
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module Az.Resources
+          Install-Module PlatyPS
+          Import-Module PlatyPS
+          Import-Module ./src/PSRule.Rules.AzureDevOps
+          New-MarkdownHelp -Module PSRule.Rules.AzureDevOps `
+            -Verbose `
+            -Force `
+            -NoMetadata `
+            -OutputFolder ./wiki/commands
+
+      - name: Commit and push changes to wiki
+        shell: bash
+        working-directory: ./wiki
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated docs from actions workflow"
+          git push
