@@ -44,3 +44,8 @@ Assert-PSRule `
     -InputPath "C:\Temp\MyProject" `
     -Module PSRule.Rules.AzureDevOps
 ```
+
+## Rules
+
+Documentation for the implemented rules can be found in the
+[en-US](src/PSRule.Rules.AzureDevOps/en-US) folder.
