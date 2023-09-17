@@ -6,6 +6,7 @@ metadata:
   name: PSRule.Rules.AzureDevOps
 spec:
   binding:
+    useQualifiedName: true
     targetName:
     - name
     - displayName
