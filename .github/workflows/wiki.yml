@@ -40,6 +40,8 @@ jobs:
       - name: Generate Module docs
         shell: pwsh
         run: |
+          Install-Module PSRule -Scope CurrentUser -Force
+          Import-Module PSRule
           New-Item -Path ./wiki -Name commands -ItemType Directory -Force
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module Az.Resources
