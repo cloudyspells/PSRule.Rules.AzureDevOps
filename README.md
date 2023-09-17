@@ -13,7 +13,7 @@ should not be considered stable. Any input on the direction
 of the module and included rules is very much appreciated.
 Please consider opening an issue with your ideas.
 
-![Screenshot of version 0.0.3 run](assets/media/run-0.0.3.png)
+![Screenshot of version 0.0.5 run](assets/media/run-0.0.5.png)
 
 ## Usage
 
@@ -51,3 +51,22 @@ Assert-PSRule `
 
 Documentation for the implemented rules can be found in the
 [en-US](src/PSRule.Rules.AzureDevOps/en-US) folder.
+
+- [Azure.DevOps.Pipelines.Core.UseYaml](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Core.UseYaml.md)
+- [Azure.DevOps.Pipelines.Environments.Description](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.Description.md)
+- [Azure.DevOps.Pipelines.Environments.ProductionCheckProtection](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.ProductionCheckProtection.md)
+- [Azure.DevOps.Pipelines.Environments.ProductionHumanApproval](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.ProductionHumanApproval.md)
+- [Azure.DevOps.Repos.BranchPolicyAllowSelfApproval](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyAllowSelfApproval.md)
+- [Azure.DevOps.Repos.BranchPolicyCommentResolution](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyCommentResolution.md)
+- [Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems.md)
+- [Azure.DevOps.Repos.BranchPolicyIsEnabled](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyIsEnabled.md)
+- [Azure.DevOps.Repos.BranchPolicyMergeStrategy](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyMergeStrategy.md)
+- [Azure.DevOps.Repos.BranchPolicyMinimumReviewers](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyMinimumReviewers.md)
+- [Azure.DevOps.Repos.BranchPolicyResetVotes](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyResetVotes.md)
+- [Azure.DevOps.Repos.HasBranchPolicy](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.HasBranchPolicy.md)
+- [Azure.DevOps.Repos.License](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.License.md)
+- [Azure.DevOps.Repos.Readme](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.Readme.md)
+- [Azure.DevOps.ServiceConnections.Description](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.Description.md)
+- [Azure.DevOps.ServiceConnections.ProductionCheckProtection](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.ProductionCheckProtection.md)
+- [Azure.DevOps.ServiceConnections.ProductionHumanApproval](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.ProductionHumanApproval.md)
+- [Azure.DevOps.ServiceConnections.Scope](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.Scope.md)

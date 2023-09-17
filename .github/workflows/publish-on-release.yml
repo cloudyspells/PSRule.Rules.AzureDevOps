@@ -1,0 +1,22 @@
+# File: .github/workflows/qa.yml
+
+on:
+  release:
+    types:
+      - "published"
+  workflow_dispatch:
+
+name: Publish Module to PSGallery
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Publish module
+        shell: pwsh
+        id: publish-module
+        run: |
+          Publish-Module -Path ./src/PSRule.Rules.AzureDevOps -NuGetApiKey ${{ secrets.PS_GALLERY_KEY }}
