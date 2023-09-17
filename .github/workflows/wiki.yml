@@ -32,8 +32,10 @@ jobs:
         run: |
           mkdir -p ./wiki
           mkdir -p ./wiki/rules
-          cp ./*.md ./wiki/
-          cp ./src/PSRule.Rules.AzureDevOps/en-US/*.md ./wiki/
+          # Copy wiki base page
+          cp README.md ./wiki/Home.md
+          # Copy wiki rules
+          cp ./src/PSRule.Rules.AzureDevOps/en-US/*.md ./wiki/rules
 
       - name: Generate Module docs
         shell: pwsh
