@@ -13,6 +13,8 @@ should not be considered stable. Any input on the direction
 of the module and included rules is very much appreciated.
 Please consider opening an issue with your ideas.
 
+![Screenshot of version 0.0.3 run](assets/media/run-0.0.3.png)
+
 ## Usage
 
 To use this module, you need to have _PSRule_ installed.
@@ -44,3 +46,8 @@ Assert-PSRule `
     -InputPath "C:\Temp\MyProject" `
     -Module PSRule.Rules.AzureDevOps
 ```
+
+## Rules
+
+Documentation for the implemented rules can be found in the
+[en-US](src/PSRule.Rules.AzureDevOps/en-US) folder.

@@ -103,6 +103,64 @@ Export-ModuleMember -Function Get-AzDevOpsBranchPolicy
 
 <#
     .SYNOPSIS
+    Check the existance of a file in an Azure DevOps repo
+
+    .DESCRIPTION
+    Check the existance of a file in an Azure DevOps repo using Azure DevOps Rest API
+
+    .PARAMETER PAT
+    Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
+
+    .PARAMETER Project
+    Project name for Azure DevOps
+
+    .PARAMETER Repository
+    Repository name for Azure DevOps
+
+    .PARAMETER Path
+    Path to file in repo
+
+    .EXAMPLE
+    Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $Repository -Path $Path
+
+    .NOTES
+    This function return $true if the file exists and $false if it does not
+#>
+function Test-AzDevOpsFileExists {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]
+        $PAT,
+        [Parameter()]
+        [string]
+        $Organization,
+        [Parameter()]
+        [string]
+        $Project,
+        [Parameter()]
+        [string]
+        $Repository,
+        [Parameter()]
+        [string]
+        $Path
+    )
+    $header = Get-AzDevOpsHeader -PAT $PAT
+    $uri = "https://dev.azure.com/$Organization/$Project/_apis/git/repositories/$Repository/items?path=$Path&api-version=6.0"
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+    }
+    catch {
+        return $false
+    }
+    return $true
+}
+
+<#
+    .SYNOPSIS
     Get and export all Azure DevOps repos in a project with default, main and master branches and branch policies and export to JSON with 1 file per repo
 
     .DESCRIPTION
@@ -150,6 +208,14 @@ function Export-AzDevOpsReposAndBranchPolicies {
             $repo | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo"
             $branchPolicy = Get-AzDevOpsBranchPolicy -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Branch $repo.defaultBranch
             $repo | Add-Member -MemberType NoteProperty -Name MainBranchPolicy -Value $branchPolicy
+            # Add a property indicating if a file named README.md or README exists in the repo
+            $readmeExists = ((Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "README.md") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "README"))
+            $repo | Add-Member -MemberType NoteProperty -Name ReadmeExists -Value $readmeExists
+            
+            # Add a property indicating if a file named LICENSE or LICENSE.md exists in the repo
+            $licenseExists = ((Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE.md"))
+            $repo | Add-Member -MemberType NoteProperty -Name LicenseExists -Value $licenseExists
+
             # Export repo object to JSON file
             $repo | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($repo.name).ado.repo.json"
         }

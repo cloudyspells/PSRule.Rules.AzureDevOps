@@ -46,11 +46,18 @@ Rule 'Azure.DevOps.ServiceConnections.Scope' `
     -Ref 'ADO-SC-004' `
     -Type 'Azure.DevOps.ServiceConnection' `
     -Tag @{ release = 'GA'} `
+    -If { $TargetObject.data.scopeLevel -eq 'Subscription' } `
     -Level Information {
-        # Description: Service connection should have a scope that is not a subscription
+        # Description: Service connection should have a scope that is not an entire subscription
         # Reason: The service connection is scoped to a subscription
         # Recommendation: Confine the scope of the service connection to a resource group or resource
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#scope-service-connections
-        $Assert.HasField($TargetObject, "data.scopeLevel", $true)
-        $Assert.NotLike($TargetObject, "data.scopeLevel", "Subscription")
+        AllOf {
+            $Assert.HasField($TargetObject, "data.scopeLevel", $true)
+            $Assert.HasField($TargetObject, "authorization.parameters.scope", $true)
+            #$Assert.NotLike($TargetObject, "data.scopeLevel", "Subscription")
+            $Assert.Contains($TargetObject, "authorization.parameters.scope", "resourcegroups")
+        }
+        #$Assert.HasField($TargetObject, "data.scopeLevel", $true)
+        #$Assert.NotLike($TargetObject, "data.scopeLevel", "Subscription")
 }
