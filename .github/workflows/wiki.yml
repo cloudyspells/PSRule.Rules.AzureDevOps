@@ -32,18 +32,22 @@ jobs:
         run: |
           mkdir -p ./wiki
           mkdir -p ./wiki/rules
-          cp ./*.md ./wiki/
-          cp ./src/PSRule.Rules.AzureDevOps/en-US/*.md ./wiki/
+          # Copy wiki base page
+          cp ./main/README.md ./wiki/Home.md
+          # Copy wiki rules
+          cp ./main/src/PSRule.Rules.AzureDevOps/en-US/*.md ./wiki/rules
 
       - name: Generate Module docs
         shell: pwsh
         run: |
+          Install-Module PSRule -Scope CurrentUser -Force
+          Import-Module PSRule
           New-Item -Path ./wiki -Name commands -ItemType Directory -Force
           Set-PSRepository PSGallery -InstallationPolicy Trusted
           Install-Module Az.Resources
           Install-Module PlatyPS
           Import-Module PlatyPS
-          Import-Module ./src/PSRule.Rules.AzureDevOps
+          Import-Module ./main/src/PSRule.Rules.AzureDevOps
           New-MarkdownHelp -Module PSRule.Rules.AzureDevOps `
             -Verbose `
             -Force `
