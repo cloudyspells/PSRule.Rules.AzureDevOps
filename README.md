@@ -13,6 +13,8 @@ should not be considered stable. Any input on the direction
 of the module and included rules is very much appreciated.
 Please consider opening an issue with your ideas.
 
+![Screenshot of version 0.0.3 run](assets/media/run-0.0.3.png)
+
 ## Usage
 
 To use this module, you need to have _PSRule_ installed.
