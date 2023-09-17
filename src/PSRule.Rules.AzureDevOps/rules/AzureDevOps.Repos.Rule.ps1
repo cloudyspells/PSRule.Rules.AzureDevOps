@@ -9,9 +9,25 @@ Rule 'Azure.DevOps.Repos.HasBranchPolicy' `
         # Description: The default branch should have a branch policy
         # Reason: The default branch does not have a branch policy
         # Recommendation: Protect your main branch with a branch policy
+        # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#secure-azure-repos
         $Assert.HasField($TargetObject, "MainBranchPolicy", $true)
         $Assert.NotNull($TargetObject, "MainBranchPolicy")
 }
+
+# Synopsis: The default branch should have its branch policy enabled
+Rule 'Azure.DevOps.Repos.BranchPolicyIsEnabled' `
+    -Ref 'ADO-RP-001a' `
+    -Type 'Azure.DevOps.Repo' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description: The default branch should have its branch policy enabled
+        # Reason: The default branch does not have its branch policy enabled
+        # Recommendation: Protect your main branch with a branch policy
+        # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#secure-azure-repos
+        $Assert.HasField($TargetObject, "MainBranchPolicy.isEnabled", $true)
+        $Assert.HasFieldValue($TargetObject, "MainBranchPolicy.isEnabled", $true)
+}
+
 
 # Synopsis: The branch policy should require a minimum number of reviewers
 Rule 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' `
@@ -22,7 +38,7 @@ Rule 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' `
         # Description: The branch policy should require a minimum number of reviewers
         # Reason: The branch policy does not require any reviewers
         # Recommendation: Require a minimum number of reviewers to approve pull requests
-        # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#policies
+        # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#repositories-and-branches
         $Assert.HasField($TargetObject, "MainBranchPolicy.settings.minimumApproverCount", $true)
         $Assert.Greater($TargetObject, "MainBranchPolicy.settings.minimumApproverCount", 0)
 }
@@ -38,7 +54,7 @@ Rule 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' `
         # Recommendation: Require a minimum number of reviewers to approve pull requests
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#policies
         $Assert.HasField($TargetObject, "MainBranchPolicy.settings.creatorVoteCounts", $true)
-        $Assert.HasDefaultValue($TargetObject, "MainBranchPolicy.settings.creatorVoteCounts", $false)
+        $Assert.HasFieldValue($TargetObject, "MainBranchPolicy.settings.creatorVoteCounts", $false)
 }
 
 # Synopsis: The branch policy should reset code reviewer votes when new changes are pushed
@@ -52,5 +68,31 @@ Rule 'Azure.DevOps.Repos.BranchPolicyResetVotes' `
         # Recommendation: Reset code reviewer votes when new changes are pushed
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#policies
         $Assert.HasField($TargetObject, "MainBranchPolicy.settings.resetOnSourcePush", $true)
-        $Assert.HasDefaultValue($TargetObject, "MainBranchPolicy.settings.resetOnSourcePush", $true)
+        $Assert.HasFieldValue($TargetObject, "MainBranchPolicy.settings.resetOnSourcePush", $true)
+}
+
+# Synopsis: The repository should contain a README file
+Rule 'Azure.DevOps.Repos.Readme' `
+    -Ref 'ADO-RP-005' `
+    -Type 'Azure.DevOps.Repo' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description: The repository should contain a README file
+        # Reason: The repository does not contain a README or README.md file
+        # Recommendation: Add a README or README.md file to the repository to explain its purpose
+        $Assert.HasField($TargetObject, "ReadmeExists", $true)
+        $Assert.HasFieldValue($TargetObject, "ReadmeExists", $true)
+}
+
+# Synopsis: The repository should contain a LICENSE file
+Rule 'Azure.DevOps.Repos.License' `
+    -Ref 'ADO-RP-006' `
+    -Type 'Azure.DevOps.Repo' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description: The repository should contain a LICENSE file
+        # Reason: The repository does not contain a LICENSE file
+        # Recommendation: Add a LICENSE file to the repository to explain its purpose
+        $Assert.HasField($TargetObject, "LicenseExists", $true)
+        $Assert.HasFieldValue($TargetObject, "LicenseExists", $true)
 }
