@@ -4,7 +4,7 @@ severity: Critical
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/AzureDevOps.Repos.BranchPolicyIsEnabled.md
 ---
 
-# Ensure the branch policy is enabled
+# AzureDevOps.Repos.BranchPolicyIsEnabled
 
 ## SYNOPSIS
 

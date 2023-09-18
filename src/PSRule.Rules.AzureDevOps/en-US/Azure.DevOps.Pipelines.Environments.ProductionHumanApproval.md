@@ -4,7 +4,7 @@ severity: Severe
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.ProductionHumanApproval.md
 ---
 
-# An environment scoped to production should be protected with a human approval
+# Azure.DevOps.Pipelines.Environments.ProductionHumanApproval
 
 ## SYNOPSIS
 

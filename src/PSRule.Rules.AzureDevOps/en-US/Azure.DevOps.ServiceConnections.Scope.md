@@ -4,7 +4,7 @@ severity: Severe
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.Scope.md
 ---
 
-# A service connection scoped to production should use a narrow scope
+# Azure.DevOps.ServiceConnections.Scope
 
 ## SYNOPSIS
 

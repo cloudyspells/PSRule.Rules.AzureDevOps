@@ -4,7 +4,7 @@ severity: Informational
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.Description.md
 ---
 
-# An environment should have a description
+# Azure.DevOps.Pipelines.Environments.Description
 
 ## SYNOPSIS
 

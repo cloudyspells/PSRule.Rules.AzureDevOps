@@ -4,7 +4,7 @@ severity: Informational
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems.md
 ---
 
-# Branch policy should enforce linked work items
+# Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems
 
 ## SYNOPSIS
 

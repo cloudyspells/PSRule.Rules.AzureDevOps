@@ -4,7 +4,7 @@ severity: Severe
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/AzureDevOps.Repos.BranchPolicyResetVotes.md
 ---
 
-# Branch policy should reset votes when changes are updated
+# AzureDevOps.Repos.BranchPolicyResetVotes
 
 ## SYNOPSIS
 

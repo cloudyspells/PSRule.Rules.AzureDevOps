@@ -4,7 +4,7 @@ severity: Severe
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.ProductionCheckProtection.md
 ---
 
-# An environment scoped to production should be protected with checks
+# Azure.DevOps.Pipelines.Environments.ProductionCheckProtection
 
 ## SYNOPSIS
 
