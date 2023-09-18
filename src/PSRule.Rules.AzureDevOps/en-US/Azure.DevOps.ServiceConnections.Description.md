@@ -4,7 +4,7 @@ severity: Severe
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.Description.md
 ---
 
-# A service connection should have a description
+# Azure.DevOps.ServiceConnections.Description
 
 ## SYNOPSIS
 

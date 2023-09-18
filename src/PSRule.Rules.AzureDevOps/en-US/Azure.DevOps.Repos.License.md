@@ -4,7 +4,7 @@ severity: Important
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/AzureDevOps.Repos.License.md
 ---
 
-# Use a LICENSE file
+# AzureDevOps.Repos.License
 
 ## SYNOPSIS
 

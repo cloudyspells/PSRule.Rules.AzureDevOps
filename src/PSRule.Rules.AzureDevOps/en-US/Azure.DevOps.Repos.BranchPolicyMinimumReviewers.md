@@ -4,7 +4,7 @@ severity: Severe
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/AzureDevOps.Repos.BranchPolicyMinimumReviewers.md
 ---
 
-# A branch policy should have a minimum number of reviewers
+# AzureDevOps.Repos.BranchPolicyMinimumReviewers
 
 ## SYNOPSIS
 

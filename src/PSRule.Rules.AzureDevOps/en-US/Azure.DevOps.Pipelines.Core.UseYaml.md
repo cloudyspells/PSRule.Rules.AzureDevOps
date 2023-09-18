@@ -25,3 +25,4 @@ Use YAML pipeline definitions to define build and release pipelines.
 ## LINKS
 
 - [Azure Pipelines YAML schema reference](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema)
+- [Azure DevOps security best practices](https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#definitions)

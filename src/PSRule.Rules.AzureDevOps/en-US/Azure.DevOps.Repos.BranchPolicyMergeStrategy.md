@@ -4,7 +4,7 @@ severity: Informational
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyMergeStrategy.md
 ---
 
-# Branch policy should define merge strategy
+# Azure.DevOps.Repos.BranchPolicyMergeStrategy
 
 ## SYNOPSIS
 

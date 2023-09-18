@@ -4,7 +4,7 @@ severity: Severe
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.ProductionCheckProtection.md
 ---
 
-# A service connection scoped to production should be protected
+# Azure.DevOps.ServiceConnections.ProductionCheckProtection
 
 ## SYNOPSIS
 

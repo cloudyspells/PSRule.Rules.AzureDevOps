@@ -4,7 +4,7 @@ severity: Important
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/AzureDevOps.Repos.Readme.md
 ---
 
-# Use a README file
+# AzureDevOps.Repos.Readme
 
 ## SYNOPSIS
 

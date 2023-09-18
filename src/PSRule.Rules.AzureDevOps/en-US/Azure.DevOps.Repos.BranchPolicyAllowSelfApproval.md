@@ -4,7 +4,7 @@ severity: Critical
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/AzureDevOps.Repos.BranchPolicyAllowSelfApproval.md
 ---
 
-# The branch policy should not allow creators to approve their own changes
+# AzureDevOps.Repos.BranchPolicyAllowSelfApproval
 
 ## SYNOPSIS
 
