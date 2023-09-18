@@ -43,7 +43,7 @@ $export = Export-AzDevOpsRuleData `
     -PAT $MyPAT `
     -OutputPath "C:\Temp\MyProject"
 Assert-PSRule `
-    -InputPath "C:\Temp\MyProject" `
+    -InputPath "C:\Temp\MyProject\" `
     -Module PSRule.Rules.AzureDevOps
 ```
 
