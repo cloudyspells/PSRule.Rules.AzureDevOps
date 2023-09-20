@@ -47,7 +47,7 @@ jobs:
           $config.CodeCoverage.Enabled = $true
           $config.CodeCoverage.OutputPath = "$($env:GITHUB_WORKSPACE)\coverage.xml"
           $config.CodeCoverage.OutputFormat = 'JaCoCo'
-          $config.CodeCoverage.Path = "$($env:PSModulePath.Split(';')[0])\PSRule.Rules.AzureDevOps"
+          $config.CodeCoverage.Path = "$($env:PSModulePath.Split(';')[0])/PSRule.Rules.AzureDevOps/Functions/"
           $config.Output.Verbosity = 'Detailed'
           $config.TestResult.OutputFormat = 'NUnitXml'
           $config.TestResult.OutputPath = "$($env:GITHUB_WORKSPACE)\testresults.xml"
