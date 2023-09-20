@@ -1,5 +1,5 @@
 ---
-category: Repository
+category: Microsoft Azure DevOps Repos
 severity: Severe
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/AzureDevOps.Repos.BranchPolicyMinimumReviewers.md
 ---

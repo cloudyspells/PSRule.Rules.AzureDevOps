@@ -15,6 +15,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install PSRule module
+        shell: pwsh
+        run: |
+          Install-Module -Name PSRule -Force -Scope CurrentUser -Repository PSGallery
+
+      - name: Update the module manifest
+        shell: pwsh
+        run: |
+          # Update the module manifest with the version number in the release tag
+          $version = $env:GITHUB_REF -replace 'refs/tags/v'
+          $path = './src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psd1'
+          Update-ModuleManifest -Path $path -ModuleVersion $version
+
       - name: Publish module
         shell: pwsh
         id: publish-module
