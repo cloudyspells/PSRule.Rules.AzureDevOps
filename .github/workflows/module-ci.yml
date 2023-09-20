@@ -34,7 +34,7 @@ jobs:
 
       - name: Copy source module to PowerShell module directory
         run: |
-          Copy-Item -Path .\src\PSRule.Rules.AzureDevOps -Destination "$($env:PSModulePath.Split(';')[0]") -Recurse
+          Copy-Item -Path .\src\PSRule.Rules.AzureDevOps -Destination "$($env:PSModulePath.Split(';')[0])" -Recurse
         shell: pwsh
 
       - name: Run Pester Tests
