@@ -56,6 +56,7 @@ Documentation for the implemented rules can be found in the
 - [Azure.DevOps.Pipelines.Environments.Description](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.Description.md)
 - [Azure.DevOps.Pipelines.Environments.ProductionCheckProtection](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.ProductionCheckProtection.md)
 - [Azure.DevOps.Pipelines.Environments.ProductionHumanApproval](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.ProductionHumanApproval.md)
+- [Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval.md)
 - [Azure.DevOps.Repos.BranchPolicyAllowSelfApproval](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyAllowSelfApproval.md)
 - [Azure.DevOps.Repos.BranchPolicyCommentResolution](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyCommentResolution.md)
 - [Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems.md)
@@ -70,3 +71,5 @@ Documentation for the implemented rules can be found in the
 - [Azure.DevOps.ServiceConnections.ProductionCheckProtection](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.ProductionCheckProtection.md)
 - [Azure.DevOps.ServiceConnections.ProductionHumanApproval](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.ProductionHumanApproval.md)
 - [Azure.DevOps.ServiceConnections.Scope](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.ServiceConnections.Scope.md)
+- [Azure.DevOps.Tasks.VariableGroup.Description](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Tasks.VariableGroup.Description.md)
+- [Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets.md)
