@@ -1,5 +1,5 @@
 BeforeAll {
-    Import-Module -Name ../src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps -Force
+    Import-Module -Name "$($env:GITHUB_WORKSPACE)/src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psd1" -Force
 }
 
 Describe 'PSRule.Rules.AzureDevOps' {
