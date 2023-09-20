@@ -97,3 +97,4 @@ function Export-AzDevOpsPipelines {
         $pipeline | ConvertTo-Json | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
     }
 }
+Export-ModuleMember -Function Export-AzDevOpsPipelines

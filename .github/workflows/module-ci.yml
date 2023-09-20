@@ -1,0 +1,63 @@
+# GitHub workflow for running pester unit tests on pull requests
+
+on: 
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  run-pester:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Pester
+        run: |
+          Install-Module -Name Pester -Force -SkipPublisherCheck
+        shell: pwsh
+
+      - name: Install PSRule
+        run: |
+          Install-Module -Name PSRule -Force -SkipPublisherCheck
+        shell: pwsh
+
+      - name: Install PSScriptAnalyzer
+        run: |
+          Install-Module -Name PSScriptAnalyzer -Force -SkipPublisherCheck
+        shell: pwsh
+
+      - name: Run PSScriptAnalyzer
+        run: |
+          Invoke-ScriptAnalyzer -Path .\src -Recurse
+        shell: pwsh
+
+      - name: Copy source module to PowerShell module directory
+        run: |
+          Copy-Item -Path .\src\PSRule.Rules.AzureDevOps -Destination "$($env:PSModulePath.Split(';')[0]") -Recurse
+        shell: pwsh
+
+      - name: Run Pester Tests
+        run: |
+          # Set Pester configuration for detailed output with code coverage and Nunit test results
+          $config = New-PesterConfiguration
+          $config.CodeCoverage.Enabled = $true
+          $config.CodeCoverage.OutputPath = "$($env:GITHUB_WORKSPACE)\coverage.xml"
+          $config.CodeCoverage.OutputFormat = 'JaCoCo'
+          $config.CodeCoverage.Path = "$($env:PSModulePath.Split(';')[0]\PSRule.Rules.AzureDevOps"
+          $config.Output.Verbosity = 'Detailed'
+          $config.Output.Format = 'NUnitXml'
+          $config.Output.Path = "$($env:GITHUB_WORKSPACE)\testresults.xml"
+          $config.Output.CIFormat = 'GitHubActions'
+          Invoke-Pester -Configuration $config
+
+      - name: Upload Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: testresults.xml
+
+      - name: Upload Code Coverage
+        uses: codecov/codecov-action@v1
+        with:
+          file: coverage.xml
+          flags: unittests
