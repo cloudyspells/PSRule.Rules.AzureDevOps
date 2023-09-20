@@ -2,9 +2,13 @@
 # PSRule module for Azure DevOps
 
 # Dot source all function scripts from src/Functions
-Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
+Get-ChildItem -Path "./Functions/*.ps1" | ForEach-Object {
     . $_.FullName
 }
+
+# Dot source all ps1 files from the modules Functions folder
+
+
 
 <#
     .SYNOPSIS
