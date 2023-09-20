@@ -35,13 +35,6 @@ jobs:
           Invoke-ScriptAnalyzer -Path .\src -Recurse
         shell: pwsh
 
-      # - name: Copy source module to PowerShell module directory
-      #   run: |
-      #     Write-Host $env:PSModulePath
-      #     Get-Module PSRule.Rules.AzureDevOps | fl *
-      #     Copy-Item -Path .\src\PSRule.Rules.AzureDevOps -Destination "$($env:PSModulePath.Split(';')[0])\PSRule.Rules.AzureDevOps" -Recurse
-      #   shell: pwsh
-
       - name: Run Pester Tests
         run: |
           # Set Pester configuration for detailed output with code coverage and Nunit test results
