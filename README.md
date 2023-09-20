@@ -1,5 +1,8 @@
 # PSRule.Rules.AzureDevOps
 
+![PowerShell Gallery Version (including pre-releases)](https://img.shields.io/powershellgallery/v/PSRule.Rules.AzureDevOps?logo=powershell&link=https%3A%2F%2Fwww.powershellgallery.com%2Fpackages%2FPSRule.Rules.AzureDevOps)
+![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/PSRule.Rules.AzureDevOps?logo=powershell&link=https%3A%2F%2Fwww.powershellgallery.com%2Fpackages%2FPSRule.Rules.AzureDevOps)
+
 ## Azure DevOps rules module for PSRule
 
 This powershell module is built to be used with
@@ -13,7 +16,7 @@ should not be considered stable. Any input on the direction
 of the module and included rules is very much appreciated.
 Please consider opening an issue with your ideas.
 
-![Screenshot of version 0.0.5 run](assets/media/run-0.0.5.png)
+![Screenshot of version 0.0.7 run](assets/media/run-0.0.7.png)
 
 ## Usage
 
