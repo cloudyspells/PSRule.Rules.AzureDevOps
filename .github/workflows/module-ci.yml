@@ -48,7 +48,7 @@ jobs:
           $config.CodeCoverage.Path = "$($env:PSModulePath.Split(';')[0])\PSRule.Rules.AzureDevOps"
           $config.Output.Verbosity = 'Detailed'
           $config.TestResult.OutputFormat = 'NUnitXml'
-          $config.Output.Path = "$($env:GITHUB_WORKSPACE)\testresults.xml"
+          $config.TestResult.OutputPath = "$($env:GITHUB_WORKSPACE)\testresults.xml"
           $config.Output.CIFormat = 'GitHubActions'
           Invoke-Pester -Configuration $config
         shell: pwsh
