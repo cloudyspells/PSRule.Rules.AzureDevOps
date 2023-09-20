@@ -12,10 +12,10 @@
 RootModule = 'PSRule.Rules.AzureDevOps.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.6'
+ModuleVersion = '0.0.7'
 
 # Supported PSEditions
-CompatiblePSEditions = @('Core','Desk')
+CompatiblePSEditions = @('Core','Desktop')
 
 # ID used to uniquely identify this module
 GUID = 'bb42e16e-b0af-46be-9ac1-51e2f6bb6e8d'
