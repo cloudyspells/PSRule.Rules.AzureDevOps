@@ -39,7 +39,7 @@ Function Get-AzDevOpsRepos {
         Write-Warning "No repos found for project $Project"
         return $null
     }
-    return $response.value
+    return @($response.value)
 }
 Export-ModuleMember -Function Get-AzDevOpsRepos
 # End of Function Get-AzDevOpsRepos
@@ -158,7 +158,7 @@ function Test-AzDevOpsFileExists {
     }
     return $true
 }
-
+Export-ModuleMember -Function Test-AzDevOpsFileExists
 <#
     .SYNOPSIS
     Get and export all Azure DevOps repos in a project with default, main and master branches and branch policies and export to JSON with 1 file per repo
@@ -221,5 +221,5 @@ function Export-AzDevOpsReposAndBranchPolicies {
         }
     }
 }
-Export-ModuleMember -Function Get-AzDevOpsReposAndBranchPolicies
-# End of Function Get-AzDevOpsReposAndBranchPolicies
+Export-ModuleMember -Function Export-AzDevOpsReposAndBranchPolicies
+# End of Function Export-AzDevOpsReposAndBranchPolicies

@@ -6,6 +6,10 @@ Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
     . $_.FullName
 }
 
+# Dot source all ps1 files from the modules Functions folder
+
+
+
 <#
     .SYNOPSIS
     Run all JSON export functions for Azure DevOps for analysis by PSRule

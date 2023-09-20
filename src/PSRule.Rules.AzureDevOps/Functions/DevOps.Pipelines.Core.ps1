@@ -33,6 +33,7 @@ function Get-AzDevOpsPipelines {
     $header = Get-AzDevOpsHeader -PAT $PAT
 
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines?api-version=6.0-preview.1"
+    Write-Verbose "Getting pipelines from $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
     }
@@ -43,6 +44,8 @@ function Get-AzDevOpsPipelines {
     # walk through all pipelines and get the pipeline details
     $pipelines = @()
     foreach ($pipeline in $response.value) {
+        Write-Verbose "Getting pipeline details for $($pipeline.id)"
+        Write-Verbose "Getting pipeline details from $uri"
         $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/$($pipeline.id)?api-version=6.0-preview.1"
         $pipelineDetails = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         $pipelines += $pipelineDetails
@@ -90,10 +93,14 @@ function Export-AzDevOpsPipelines {
         [string]
         $OutputPath
     )
+    Write-Verbose "Getting pipelines from Azure DevOps"
     $pipelines = Get-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $Project
     foreach ($pipeline in $pipelines) {
         # Add ObjectType Azure.DevOps.Pipeline to the pipeline object
         $pipeline | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Pipeline"
+        Write-Verbose "Exporting pipeline $($pipeline.name) to JSON file"
+        Write-Verbose "Exporting pipeline as JSON file to $OutputPath\$($pipeline.name).ado.pl.json"
         $pipeline | ConvertTo-Json | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
     }
 }
+Export-ModuleMember -Function Export-AzDevOpsPipelines

@@ -1,0 +1,74 @@
+# GitHub workflow for running pester unit tests on pull requests
+
+on: 
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  checks: write
+  pull-requests: write
+
+jobs:
+  run-pester:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Pester
+        run: |
+          Install-Module -Name Pester -Force -SkipPublisherCheck
+        shell: pwsh
+
+      - name: Install PSRule
+        run: |
+          Install-Module -Name PSRule -Force -SkipPublisherCheck
+        shell: pwsh
+
+      - name: Install PSScriptAnalyzer
+        run: |
+          Install-Module -Name PSScriptAnalyzer -Force -SkipPublisherCheck
+        shell: pwsh
+
+      - name: Run PSScriptAnalyzer
+        run: |
+          Invoke-ScriptAnalyzer -Path .\src -Recurse
+        shell: pwsh
+
+      - name: Run Pester Tests
+        run: |
+          # Set Pester configuration for detailed output with code coverage and Nunit test results
+          Import-Module Pester -Force
+          # Create ADO export directory
+          New-Item -Path $env:ADO_EXPORT_DIR -ItemType Directory -Force
+          # Set Pester configuration for detailed output with code coverage and Nunit test results
+          $config = New-PesterConfiguration
+          $config.CodeCoverage.Enabled = $true
+          $config.CodeCoverage.OutputPath = "$($env:GITHUB_WORKSPACE)\coverage.xml"
+          $config.CodeCoverage.OutputFormat = 'JaCoCo'
+          $config.CodeCoverage.Path = "$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Functions"
+          $config.Output.Verbosity = 'Detailed'
+          $config.TestResult.OutputFormat = 'NUnitXml'
+          $config.TestResult.OutputPath = "$($env:GITHUB_WORKSPACE)\testresults.xml"
+          $config.Output.CIFormat = 'GitHubActions'
+          # Run Pester tests
+          Invoke-Pester -Configuration $config
+        shell: pwsh
+        env:
+          ADO_EXPORT_DIR: "${{ github.workspace }}/tmp"
+          ADO_PAT: ${{ secrets.ADO_PAT }}
+          ADO_ORGANIZATION: ${{ secrets.ADO_ORGANIZATION }}
+          ADO_PROJECT: ${{ secrets.ADO_PROJECT }}
+
+      - name: Upload Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: ./testresults.xml
+
+      - name: Upload Code Coverage
+        uses: codecov/codecov-action@v1
+        with:
+          file: coverage.xml
+          flags: unittests
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

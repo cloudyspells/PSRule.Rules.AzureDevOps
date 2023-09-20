@@ -33,6 +33,7 @@ Function Get-AzDevOpsVariableGroups {
     $response = Invoke-RestMethod -Uri $url -Method Get -Headers $header
     return @($response.value)
 }
+Export-ModuleMember -Function Get-AzDevOpsVariableGroups
 # End of function Get-AzDevOpsVariableGroups
 
 <#
@@ -86,4 +87,5 @@ Function Export-AzDevOpsVariableGroups {
         $variableGroup | ConvertTo-Json | Out-File -FilePath $variableGroupPath -Encoding UTF8
     }
 }
+Export-ModuleMember -Function Export-AzDevOpsVariableGroups
 # End of function Export-AzDevOpsVariableGroups
