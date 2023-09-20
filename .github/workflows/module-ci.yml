@@ -60,6 +60,9 @@ jobs:
         shell: pwsh
         env:
           ADO_EXPORT_DIR: "${{ github.workspace }}/tmp"
+          ADO_PAT: ${{ secrets.ADO_PAT }}
+          ADO_ORGANIZATION: ${{ secrets.ADO_ORGANIZATION }}
+          ADO_PROJECT: ${{ secrets.ADO_PROJECT }}
 
       - name: Upload Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
