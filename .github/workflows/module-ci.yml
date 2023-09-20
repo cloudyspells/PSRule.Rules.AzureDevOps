@@ -43,6 +43,9 @@ jobs:
         run: |
           # Set Pester configuration for detailed output with code coverage and Nunit test results
           Import-Module Pester -Force
+          # Create ADO export directory
+          New-Item -Path $env:ADO_EXPORT_DIR -ItemType Directory -Force
+          # Set Pester configuration for detailed output with code coverage and Nunit test results
           $config = New-PesterConfiguration
           $config.CodeCoverage.Enabled = $true
           $config.CodeCoverage.OutputPath = "$($env:GITHUB_WORKSPACE)\coverage.xml"
@@ -52,8 +55,11 @@ jobs:
           $config.TestResult.OutputFormat = 'NUnitXml'
           $config.TestResult.OutputPath = "$($env:GITHUB_WORKSPACE)\testresults.xml"
           $config.Output.CIFormat = 'GitHubActions'
+          # Run Pester tests
           Invoke-Pester -Configuration $config
         shell: pwsh
+        env:
+          ADO_EXPORT_DIR: "${{ github.workspace }}/tmp"
 
       - name: Upload Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
