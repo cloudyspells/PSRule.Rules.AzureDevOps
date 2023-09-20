@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  checks: write
+  pull-requests: write
 
 jobs:
   run-pester:
@@ -67,7 +70,7 @@ jobs:
       - name: Upload Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         with:
-          files: testresults.xml
+          files: ./testresults.xml
 
       - name: Upload Code Coverage
         uses: codecov/codecov-action@v1
