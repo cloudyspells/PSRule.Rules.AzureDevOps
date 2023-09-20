@@ -40,6 +40,7 @@ jobs:
       - name: Run Pester Tests
         run: |
           # Set Pester configuration for detailed output with code coverage and Nunit test results
+          Import-Module Pester -Force
           $config = New-PesterConfiguration
           $config.CodeCoverage.Enabled = $true
           $config.CodeCoverage.OutputPath = "$($env:GITHUB_WORKSPACE)\coverage.xml"
