@@ -51,6 +51,7 @@ jobs:
           $config.Output.Path = "$($env:GITHUB_WORKSPACE)\testresults.xml"
           $config.Output.CIFormat = 'GitHubActions'
           Invoke-Pester -Configuration $config
+        shell: pwsh
 
       - name: Upload Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
