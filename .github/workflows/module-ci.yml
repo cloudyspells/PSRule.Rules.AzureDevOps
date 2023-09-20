@@ -32,12 +32,12 @@ jobs:
           Invoke-ScriptAnalyzer -Path .\src -Recurse
         shell: pwsh
 
-      - name: Copy source module to PowerShell module directory
-        run: |
-          Write-Host $env:PSModulePath
-          Get-Module PSRule.Rules.AzureDevOps | fl *
-          Copy-Item -Path .\src\PSRule.Rules.AzureDevOps -Destination "$($env:PSModulePath.Split(';')[0])\PSRule.Rules.AzureDevOps" -Recurse
-        shell: pwsh
+      # - name: Copy source module to PowerShell module directory
+      #   run: |
+      #     Write-Host $env:PSModulePath
+      #     Get-Module PSRule.Rules.AzureDevOps | fl *
+      #     Copy-Item -Path .\src\PSRule.Rules.AzureDevOps -Destination "$($env:PSModulePath.Split(';')[0])\PSRule.Rules.AzureDevOps" -Recurse
+      #   shell: pwsh
 
       - name: Run Pester Tests
         run: |
@@ -47,7 +47,7 @@ jobs:
           $config.CodeCoverage.Enabled = $true
           $config.CodeCoverage.OutputPath = "$($env:GITHUB_WORKSPACE)\coverage.xml"
           $config.CodeCoverage.OutputFormat = 'JaCoCo'
-          $config.CodeCoverage.Path = "$($env:PSModulePath.Split(';')[0])/PSRule.Rules.AzureDevOps/Functions/"
+          $config.CodeCoverage.Path = "$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Functions"
           $config.Output.Verbosity = 'Detailed'
           $config.TestResult.OutputFormat = 'NUnitXml'
           $config.TestResult.OutputPath = "$($env:GITHUB_WORKSPACE)\testresults.xml"

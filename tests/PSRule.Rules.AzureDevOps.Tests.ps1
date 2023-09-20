@@ -1,5 +1,5 @@
 BeforeAll {
-    Import-Module PSRule.Rules.AzureDevOps -Force
+    Import-Module -Name ../src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps -Force
 }
 
 Describe 'PSRule.Rules.AzureDevOps' {
