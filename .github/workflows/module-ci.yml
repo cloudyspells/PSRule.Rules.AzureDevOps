@@ -36,7 +36,7 @@ jobs:
         run: |
           Write-Host $env:PSModulePath
           Get-Module PSRule.Rules.AzureDevOps | fl *
-          Copy-Item -Path .\src\PSRule.Rules.AzureDevOps -Destination "$($env:PSModulePath.Split(';')[0])" -Recurse
+          Copy-Item -Path .\src\PSRule.Rules.AzureDevOps -Destination "$($env:PSModulePath.Split(';')[0])\PSRule.Rules.AzureDevOps" -Recurse
         shell: pwsh
 
       - name: Run Pester Tests
