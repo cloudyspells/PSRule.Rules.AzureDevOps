@@ -67,7 +67,8 @@ jobs:
       - name: Upload Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2.9.0
         with:
-          files: ${{ github.workspace }}/testresults.xml
+          files: |
+            **/testresults.xml
 
       - name: Upload Code Coverage
         uses: codecov/codecov-action@v1
