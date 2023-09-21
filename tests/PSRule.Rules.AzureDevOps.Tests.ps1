@@ -326,4 +326,23 @@ Describe 'PSRule.Rules.AzureDevOps' {
             $files | Should -Not -BeNullOrEmpty
         }
     }
+
+    Context 'When running Export-AzDevOpsOrganizationRuleData' {
+        BeforeAll {
+            # Delete existing files from previous test runs
+            $OutputPath = $env:ADO_EXPORT_DIR
+            $files = Get-ChildItem -Path $OutputPath -Recurse -File
+            $files | ForEach-Object {
+                Remove-Item -Path $_.FullName -Force
+            }
+        }
+        It 'Should export all JSON files' {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $OutputPath = $env:ADO_EXPORT_DIR
+            Export-AzDevOpsOrganizationRuleData -PAT $PAT -Organization $Organization -OutputPath $OutputPath
+            $files = Get-ChildItem -Path $OutputPath -Recurse -File
+            $files | Should -Not -BeNullOrEmpty
+        }
+    }
 }
