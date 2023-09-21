@@ -64,7 +64,7 @@ function Get-AzDevOpsProjects {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
     }
     catch {
-        Write-Warning "No projects found for organization $Organization"
+        Write-Error "No projects found for organization $Organization"
         return @()
     }
     $projects = $response.value

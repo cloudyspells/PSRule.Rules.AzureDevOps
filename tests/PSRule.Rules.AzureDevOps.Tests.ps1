@@ -18,6 +18,30 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context "When running Get-AzDevOpsProjects" {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $Organization
+        }
+
+        It 'Should return a list of projects' {
+            $projects | Should -Not -BeNullOrEmpty
+            $projects[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It 'Should return a list of projects with a name' {
+            $projects[0].name | Should -Not -BeNullOrEmpty
+            $projects[0].name | Should -BeOfType [System.String]
+        }
+
+        It 'Should throw an error with a non-existing Organization' {
+            $faultyOrganization = "faultyOrganization"
+            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $faultyOrganization -ErrorAction SilentlyContinue
+            $projects | Should -BeNullOrEmpty
+        }
+    }
+
     Context "When running Get-AzDevOpsRepos" {
         BeforeAll {
             $PAT = $env:ADO_PAT
