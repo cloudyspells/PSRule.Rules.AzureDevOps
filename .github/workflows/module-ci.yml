@@ -2,6 +2,17 @@
 
 on: 
   pull_request:
+    paths:
+      - 'src/PSRule.Rules.AzureDevOps/Functions/**'
+      - 'src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psm1'
+      - 'tests/**'
+    branches:
+      - main
+  push:
+    paths:
+      - 'src/PSRule.Rules.AzureDevOps/Functions/**'
+      - 'src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psm1'
+      - 'tests/**'
     branches:
       - main
 
