@@ -26,19 +26,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install Pester
-        run: |
-          Install-Module -Name Pester -Force -SkipPublisherCheck
-        shell: pwsh
-
       - name: Install PSRule
         run: |
           Install-Module -Name PSRule -Force -SkipPublisherCheck
-        shell: pwsh
-
-      - name: Install PSScriptAnalyzer
-        run: |
-          Install-Module -Name PSScriptAnalyzer -Force -SkipPublisherCheck
         shell: pwsh
 
       - name: Run PSScriptAnalyzer
@@ -59,7 +49,7 @@ jobs:
           $config.CodeCoverage.OutputFormat = 'JaCoCo'
           $config.CodeCoverage.Path = "$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Functions"
           $config.Output.Verbosity = 'Detailed'
-          $config.TestResult.OutputFormat = 'NUnitXml'
+          $config.TestResult.OutputFormat = 'JUnitXml'
           $config.TestResult.OutputPath = "$($env:GITHUB_WORKSPACE)\testresults.xml"
           $config.Output.CIFormat = 'GitHubActions'
           # Run Pester tests
