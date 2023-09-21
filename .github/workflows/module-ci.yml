@@ -17,6 +17,8 @@ on:
     branches:
       - main
 
+name: PS Module CI
+
 permissions:
   checks: write
   pull-requests: write
