@@ -6,6 +6,7 @@ on:
       - 'src/PSRule.Rules.AzureDevOps/Functions/**'
       - 'src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psm1'
       - 'tests/**'
+      - '.github/workflows/module-ci.yml'
     branches:
       - main
   push:
