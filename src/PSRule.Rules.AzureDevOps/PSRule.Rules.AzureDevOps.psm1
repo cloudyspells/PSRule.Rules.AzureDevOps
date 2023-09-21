@@ -55,7 +55,7 @@ Function Export-AzDevOpsRuleData {
     Export-AzDevOpsVariableGroups -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
     Export-AzDevOpsReleaseDefinitions -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
 }
-Export-ModuleMember -Function Export-AzDevOpsProjectRuleData -Alias Export-AzDevOpsRuleData
+Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProjectRuleData
 # End of Function Export-AzDevOpsRuleData
 
 <#
