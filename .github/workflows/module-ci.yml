@@ -52,7 +52,7 @@ jobs:
           $config.CodeCoverage.OutputFormat = 'JaCoCo'
           $config.CodeCoverage.Path = "$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Functions"
           $config.Output.Verbosity = 'Detailed'
-          $config.TestResult.OutputFormat = 'JUnitXml'
+          $config.TestResult.OutputFormat = 'NUnitXml'
           $config.TestResult.OutputPath = "$($env:GITHUB_WORKSPACE)\testresults.xml"
           $config.Output.CIFormat = 'GitHubActions'
           # Run Pester tests
@@ -65,7 +65,7 @@ jobs:
           ADO_PROJECT: ${{ secrets.ADO_PROJECT }}
 
       - name: Upload Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
+        uses: EnricoMi/publish-unit-test-result-action@v2.9.0
         with:
           files: ./testresults.xml
 
