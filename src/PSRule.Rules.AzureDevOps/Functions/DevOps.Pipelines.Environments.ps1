@@ -31,8 +31,9 @@ function Get-AzDevOpsEnvironments {
         $Project
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
-
+    Write-Verbose "Getting environments for project $Project"
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/environments?api-version=6.0-preview.1"
+    Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
     }
@@ -90,8 +91,9 @@ function Get-AzDevOpsEnvironmentChecks {
         $Environment
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
-
+    Write-Verbose "Getting checks for environment $Environment"
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/checks/configurations?api-version=7.2-preview.1&resourceType=environment&resourceId=$($Environment)&"
+    Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
     }
@@ -153,6 +155,8 @@ function Export-AzDevOpsEnvironmentChecks {
             $environment | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Pipelines.Environment'
             $checks = @(Get-AzDevOpsEnvironmentChecks -PAT $PAT -Organization $Organization -Project $Project -Environment $environment.id)
             $environment | Add-Member -MemberType NoteProperty -Name checks -Value $checks
+            Write-Verbose "Exporting environment $($environment.name) to JSON"
+            Write-Verbose "Output file: $OutputPath\$($environment.name).ado.env.json"
             $environment | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($environment.name).ado.env.json"
         }
     }

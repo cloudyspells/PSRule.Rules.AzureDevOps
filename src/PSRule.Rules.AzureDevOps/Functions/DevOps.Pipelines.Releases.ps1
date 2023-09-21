@@ -28,9 +28,19 @@ Function Get-AzDevOpsReleaseDefinitions {
         [Parameter(Mandatory = $true)]
         [string]$PAT
     )
+    Write-Verbose "Getting release definitions for project $Project"
     $uri = "https://vsrm.dev.azure.com/$Organization/$Project/_apis/release/definitions?api-version=7.2-preview.4"
+    Write-Verbose "URI: $uri"
     $header = Get-AzDevOpsHeader -PAT $PAT
-    $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+    # try to get the release definitions, throw a descriptive error if it fails for authentication or other reasons
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+    }
+    catch {
+        Write-Error "Failed to get release definitions for project $Project"
+        Write-Error $_.Exception.Message
+        return @()
+    }
     return @($response.value)
 }
 Export-ModuleMember -Function Get-AzDevOpsReleaseDefinitions
@@ -74,10 +84,21 @@ Function Export-AzDevOpsReleaseDefinitions {
     foreach ($definition in $definitions) {
         if ($null -ne $definition.id) {
             $definitionId = $definition.id
+            Write-Verbose "Getting release definition with id $definitionId"
             $uri = "https://vsrm.dev.azure.com/$Organization/$Project/_apis/release/definitions/$($definitionId)?api-version=7.2-preview.4"
+            Write-Verbose "URI: $uri"
             $header = Get-AzDevOpsHeader -PAT $PAT
-            $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+            # try to get the release definition, throw a descriptive error if it fails for authentication or other reasons
+            try {
+                $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+            }
+            catch {
+                Write-Error "Failed to get release definition with id $definitionId"
+                Write-Error $_.Exception.Message
+                continue
+            }
             $definitionName = $response.name
+            Write-Verbose "Exporting release definition $definitionName as file $definitionName.ado.rd.json"
             $definitionPath = Join-Path -Path $OutputPath -ChildPath "$definitionName.ado.rd.json"
             # Add an ObjectType of Azure.DevOps.Pipelines.Releases.Definition to the response
             $response | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Pipelines.Releases.Definition'

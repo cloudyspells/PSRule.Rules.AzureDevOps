@@ -31,7 +31,9 @@ Function Get-AzDevOpsRepos {
         $Project
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
+    Write-Verbose "Getting repos for project $Project"
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/git/repositories?api-version=6.0"
+    Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
     }
@@ -92,8 +94,17 @@ Function Get-AzDevOpsBranchPolicy {
         $Branch
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
+    Write-Verbose "Getting branch policy for branch $Branch in repo $Repository in project $Project"
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/policy/configurations?api-version=6.0"
-    $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+    Write-Verbose "URI: $uri"
+    # Try to get the branch policy, return an empty object if no branch policy is found for the branch
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+    }
+    catch {
+        Write-Warning "No branch policy found for branch $Branch in repo $Repository in project $Project"
+        return $null
+    }
     $branchPolicy = $response.value | Where-Object {$_.settings.scope.refName -eq $Branch -and $_.settings.scope.repositoryId -eq $Repository}
 
     return $branchPolicy
@@ -149,7 +160,9 @@ function Test-AzDevOpsFileExists {
         $Path
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
+    Write-Verbose "Checking if file $Path exists in repo $Repository in project $Project"
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/git/repositories/$Repository/items?path=$Path&api-version=6.0"
+    Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
     }
@@ -200,12 +213,14 @@ function Export-AzDevOpsReposAndBranchPolicies {
         [string]
         $OutputPath
     )
+    # Get all repos in project
     $repos = Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $Project
     $repos | ForEach-Object {
         if ($null -ne $_) {
             $repo = $_
             # Add ObjectType Azure.DevOps.Repo to repo object
             $repo | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo"
+            Write-Verbose "Getting branch policy for repo $($repo.name)"
             $branchPolicy = Get-AzDevOpsBranchPolicy -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Branch $repo.defaultBranch
             $repo | Add-Member -MemberType NoteProperty -Name MainBranchPolicy -Value $branchPolicy
             # Add a property indicating if a file named README.md or README exists in the repo
@@ -217,6 +232,7 @@ function Export-AzDevOpsReposAndBranchPolicies {
             $repo | Add-Member -MemberType NoteProperty -Name LicenseExists -Value $licenseExists
 
             # Export repo object to JSON file
+            Write-Verbose "Exporting repo $($repo.name) to JSON as file $($repo.name).ado.repo.json"
             $repo | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($repo.name).ado.repo.json"
         }
     }

@@ -128,6 +128,7 @@ function Export-AzDevOpsArmServiceConnections {
         [string]
         $OutputPath
     )
+    # Get all service connections
     $serviceConnections = Get-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $Project
     $serviceConnections | ForEach-Object {
         $serviceConnection = $_
@@ -136,6 +137,7 @@ function Export-AzDevOpsArmServiceConnections {
         # Get checks for service connection
         $serviceConnectionChecks = @(Get-AzDevOpsArmServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $serviceConnection.id)
         $serviceConnection | Add-Member -MemberType NoteProperty -Name Checks -Value $serviceConnectionChecks
+        Write-Verbose "Exporting service connection $($serviceConnection.name) as file $($serviceConnection.name).ado.sc.json"
         $serviceConnection | ConvertTo-Json -Depth 10 | Out-File "$OutputPath/$($serviceConnection.name).ado.sc.json"
     }
 }
