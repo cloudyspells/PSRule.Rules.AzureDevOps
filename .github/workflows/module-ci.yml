@@ -52,6 +52,7 @@ jobs:
           $config.CodeCoverage.OutputFormat = 'JaCoCo'
           $config.CodeCoverage.Path = "$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Functions"
           $config.Output.Verbosity = 'Detailed'
+          $config.TestResult.Enabled = $true
           $config.TestResult.OutputFormat = 'NUnitXml'
           $config.TestResult.OutputPath = "$($env:GITHUB_WORKSPACE)\testresults.xml"
           $config.Output.CIFormat = 'GitHubActions'
