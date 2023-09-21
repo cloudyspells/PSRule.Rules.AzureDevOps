@@ -18,6 +18,30 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context "When running Get-AzDevOpsProjects" {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $Organization
+        }
+
+        It 'Should return a list of projects' {
+            $projects | Should -Not -BeNullOrEmpty
+            $projects[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It 'Should return a list of projects with a name' {
+            $projects[0].name | Should -Not -BeNullOrEmpty
+            $projects[0].name | Should -BeOfType [System.String]
+        }
+
+        It 'Should throw an error with a non-existing Organization' {
+            $faultyOrganization = "faultyOrganization"
+            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $faultyOrganization -ErrorAction SilentlyContinue
+            $projects | Should -BeNullOrEmpty
+        }
+    }
+
     Context "When running Get-AzDevOpsRepos" {
         BeforeAll {
             $PAT = $env:ADO_PAT
@@ -322,6 +346,25 @@ Describe 'PSRule.Rules.AzureDevOps' {
             $Project = $env:ADO_PROJECT
             $OutputPath = $env:ADO_EXPORT_DIR
             Export-AzDevOpsRuleData -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
+            $files = Get-ChildItem -Path $OutputPath -Recurse -File
+            $files | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context 'When running Export-AzDevOpsOrganizationRuleData' {
+        BeforeAll {
+            # Delete existing files from previous test runs
+            $OutputPath = $env:ADO_EXPORT_DIR
+            $files = Get-ChildItem -Path $OutputPath -Recurse -File
+            $files | ForEach-Object {
+                Remove-Item -Path $_.FullName -Force
+            }
+        }
+        It 'Should export all JSON files' {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $OutputPath = $env:ADO_EXPORT_DIR
+            Export-AzDevOpsOrganizationRuleData -PAT $PAT -Organization $Organization -OutputPath $OutputPath
             $files = Get-ChildItem -Path $OutputPath -Recurse -File
             $files | Should -Not -BeNullOrEmpty
         }
