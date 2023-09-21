@@ -28,9 +28,19 @@ Function Get-AzDevOpsVariableGroups {
         [Parameter(Mandatory = $true)]
         [string]$PAT
     )
+    Write-Verbose "Getting variable groups for project $Project"
     $url = "https://dev.azure.com/$Organization/$Project/_apis/distributedtask/variablegroups?api-version=7.2-preview.2"
+    Write-Verbose "URI: $url"
     $header = Get-AzDevOpsHeader -PAT $PAT
-    $response = Invoke-RestMethod -Uri $url -Method Get -Headers $header
+    # try to get the variable groups, throw a descriptive error if it fails for authentication or other reasons
+    try {
+        $response = Invoke-RestMethod -Uri $url -Method Get -Headers $header
+    }
+    catch {
+        Write-Error "Failed to get variable groups for project $Project"
+        Write-Error $_.Exception.Message
+        return @()
+    }
     return @($response.value)
 }
 Export-ModuleMember -Function Get-AzDevOpsVariableGroups
@@ -84,6 +94,7 @@ Function Export-AzDevOpsVariableGroups {
         $variableGroup | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Tasks.VariableGroup'
         $variableGroupName = $variableGroup.name
         $variableGroupPath = Join-Path -Path $OutputPath -ChildPath "$variableGroupName.ado.vg.json"
+        Write-Verbose "Exporting variable group $variableGroupName as file $variableGroupName.ado.vg.json"
         $variableGroup | ConvertTo-Json | Out-File -FilePath $variableGroupPath -Encoding UTF8
     }
 }

@@ -47,7 +47,16 @@ function Get-AzDevOpsPipelines {
         Write-Verbose "Getting pipeline details for $($pipeline.id)"
         Write-Verbose "Getting pipeline details from $uri"
         $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/$($pipeline.id)?api-version=6.0-preview.1"
-        $pipelineDetails = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        Write-Verbose "URI: $uri"
+        # try to get the pipeline details, throw a descriptive error if it fails for authentication or other reasons
+        try {
+            $pipelineDetails = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        }
+        catch {
+            Write-Error "Failed to get pipeline details for $($pipeline.id)"
+            Write-Error $_.Exception.Message
+            return @()
+        }
         $pipelines += $pipelineDetails
     }
     return $pipelines
