@@ -41,7 +41,7 @@ value needs to be an Azure DevOps Personal Access Token with
 sufficient permissions to read the project data.
 
 ```powershell
-$export = Export-AzDevOpsRuleData `
+Export-AzDevOpsRuleData `
     -Organization "MyOrg" `
     -Project "MyProject" `
     -PAT $MyPAT `
@@ -49,6 +49,17 @@ $export = Export-AzDevOpsRuleData `
 Assert-PSRule `
     -InputPath "C:\Temp\MyProject\" `
     -Module PSRule.Rules.AzureDevOps
+```
+
+Since version 0.0.8 of this module, you can also export the
+data at the organization level, looping through all projects
+in the organization the PAT has access to.
+
+```powershell
+Export-AzDevOpsOrganizationRuleData `
+    -Organization "MyOrg" `
+    -PAT $MyPAT `
+    -OutputPath "C:\Temp\MyOrg"
 ```
 
 ## Rules
