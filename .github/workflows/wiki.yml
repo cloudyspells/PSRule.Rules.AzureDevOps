@@ -35,7 +35,7 @@ jobs:
           # Copy wiki base page
           cp ./main/README.md ./wiki/Home.md
           # Copy wiki rules
-          cp ./main/src/PSRule.Rules.AzureDevOps/en-US/*.md ./wiki/rules
+          cp ./main/src/PSRule.Rules.AzureDevOps/en/*.md ./wiki/rules
 
       - name: Generate Module docs
         shell: pwsh
