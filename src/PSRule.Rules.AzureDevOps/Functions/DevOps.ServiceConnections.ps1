@@ -138,7 +138,7 @@ function Export-AzDevOpsArmServiceConnections {
         $serviceConnectionChecks = @(Get-AzDevOpsArmServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $serviceConnection.id)
         $serviceConnection | Add-Member -MemberType NoteProperty -Name Checks -Value $serviceConnectionChecks
         Write-Verbose "Exporting service connection $($serviceConnection.name) as file $($serviceConnection.name).ado.sc.json"
-        $serviceConnection | ConvertTo-Json -Depth 10 | Out-File "$OutputPath/$($serviceConnection.name).ado.sc.json"
+        $serviceConnection | ConvertTo-Json -Depth 100 | Out-File "$OutputPath/$($serviceConnection.name).ado.sc.json"
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsArmServiceConnections

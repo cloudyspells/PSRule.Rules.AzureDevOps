@@ -109,7 +109,7 @@ function Export-AzDevOpsPipelines {
         $pipeline | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Pipeline"
         Write-Verbose "Exporting pipeline $($pipeline.name) to JSON file"
         Write-Verbose "Exporting pipeline as JSON file to $OutputPath\$($pipeline.name).ado.pl.json"
-        $pipeline | ConvertTo-Json | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
+        $pipeline | ConvertTo-Json -Depth 100 | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsPipelines

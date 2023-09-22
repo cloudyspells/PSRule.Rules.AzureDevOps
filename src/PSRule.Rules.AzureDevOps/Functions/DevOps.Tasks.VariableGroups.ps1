@@ -95,7 +95,7 @@ Function Export-AzDevOpsVariableGroups {
         $variableGroupName = $variableGroup.name
         $variableGroupPath = Join-Path -Path $OutputPath -ChildPath "$variableGroupName.ado.vg.json"
         Write-Verbose "Exporting variable group $variableGroupName as file $variableGroupName.ado.vg.json"
-        $variableGroup | ConvertTo-Json | Out-File -FilePath $variableGroupPath -Encoding UTF8
+        $variableGroup | ConvertTo-Json -Depth 100 | Out-File -FilePath $variableGroupPath -Encoding UTF8
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsVariableGroups
