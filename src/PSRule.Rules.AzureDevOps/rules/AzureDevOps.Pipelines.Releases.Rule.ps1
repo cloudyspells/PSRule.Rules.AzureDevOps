@@ -5,10 +5,10 @@ Rule 'Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval' `
     -If { $null -ne ($TargetObject.environments | ?{ $_.name -imatch "prd|prod|live|master|main"}) } `
     -Tag @{ release = 'GA'} `
     -Level Error {
-        # Description: Release pipeline production environments should be protected by approval.
-        # Reason: The release pipeline contains a production environment that is not protected by approval.
-        # Recommendation: Consider adding approval to the production environment.
-        # Links: https://docs.microsoft.com/en-us/azure/devops/pipelines/release/approvals/?view=azure-devops
+        # Description 'Release pipeline production environments should be protected by approval.'
+        Reason 'The release pipeline contains a production environment that is not protected by approval.'
+        Recommend 'Consider adding approval to the production environment.'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/pipelines/release/approvals/?view=azure-devops'
         $prodEnvironments = $TargetObject.environments | ?{ $_.name -imatch "prd|prod|live|master|main"}
         $prodEnvironments | ForEach-Object {
             $Assert.HasField($_, "preDeployApprovals", $true)

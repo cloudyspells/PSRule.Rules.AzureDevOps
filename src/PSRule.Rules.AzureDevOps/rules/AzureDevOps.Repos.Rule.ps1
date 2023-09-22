@@ -7,8 +7,8 @@ Rule 'Azure.DevOps.Repos.HasBranchPolicy' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description: The default branch should have a branch policy
-        # Reason: The default branch does not have a branch policy
-        # Recommendation: Protect your main branch with a branch policy
+        Reason 'The default branch does not have a branch policy.'
+        Recommend 'Protect your main branch with a branch policy.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#secure-azure-repos
         $Assert.HasField($TargetObject, "MainBranchPolicy", $true)
         $Assert.NotNull($TargetObject, "MainBranchPolicy")
@@ -21,8 +21,8 @@ Rule 'Azure.DevOps.Repos.BranchPolicyIsEnabled' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description: The default branch should have its branch policy enabled
-        # Reason: The default branch does not have its branch policy enabled
-        # Recommendation: Protect your main branch with a branch policy
+        Reason 'The default branch does not have its branch policy enabled.'
+        Recommend 'Protect your main branch with a branch policy.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#secure-azure-repos
         $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "isEnabled", $true)
         $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "isEnabled", $true)
@@ -36,8 +36,8 @@ Rule 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description: The branch policy should require a minimum number of reviewers
-        # Reason: The branch policy does not require any reviewers
-        # Recommendation: Require a minimum number of reviewers to approve pull requests
+        Reason 'The branch policy does not require any reviewers.'
+        Recommend 'Require a minimum number of reviewers to approve pull requests.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#repositories-and-branches
         $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", $true)
         $Assert.Greater(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", 0)
@@ -50,8 +50,8 @@ Rule 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description: The branch policy should not allow creators to approve their own changes
-        # Reason: The branch policy allows creators to approve their own changes
-        # Recommendation: Require a minimum number of reviewers to approve pull requests
+        Reason 'The branch policy allows creators to approve their own changes.'
+        Recommend 'Require a minimum number of reviewers to approve pull requests.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#policies
         $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.creatorVoteCounts", $true)
         $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.creatorVoteCounts", $false)
@@ -64,8 +64,8 @@ Rule 'Azure.DevOps.Repos.BranchPolicyResetVotes' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description: The branch policy should reset code reviewer votes when new changes are pushed
-        # Reason: The branch policy does not reset code reviewer votes when new changes are pushed
-        # Recommendation: Reset code reviewer votes when new changes are pushed
+        Reason 'The branch policy does not reset code reviewer votes when new changes are pushed.'
+        Recommend 'Reset code reviewer votes when new changes are pushed.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#policies
         $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.resetOnSourcePush", $true)
         $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.resetOnSourcePush", $true)
@@ -78,8 +78,8 @@ Rule 'Azure.DevOps.Repos.Readme' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description: The repository should contain a README file
-        # Reason: The repository does not contain a README or README.md file
-        # Recommendation: Add a README or README.md file to the repository to explain its purpose
+        Reason 'The repository does not contain a README or README.md file.'
+        Recommend 'Add a README or README.md file to the repository to explain its purpose.'
         $Assert.HasField($TargetObject, "ReadmeExists", $true)
         $Assert.HasFieldValue($TargetObject, "ReadmeExists", $true)
 }
@@ -91,8 +91,8 @@ Rule 'Azure.DevOps.Repos.License' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description: The repository should contain a LICENSE file
-        # Reason: The repository does not contain a LICENSE file
-        # Recommendation: Add a LICENSE file to the repository to explain its purpose
+        Reason 'The repository does not contain a LICENSE file.'
+        Recommend 'Add a LICENSE file to the repository to explain its purpose.'
         $Assert.HasField($TargetObject, "LicenseExists", $true)
         $Assert.HasFieldValue($TargetObject, "LicenseExists", $true)
 }
@@ -103,11 +103,12 @@ Rule 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' `
     -Type 'Azure.DevOps.Repo' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
-        # Description: The branch policy enforce linked work items
-        # Reason: The branch policy does not enforce linked work items
-        # Recommendation: Enforce linked work items
-        # Links: https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#enforce-linked-work-items
-        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq '40e92b44-2fe1-4dd6-b3d8-74a9c21d0c6e'}), "type.displayName", "Work item linking")	
+        # Description 'The branch policy enforce linked work items.'
+        Reason 'The branch policy does not enforce linked work items.'
+        Recommend 'Enforce linked work items.'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#enforce-linked-work-items'
+        $Assert.NotNull($TargetObject, "MainBranchPolicy")
+        $Assert.HasField($TargetObject, "MainBranchPolicy[?@type.id == '40e92b44-2fe1-4dd6-b3d8-74a9c21d0c6e'].type", $true)
 }
 
 # Synopsis: The branch policy should enforce comment resolution
@@ -116,10 +117,10 @@ Rule 'Azure.DevOps.Repos.BranchPolicyCommentResolution' `
     -Type 'Azure.DevOps.Repo' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
-        # Description: The branch policy enforce comment resolution
-        # Reason: The branch policy does not enforce comment resolution
-        # Recommendation: Enforce comment resolution
-        # Links: https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#enforce-comment-resolution
+        # Description 'The branch policy should enforce comment resolution'
+        Reason 'The branch policy does not enforce comment resolution'
+        Recommend 'Enforce comment resolution'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#enforce-comment-resolution'
         $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'c6a1889d-b943-4856-b76f-9e46bb6b0df2'}), "type.displayName", "Comment requirements")	
 }
 
@@ -129,9 +130,9 @@ Rule 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' `
     -Type 'Azure.DevOps.Repo' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
-        # Description: The branch policy should require a merge strategy
-        # Reason: The branch policy does not require a merge strategy
-        # Recommendation: Require a merge strategy
-        # Links: https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#require-a-merge-strategy
+        # Description 'The branch policy should require a merge strategy'
+        Reason 'The branch policy does not require a merge strategy'
+        Recommend 'Consider requiring a merge strategy'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#require-a-merge-strategy'
         $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4916e5d171ab'}), "type.displayName", "Require a merge strategy")	
 }

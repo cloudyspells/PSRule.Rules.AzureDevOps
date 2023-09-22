@@ -1,14 +1,14 @@
 ---
-category: Microsoft Azure DevOps Pipelines
+category: Microsoft Azure DevOps Service Connections
 severity: Severe
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.ProductionHumanApproval.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.ProductionHumanApproval.md
 ---
 
-# Azure.DevOps.Pipelines.Environments.ProductionHumanApproval
+# Azure.DevOps.ServiceConnections.ProductionHumanApproval
 
 ## SYNOPSIS
 
-An environment scoped to production should be protected by a human review
+A service connection scoped to production should be protected by a human review
 and approval. This will help ensure no accidental changes are made to the
 production resources.
 
@@ -22,9 +22,9 @@ reviewers or a specific CI pipeline must pass.
 ## RECOMMENDATION
 
 Consider protecting a service connection scoped to production with a human
-approval check.
+approval step.
 
 ## LINKS
 
 - [Define approvals and checks](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/approvals?view=azure-devops&tabs=check-pass)
-- [Create an environment](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops&tabs=yaml#create-an-environment)
+

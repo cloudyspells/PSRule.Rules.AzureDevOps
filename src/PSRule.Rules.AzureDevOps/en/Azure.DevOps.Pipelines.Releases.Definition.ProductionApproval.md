@@ -1,7 +1,7 @@
 ---
 category: Microsoft Azure DevOps Pipelines
 severity: Severe
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval.md
 ---
 
 # Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval

@@ -25,10 +25,10 @@ Rule 'Azure.DevOps.Pipelines.Environments.ProductionHumanApproval' `
     -With 'IsProduction' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
-        # Description: Production environment should be protected by a human approval
-        # Reason: No approval check is configured for the environment
-        # Recommendation: Add one or more check gates to the production environment
-        # Links: https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops#check-gates
+        # Description 'Production environment should be protected by a human approval'
+        Reason 'No approval check is configured for the environment'
+        Recommend 'Add one or more check gates to the production environment'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops#check-gates'
         $approvalCount = @($TargetObject.checks | Where-Object { $_.type.name -eq 'Approval' })
         $Assert.Greater($approvalCount, "Count", 0)
 }
@@ -39,11 +39,10 @@ Rule 'Azure.DevOps.Pipelines.Environments.Description' `
     -Type 'Azure.DevOps.Pipelines.Environment' `
     -Tag @{ release = 'GA'} `
     -Level Information {
-        # Description: Production environment have a description
-        # Reason: No description is configured for the environment
-        # Recommendation: Add a description to the environment to make it easier to understand its purpose
-        # Links: https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops#check-gates
+        # Description 'Production environment have a description'
+        Reason 'No description is configured for the environment'
+        Recommend 'Add a description to the environment to make it easier to understand its purpose'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops#check-gates'
         $Assert.HasField($TargetObject, "description", $true)
         $Assert.NotNull($TargetObject, "description")
 }
-
