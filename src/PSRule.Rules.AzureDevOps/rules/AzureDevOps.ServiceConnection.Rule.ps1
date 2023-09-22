@@ -38,7 +38,7 @@ Rule 'Azure.DevOps.ServiceConnections.Description' `
         Reason 'No description is configured for the service connection.'
         Recommend 'Add a description to the service connection to make it easier to understand its purpose.'
         $Assert.HasField($TargetObject, "description", $true)
-        $Assert.NotNull($TargetObject, "description")
+        $Assert.HasFieldValue($TargetObject, "description")
 }
 
 # Synopsis: service connections should have a scope that is not a subscription

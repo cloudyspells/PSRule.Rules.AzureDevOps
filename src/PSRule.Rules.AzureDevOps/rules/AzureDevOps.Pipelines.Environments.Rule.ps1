@@ -44,5 +44,5 @@ Rule 'Azure.DevOps.Pipelines.Environments.Description' `
         Recommend 'Add a description to the environment to make it easier to understand its purpose'
         # Links 'https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops#check-gates'
         $Assert.HasField($TargetObject, "description", $true)
-        $Assert.NotNull($TargetObject, "description")
+        $Assert.HasFieldValue($TargetObject, "description")
 }
