@@ -1,5 +1,6 @@
 BeforeAll {
-    Import-Module -Name "$($env:GITHUB_WORKSPACE)/src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psm1" -Force
+    $rootPath = $PWD;
+    Import-Module -Name (Join-Path -Path $rootPath -ChildPath '/src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psd1') -Force;
 }
 
 Describe 'PSRule.Rules.AzureDevOps' {
@@ -61,7 +62,25 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context "When running Get-AzDevOpsBranchPolicy" {
+    Context "When running Get-AzDevOpsBranchPolicy on a protected branch" {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $repos = Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $Project
+            $Repository = $repos[1].id
+            $Branch = $repos[1].defaultBranch
+            $branchPolicy = Get-AzDevOpsBranchPolicy -PAT $PAT -Organization $Organization -Project $Project -Repository $Repository -Branch $Branch
+        }
+
+        It 'Should return a branch policy' {
+            $branchPolicy | Should -Not -BeNullOrEmpty
+            $branchPolicy | Should -BeOfType [PSCustomObject]
+            $branchPolicy._links.policyType.href | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context "When running Get-AzDevOpsBranchPolicy on an unprotected branch" {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
@@ -72,10 +91,8 @@ Describe 'PSRule.Rules.AzureDevOps' {
             $branchPolicy = Get-AzDevOpsBranchPolicy -PAT $PAT -Organization $Organization -Project $Project -Repository $Repository -Branch $Branch
         }
 
-        It 'Should return a branch policy' {
-            $branchPolicy | Should -Not -BeNullOrEmpty
-            $branchPolicy | Should -BeOfType [PSCustomObject]
-            $branchPolicy._links.policyType.href | Should -Not -BeNullOrEmpty
+        It 'Should return null or empty' {
+            $branchPolicy | Should -BeNullOrEmpty
         }
     }
 
@@ -138,7 +155,7 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context "When running Get-AzDevOpsArmServiceConnectionChecks" {
+    Context "When running Get-AzDevOpsArmServiceConnectionChecks on a protected service connection" {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
@@ -151,6 +168,22 @@ Describe 'PSRule.Rules.AzureDevOps' {
         It 'Should return a list of service connection checks' {
             $serviceConnectionChecks | Should -Not -BeNullOrEmpty
             $serviceConnectionChecks[0] | Should -BeOfType [PSCustomObject]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsArmServiceConnectionChecks on an unprotected service connection' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+
+            $serviceConnections = Get-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $Project
+            $serviceConnectionId = $serviceConnections[0].id
+            $serviceConnectionChecks = Get-AzDevOpsArmServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $serviceConnectionId
+        }
+
+        It 'Should return null or empty' {
+            $serviceConnectionChecks | Should -BeNullOrEmpty
         }
     }
 
@@ -307,7 +340,24 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context "When running Get-AzDevOpsEnvironmentChecks" {
+    Context "When running Get-AzDevOpsEnvironmentChecks on a protected environment" {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+
+            $environments = Get-AzDevOpsEnvironments -PAT $PAT -Organization $Organization -Project $Project
+            $environmentId = $environments[1].id
+            $environmentChecks = Get-AzDevOpsEnvironmentChecks -PAT $PAT -Organization $Organization -Project $Project -Environment $environmentId
+        }
+
+        It 'Should return a list of environment checks' {
+            $environmentChecks | Should -Not -BeNullOrEmpty
+            $environmentChecks[0] | Should -BeOfType [PSCustomObject]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsEnvironmentChecks on an unprotected environment' {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
@@ -318,9 +368,8 @@ Describe 'PSRule.Rules.AzureDevOps' {
             $environmentChecks = Get-AzDevOpsEnvironmentChecks -PAT $PAT -Organization $Organization -Project $Project -Environment $environmentId
         }
 
-        It 'Should return a list of environment checks' {
-            $environmentChecks | Should -Not -BeNullOrEmpty
-            $environmentChecks[0] | Should -BeOfType [PSCustomObject]
+        It 'Should return null or empty' {
+            $environmentChecks | Should -BeNullOrEmpty
         }
     }
 
