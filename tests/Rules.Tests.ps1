@@ -11,8 +11,11 @@ BeforeAll {
     }
 
     # Setup tests paths
-    $rootPath = $PWD;
-    Import-Module -Name (Join-Path -Path $rootPath -ChildPath '/src/PSRule.Rules.AzureDevOps') -Force;
+    # $rootPath = $PWD;
+    $rootPath = $env:GITHUB_WORKSPACE
+    $ourModule = (Join-Path -Path $rootPath -ChildPath '/src/PSRule.Rules.AzureDevOps')
+
+    Import-Module -Name $ourModule -Force;
     $here = (Resolve-Path $PSScriptRoot).Path;
 
      # Create tempory test output folder and store path
