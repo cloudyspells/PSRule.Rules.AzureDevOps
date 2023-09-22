@@ -24,7 +24,7 @@ BeforeAll {
 
     # Export all Azure DevOps rule data for project 'psrule-fail-project' to output folder
     Export-AzDevOpsRuleData -PAT $env:ADO_PAT -Project $env:ADO_PROJECT -Organization $env:ADO_ORGANIZATION -OutputPath $outPath
-    $ruleResult = Invoke-PSRule -InputPath "$($outPath)\" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en
+    $ruleResult = Invoke-PSRule -InputPath "$($outPath)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en
 }
 
 Describe 'AzureDevOps ' {

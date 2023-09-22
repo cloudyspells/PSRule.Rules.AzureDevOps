@@ -210,7 +210,7 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context "When running Get-AzDevOpsVariableGroups" {
+    Context "When running Get-AzDevOpsVariableGroups on a project containing variable groups" {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
@@ -226,6 +226,19 @@ Describe 'PSRule.Rules.AzureDevOps' {
         It 'Should return a list of variable groups with a name' {
             $variableGroups[0].name | Should -Not -BeNullOrEmpty
             $variableGroups[0].name | Should -BeOfType [System.String]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsVariableGroups on an empty project' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $EmptyProject = 'empty-project'
+            $variableGroups = Get-AzDevOpsVariableGroups -PAT $PAT -Organization $Organization -Project $EmptyProject
+        }
+
+        It 'Should return null or empty' {
+            $variableGroups | Should -BeNullOrEmpty
         }
     }
 
@@ -252,7 +265,7 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context "When running Get-AzDevOpsPipelines" {
+    Context "When running Get-AzDevOpsPipelines on a project containing pipelines" {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
@@ -271,6 +284,19 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsPipelines on an empty project' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $EmptyProject = 'empty-project'
+            $pipelines = Get-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $EmptyProject
+        }
+
+        It 'Should return null or empty' {
+            $pipelines | Should -BeNullOrEmpty
+        }
+    }
+
     Context "When running Export-AzDevOpsPipelines" {
         It 'Should export all JSON files with an ObjectType property set as Azure.DevOps.Pipeline' {
             $PAT = $env:ADO_PAT
@@ -286,7 +312,7 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context "When running Get-AzDevOpsReleaseDefinitions" {
+    Context "When running Get-AzDevOpsReleaseDefinitions on a project containing release definitions" {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
@@ -305,6 +331,19 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsReleaseDefinitions on an empty project' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $EmptyProject = 'empty-project'
+            $releaseDefinitions = Get-AzDevOpsReleaseDefinitions -PAT $PAT -Organization $Organization -Project $EmptyProject
+        }
+
+        It 'Should return null or empty' {
+            $releaseDefinitions | Should -BeNullOrEmpty
+        }
+    }
+
     Context "When running Export-AzDevOpsReleaseDefinitions" {
         It 'Should export all JSON files with an ObjectType property set as Azure.DevOps.Releases.Definition' {
             $PAT = $env:ADO_PAT
@@ -320,7 +359,7 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context "When running Get-AzDevOpsEnvironments" {
+    Context "When running Get-AzDevOpsEnvironments on a project containing environments" {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
@@ -337,6 +376,19 @@ Describe 'PSRule.Rules.AzureDevOps' {
             $environments = Get-AzDevOpsEnvironments -PAT $PAT -Organization $Organization -Project $Project
             $environments[0].name | Should -Not -BeNullOrEmpty
             $environments[0].name | Should -BeOfType [System.String]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsEnvironments on an empty project' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $EmptyProject = 'empty-project'
+            $environments = Get-AzDevOpsEnvironments -PAT $PAT -Organization $Organization -Project $EmptyProject
+        }
+
+        It 'Should return null or empty' {
+            $environments | Should -BeNullOrEmpty
         }
     }
 
