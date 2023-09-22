@@ -1,7 +1,7 @@
 ---
 category: Microsoft Azure DevOps Distributed Task
 severity: Severe
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Tasks.VariableGroup.Description.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.Description.md
 ---
 
 # Azure.DevOps.Tasks.VariableGroup.Description

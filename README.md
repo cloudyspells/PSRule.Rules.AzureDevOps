@@ -67,7 +67,7 @@ Export-AzDevOpsOrganizationRuleData `
 Documentation for the implemented rules can be found in the
 [en-US](src/PSRule.Rules.AzureDevOps/en-US) folder.
 
-- [Azure.DevOps.Pipelines.Core.UseYaml](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Core.UseYaml.md)
+- [Azure.DevOps.Pipelines.Core.UseYamlDefinition](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Core.UseYamlDefinition.md)
 - [Azure.DevOps.Pipelines.Environments.Description](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.Description.md)
 - [Azure.DevOps.Pipelines.Environments.ProductionCheckProtection](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.ProductionCheckProtection.md)
 - [Azure.DevOps.Pipelines.Environments.ProductionHumanApproval](src/PSRule.Rules.AzureDevOps/en-US/Azure.DevOps.Pipelines.Environments.ProductionHumanApproval.md)

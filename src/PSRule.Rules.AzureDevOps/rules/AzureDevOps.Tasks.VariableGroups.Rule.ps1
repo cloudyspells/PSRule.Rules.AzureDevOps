@@ -7,10 +7,10 @@ Rule 'Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets' `
     -If { $TargetObject.type -eq 'Vsts' } `
     -Tag @{ release = 'GA'} `
     -Level Error {
-        # Description: Variable Groups should not contain secrets when not linked to a Key Vault
-        # Reason: The Variable Group is not linked to a Key Vault and it contains secrets
-        # Recommendation: Consider backing the Variable Group with a Key Vault
-        # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#tasks
+        # Description 'Variable Groups should not contain secrets when not linked to a Key Vault.'
+        Reason 'The Variable Group is not linked to a Key Vault and it contains secrets.'
+        Recommend 'Consider backing the Variable Group with a Key Vault.'
+        # Links 'https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#tasks'
         $Assert.NotHasField($TargetObject, "variables.psobject.Properties.Value.isSecret", $false)
 }
 
@@ -20,9 +20,9 @@ Rule 'Azure.DevOps.Tasks.VariableGroup.Description' `
     -Type 'Azure.DevOps.Tasks.VariableGroup' `
     -Tag @{ release = 'GA'} `
     -Level Information {
-        # Description: Variable groups should have a description
-        # Reason: No description is configured for the variable group
-        # Recommendation: Add a description to the variable group to make it easier to understand its purpose
+        # Description 'Variable groups should have a description.'
+        Reason 'No description is configured for the variable group.'
+        Recommend 'Add a description to the variable group to make it easier to understand its purpose.'
         $Assert.HasField($TargetObject, "description", $true)
         $Assert.NotNull($TargetObject, "description")
 }
