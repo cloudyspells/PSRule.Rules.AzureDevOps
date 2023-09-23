@@ -149,6 +149,34 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsRepositoryGhas' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $repositoryName = 'repository-success'
+            $repoGhas = Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -Repository $repositoryName
+        }
+
+        It 'Should return an object' {
+            $repoGhas | Should -Not -BeNullOrEmpty
+            $repoGhas | Should -BeOfType [PSCustomObject]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsRepositoryGhas with a non-existing repository' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = 'project-success'
+            $repositoryName = 'repository-failure'
+        }
+
+        It 'Should return an error' {
+            { Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -Repository $repositoryName } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+        }
+    }
+
     Context "When running Export-AzDevOpsReposAndBranchPolicies" {
         BeforeAll {
             $PAT = $env:ADO_PAT

@@ -12,8 +12,8 @@ Rule 'Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval' `
         $prodEnvironments = $TargetObject.environments | ?{ $_.name -imatch "prd|prod|live|master|main"}
         $prodEnvironments | ForEach-Object {
             $Assert.HasField($_, "preDeployApprovals", $true)
-            $Assert.HasField($_.preDeployApprovals, "approvals", $true)
-            $Assert.Greater($_.preDeployApprovals, "approvals.length", 0, $true)
+            $Assert.HasField($_.preDeployApprovals, "approvals[0].approver", $true)
+            $Assert.HasFieldValue($_.preDeployApprovals, "approvals[0].approver.displayName")
         }
 }
 

@@ -178,6 +178,96 @@ function Test-AzDevOpsFileExists {
     return $true
 }
 Export-ModuleMember -Function Test-AzDevOpsFileExists
+# End of Function Test-AzDevOpsFileExists
+
+<#
+    .SYNOPSIS
+    Get Azure DevOps organization information
+
+    .DESCRIPTION
+    Get Azure DevOps organization information using Azure DevOps Rest API
+
+    .PARAMETER PAT
+    Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsOrganization -PAT $PAT -Organization $Organization
+#>
+
+<#
+    .SYNOPSIS
+    Get GitHub Advanced Security (GHAS) data for a repository
+
+    .DESCRIPTION
+    Get GitHub Advanced Security (GHAS) data for a repository using Azure DevOps Rest API
+
+    .PARAMETER PAT
+    Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
+
+    .PARAMETER Project
+    Project name for Azure DevOps
+
+    .PARAMETER Repository
+    Repository name for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -Repository $Repository
+#>
+Function Get-AzDevOpsRepositoryGhas {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]
+        $PAT,
+        [Parameter()]
+        [string]
+        $Organization,
+        [Parameter()]
+        [string]
+        $Project,
+        [Parameter()]
+        [string]
+        $Repository
+    )
+    
+    $header = Get-AzDevOpsHeader -PAT $PAT
+    # Get the repository
+    $repo = Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $Project | ?{ $_.name -eq $Repository }
+    # Get the repository id
+    $repoId = $repo.id
+    # Get the project id
+    $projectId = $repo.project.id
+    $payload = @{
+        contributionIds = @(
+            "ms.vss-features.my-organizations-data-provider"
+            "ms.vss-advsec.advanced-security-enablement-data-provider"
+        )
+        dataProviderContext = @{
+            properties = @{
+                givenProjectId = $projectId
+                givenRepoId = $repoId
+            }
+        }
+    }
+    $url = "https://dev.azure.com/$Organization/_apis/Contribution/HierarchyQuery?api-version=5.0-preview.1"
+    Write-Verbose "Getting repository $Repository in project $Project in organization $Organization"
+    try {
+        $response = Invoke-RestMethod -Uri $url -Method Post -Headers $header -Body ($payload | ConvertTo-Json) -ContentType "application/json"
+    }
+    catch {
+        throw $_.Exception.Message
+    }
+    return $response.dataProviders.'ms.vss-advsec.advanced-security-enablement-data-provider'
+}
+Export-ModuleMember -Function Get-AzDevOpsRepositoryGhas
+# End of Function Get-AzDevOpsRepositoryGhas
+
 <#
     .SYNOPSIS
     Get and export all Azure DevOps repos in a project with default, main and master branches and branch policies and export to JSON with 1 file per repo
@@ -236,6 +326,10 @@ function Export-AzDevOpsReposAndBranchPolicies {
             # Add a property indicating if a file named LICENSE or LICENSE.md exists in the repo
             $licenseExists = ((Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE.md"))
             $repo | Add-Member -MemberType NoteProperty -Name LicenseExists -Value $licenseExists
+
+            # Add a property for GitHub Advanced Security (GHAS) data
+            $ghas = Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.name
+            $repo | Add-Member -MemberType NoteProperty -Name Ghas -Value $ghas
 
             # Export repo object to JSON file
             Write-Verbose "Exporting repo $($repo.name) to JSON as file $($repo.name).ado.repo.json"
