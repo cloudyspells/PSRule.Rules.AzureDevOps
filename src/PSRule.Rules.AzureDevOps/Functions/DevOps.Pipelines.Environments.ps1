@@ -36,10 +36,13 @@ function Get-AzDevOpsEnvironments {
     Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # If the response is a string and not an object, throw an exception for authentication failure or project not found
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
     }
     catch {
-        Write-Warning "No environments found for project $Project"
-        return @()
+        throw $_.Exception.Message
     }
     $environments = $response.value
     return $environments
@@ -96,10 +99,13 @@ function Get-AzDevOpsEnvironmentChecks {
     Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # If the response is a string and not an object, throw an exception for authentication failure or project not found
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
     }
     catch {
-        Write-Warning "No checks found for environment $Environment"
-        return @()
+        throw $_.Exception.Message
     }
     $checks = $response.value
     if($null -eq $checks) {

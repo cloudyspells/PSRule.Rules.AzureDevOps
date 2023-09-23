@@ -35,11 +35,13 @@ Function Get-AzDevOpsVariableGroups {
     # try to get the variable groups, throw a descriptive error if it fails for authentication or other reasons
     try {
         $response = Invoke-RestMethod -Uri $url -Method Get -Headers $header
+        # If the response is not an object but a string, the authentication failed
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
     }
     catch {
-        Write-Error "Failed to get variable groups for project $Project"
-        Write-Error $_.Exception.Message
-        return @()
+        throw $_.Exception.Message
     }
     return @($response.value)
 }
@@ -95,7 +97,7 @@ Function Export-AzDevOpsVariableGroups {
         $variableGroupName = $variableGroup.name
         $variableGroupPath = Join-Path -Path $OutputPath -ChildPath "$variableGroupName.ado.vg.json"
         Write-Verbose "Exporting variable group $variableGroupName as file $variableGroupName.ado.vg.json"
-        $variableGroup | ConvertTo-Json | Out-File -FilePath $variableGroupPath -Encoding UTF8
+        $variableGroup | ConvertTo-Json -Depth 100 | Out-File -FilePath $variableGroupPath -Encoding UTF8
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsVariableGroups

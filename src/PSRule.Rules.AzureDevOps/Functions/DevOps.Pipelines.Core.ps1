@@ -36,10 +36,13 @@ function Get-AzDevOpsPipelines {
     Write-Verbose "Getting pipelines from $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # if the response is not an object but a string, the authentication failed
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
     }
     catch {
-        Write-Warning "No pipelines found for project $Project"
-        return @()
+        throw $_.Exception.Message
     }
     # walk through all pipelines and get the pipeline details
     $pipelines = @()
@@ -48,14 +51,15 @@ function Get-AzDevOpsPipelines {
         Write-Verbose "Getting pipeline details from $uri"
         $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/$($pipeline.id)?api-version=6.0-preview.1"
         Write-Verbose "URI: $uri"
-        # try to get the pipeline details, throw a descriptive error if it fails for authentication or other reasons
         try {
             $pipelineDetails = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+            # if the response is not an object but a string, the authentication failed or the pipeline was not found
+            if ($pipelineDetails -is [string]) {
+                throw "Authentication failed or pipeline not found"	
+            }
         }
         catch {
-            Write-Error "Failed to get pipeline details for $($pipeline.id)"
-            Write-Error $_.Exception.Message
-            return @()
+            throw $_.Exception.Message
         }
         $pipelines += $pipelineDetails
     }
@@ -109,7 +113,7 @@ function Export-AzDevOpsPipelines {
         $pipeline | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Pipeline"
         Write-Verbose "Exporting pipeline $($pipeline.name) to JSON file"
         Write-Verbose "Exporting pipeline as JSON file to $OutputPath\$($pipeline.name).ado.pl.json"
-        $pipeline | ConvertTo-Json | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
+        $pipeline | ConvertTo-Json -Depth 100 | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsPipelines

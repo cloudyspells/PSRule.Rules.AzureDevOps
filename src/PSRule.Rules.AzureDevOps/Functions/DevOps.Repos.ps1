@@ -36,10 +36,13 @@ Function Get-AzDevOpsRepos {
     Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # If the response is a string and not an object, throw an exception for authentication failure or project not found
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
     }
     catch {
-        Write-Warning "No repos found for project $Project"
-        return $null
+        throw $_.Exception.Message
     }
     return @($response.value)
 }
@@ -100,10 +103,13 @@ Function Get-AzDevOpsBranchPolicy {
     # Try to get the branch policy, return an empty object if no branch policy is found for the branch
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # If the response is a string and not an object, throw an exception for authentication failure or project not found
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
     }
     catch {
-        Write-Warning "No branch policy found for branch $Branch in repo $Repository in project $Project"
-        return $null
+        throw $_.Exception.Message
     }
     $branchPolicy = $response.value | Where-Object {$_.settings.scope.refName -eq $Branch -and $_.settings.scope.repositoryId -eq $Repository}
 

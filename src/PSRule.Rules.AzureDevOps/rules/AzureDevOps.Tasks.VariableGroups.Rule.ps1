@@ -11,7 +11,7 @@ Rule 'Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets' `
         Reason 'The Variable Group is not linked to a Key Vault and it contains secrets.'
         Recommend 'Consider backing the Variable Group with a Key Vault.'
         # Links 'https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#tasks'
-        $Assert.NotHasField($TargetObject, "variables.psobject.Properties.Value.isSecret", $false)
+        $Assert.NotHasField($TargetObject, "variables[*].isSecret", $true)
 }
 
 # Synopsis: Variable groups should have a description
@@ -24,5 +24,5 @@ Rule 'Azure.DevOps.Tasks.VariableGroup.Description' `
         Reason 'No description is configured for the variable group.'
         Recommend 'Add a description to the variable group to make it easier to understand its purpose.'
         $Assert.HasField($TargetObject, "description", $true)
-        $Assert.NotNull($TargetObject, "description")
+        $Assert.HasFieldValue($TargetObject, "description")
 }
