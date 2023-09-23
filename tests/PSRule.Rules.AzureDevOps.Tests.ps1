@@ -38,8 +38,18 @@ Describe 'PSRule.Rules.AzureDevOps' {
 
         It 'Should throw an error with a non-existing Organization' {
             $faultyOrganization = "faultyOrganization"
-            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $faultyOrganization -ErrorAction SilentlyContinue
-            $projects | Should -BeNullOrEmpty
+            { Get-AzDevOpsProjects -PAT $PAT -Organization $faultyOrganization -ErrorAction SilentlyContinue } | Should -Throw
+        }
+    }
+
+    Context "When running Get-AzDevOpsProjects with a wrong PAT" {
+        BeforeAll {
+            $PAT = 'ThisIsAFaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+        }
+
+        It 'Should throw an error' {
+            { Get-AzDevOpsProjects -PAT $PAT -Organization $Organization -ErrorAction Stop } | Should -Throw
         }
     }
 
@@ -59,6 +69,18 @@ Describe 'PSRule.Rules.AzureDevOps' {
         It 'Should return a list of repos with a default branch' {
             $repos[0].defaultBranch | Should -Not -BeNullOrEmpty
             $repos[0].defaultBranch | Should -BeOfType [System.String]
+        }
+    }
+
+    Context "When running Get-AzDevOpsRepos with a wrong project name and faulty PAT" {
+        BeforeAll {
+            $PAT = 'ThisIsAFaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+            $FaultyProject = 'faulty-project'
+        }
+
+        It 'Should throw an error' {
+            { Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
         }
     }
 
@@ -93,6 +115,20 @@ Describe 'PSRule.Rules.AzureDevOps' {
 
         It 'Should return null or empty' {
             $branchPolicy | Should -BeNullOrEmpty
+        }
+    }
+
+    Context "When running Get-AzDevOpsBranchPolicy with a wrong project name and faulty PAT" {
+        BeforeAll {
+            $PAT = 'ThisIsAFaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+            $FaultyProject = 'faulty-project'
+            $Repository = 'faulty-repository'
+            $Branch = 'faulty-branch'
+        }
+
+        It 'Should throw an error' {
+            { Get-AzDevOpsBranchPolicy -PAT $PAT -Organization $Organization -Project $FaultyProject -Repository $Repository -Branch $Branch -ErrorAction Stop } | Should -Throw
         }
     }
 
@@ -155,6 +191,18 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context "When running Get-AzDevOpsServiceConnections with a wrong project name and faulty PAT" {
+        BeforeAll {
+            $PAT = 'ThisIsAFaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+            $FaultyProject = 'faulty-project'
+        }
+
+        It 'Should throw an error' {
+            { Get-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
+        }
+    }
+
     Context "When running Get-AzDevOpsArmServiceConnectionChecks on a protected service connection" {
         BeforeAll {
             $PAT = $env:ADO_PAT
@@ -184,6 +232,19 @@ Describe 'PSRule.Rules.AzureDevOps' {
 
         It 'Should return null or empty' {
             $serviceConnectionChecks | Should -BeNullOrEmpty
+        }
+    }
+
+    Context 'When running Get-AzDevOpsArmServiceConnectionChecks with a wrong project name and faulty PAT' {
+        BeforeAll {
+            $PAT = 'ThisIsAFaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+            $FaultyProject = 'faulty-project'
+            $ServiceConnectionId = 'faulty-service-connection-id'
+        }
+
+        It 'Should throw an error' {
+            { Get-AzDevOpsArmServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $FaultyProject -ServiceConnectionId $ServiceConnectionId -ErrorAction Stop } | Should -Throw
         }
     }
 
@@ -297,6 +358,18 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsPipelines with a wrong project name and faulty PAT' {
+        BeforeAll {
+            $PAT = 'ThisIsAFaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+            $FaultyProject = 'faulty-project'
+        }
+
+        It 'Should throw an error' {
+            { Get-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
+        }
+    }
+
     Context "When running Export-AzDevOpsPipelines" {
         It 'Should export all JSON files with an ObjectType property set as Azure.DevOps.Pipeline' {
             $PAT = $env:ADO_PAT
@@ -341,6 +414,18 @@ Describe 'PSRule.Rules.AzureDevOps' {
 
         It 'Should return null or empty' {
             $releaseDefinitions | Should -BeNullOrEmpty
+        }
+    }
+
+    Context 'When running Get-AzDevOpsReleaseDefinitions with a wrong project name and faulty PAT' {
+        BeforeAll {
+            $PAT = 'ThisIsAFaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+            $FaultyProject = 'faulty-project'
+        }
+
+        It 'Should throw an error' {
+            { Get-AzDevOpsReleaseDefinitions -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
         }
     }
 
@@ -392,6 +477,18 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsEnvironments with a wrong project name and faulty PAT' {
+        BeforeAll {
+            $PAT = 'ThisIsAFaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+            $FaultyProject = 'faulty-project'
+        }
+
+        It 'Should throw an error' {
+            { Get-AzDevOpsEnvironments -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
+        }
+    }
+
     Context "When running Get-AzDevOpsEnvironmentChecks on a protected environment" {
         BeforeAll {
             $PAT = $env:ADO_PAT
@@ -425,6 +522,18 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsEnvironmentChecks with a wrong project name and faulty PAT' {
+        BeforeAll {
+            $PAT = 'ThisIsAFaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+            $FaultyProject = 'faulty-project'
+        }
+
+        It 'Should throw an error' {
+            { Get-AzDevOpsEnvironmentChecks -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
+        }
+    }
+
     Context "When running Export-AzDevOpsEnvironmentChecks" {
         It 'Should export all JSON files with an ObjectType property set as Azure.DevOps.Pipelines.Environment' {
             $PAT = $env:ADO_PAT
@@ -453,20 +562,17 @@ Describe 'PSRule.Rules.AzureDevOps' {
     }
 
     Context 'When running Export-AzDevOpsOrganizationRuleData' {
-        BeforeAll {
-            # Delete existing files from previous test runs
-            $OutputPath = $env:ADO_EXPORT_DIR
-            $files = Get-ChildItem -Path $OutputPath -Recurse -File
-            $files | ForEach-Object {
-                Remove-Item -Path $_.FullName -Force
-            }
-        }
+        
         It 'Should export all JSON files' {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
-            $OutputPath = $env:ADO_EXPORT_DIR
+            $OutputPath = "$env:ADO_EXPORT_DIR/organization"
+            # Create the output directory if it does not exist
+            if (!(Test-Path -Path $OutputPath)) {
+                New-Item -Path $OutputPath -ItemType Directory
+            }
             Export-AzDevOpsOrganizationRuleData -PAT $PAT -Organization $Organization -OutputPath $OutputPath
-            $files = Get-ChildItem -Path $OutputPath -Recurse -File
+            $files = Get-ChildItem -Path "$OutputPath" -Recurse -File
             $files | Should -Not -BeNullOrEmpty
         }
     }

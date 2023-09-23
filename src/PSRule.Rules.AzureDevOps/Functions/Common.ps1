@@ -62,10 +62,14 @@ function Get-AzDevOpsProjects {
     Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # If the response is not an object but a string, the authentication failed
+        if ($response -is [string]) {
+            throw "Authentication failed or organization not found"	
+        }
     }
     catch {
-        Write-Error "No projects found for organization $Organization"
-        return @()
+        Write-Error "Failed to get projects from Azure DevOps"
+        throw $_.Exception.Message
     }
     $projects = $response.value
     return $projects

@@ -35,11 +35,14 @@ Function Get-AzDevOpsVariableGroups {
     # try to get the variable groups, throw a descriptive error if it fails for authentication or other reasons
     try {
         $response = Invoke-RestMethod -Uri $url -Method Get -Headers $header
+        # If the response is not an object but a string, the authentication failed
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
     }
     catch {
-        Write-Error "Failed to get variable groups for project $Project"
-        Write-Error $_.Exception.Message
-        return @()
+        Write-Error "Failed to get variable groups from Azure DevOps"
+        throw $_.Exception.Message
     }
     return @($response.value)
 }

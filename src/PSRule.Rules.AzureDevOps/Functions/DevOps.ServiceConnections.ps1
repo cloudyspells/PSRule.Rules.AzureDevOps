@@ -32,6 +32,18 @@ function Get-AzDevOpsArmServiceConnections {
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/serviceendpoint/endpoints?api-version=6.0-preview.4"
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # If the response is not an object but a string, the authentication failed
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
+    }
+    catch {
+        Write-Error "Failed to get service connections from Azure DevOps"
+        throw $_.Exception.Message
+    }
+
     $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
     return $response.value | Where-Object { $_.type -eq 'azurerm' }
 }
@@ -81,7 +93,17 @@ function Get-AzDevOpsArmServiceConnectionChecks {
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/checks/configurations?api-version=7.2-preview.1&resourceType=endpoint&resourceId=$ServiceConnectionId"
-    $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # If the response is not an object but a string, the authentication failed
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
+    }
+    catch {
+        Write-Error "Failed to get checks for service connection $ServiceConnectionId from Azure DevOps"
+        throw $_.Exception.Message
+    }
     return $response.value
 }
 Export-ModuleMember -Function Get-AzDevOpsArmServiceConnectionChecks
