@@ -58,3 +58,20 @@ Rule 'Azure.DevOps.ServiceConnections.Scope' `
             $Assert.Contains($TargetObject, "authorization.parameters.scope", "resourcegroups")
         }
 }
+
+# Synopsis: service connections should should use Workload Idenity Federation
+Rule 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' `
+    -Ref 'ADO-SC-005' `
+    -Type 'Azure.DevOps.ServiceConnection' `
+    -Tag @{ release = 'GA'} `
+    -If { $TargetObject.data.scopeLevel -eq 'Subscription' } `
+    -Level Warning {
+        # Description 'Service connection should should use Workload Idenity Federation.'
+        Reason 'The service connection does not use Workload Idenity Federation.'
+        Recommend 'Use Workload Idenity Federation to authenticate the service connection.'
+        # Links 'https://learn.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-using-workload-identity-federation'
+        AllOf {
+            $Assert.HasField($TargetObject, "data.scopeLevel", $true)
+            $Assert.HasField($TargetObject, "authorization.parameters.workloadIdentityFederationSubject", $true)
+        }
+    }
