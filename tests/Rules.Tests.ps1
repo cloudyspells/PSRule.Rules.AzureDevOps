@@ -31,7 +31,7 @@ Describe 'AzureDevOps ' {
     Context 'Base rules ' {
         It 'Should contain 21 rules' {
             $rules = Get-PSRule -Module PSRule.Rules.AzureDevOps;
-            $rules.Count | Should -Be 22;
+            $rules.Count | Should -Be 23;
         }
     }
 
@@ -267,6 +267,18 @@ Describe 'AzureDevOps ' {
 
         It 'Should pass for targets named success' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Scope' -and $_.TargetName -match 'success' })
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' {
+        It 'Should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' -and $_.TargetName -match 'fail' })
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' -and $_.TargetName -match 'success' })
             $ruleHits.Count | Should -Be 1;
         }
     }
