@@ -42,9 +42,7 @@ function Get-AzDevOpsPipelines {
         }
     }
     catch {
-            Write-Error "Failed to get pipelines from Azure DevOps"
-            Write-Error "Authentication failed, please check your Personal Access Token (PAT), Organization and Project"
-            throw $_.Exception.Message
+        throw $_.Exception.Message
     }
     # walk through all pipelines and get the pipeline details
     $pipelines = @()
@@ -61,8 +59,6 @@ function Get-AzDevOpsPipelines {
             }
         }
         catch {
-            Write-Error "Failed to get pipeline details from Azure DevOps"
-            Write-Error $_.Exception.Message
             throw $_.Exception.Message
         }
         $pipelines += $pipelineDetails

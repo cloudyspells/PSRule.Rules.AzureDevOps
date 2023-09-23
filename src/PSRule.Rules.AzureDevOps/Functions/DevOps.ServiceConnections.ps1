@@ -40,7 +40,6 @@ function Get-AzDevOpsArmServiceConnections {
         }
     }
     catch {
-        Write-Error "Failed to get service connections from Azure DevOps"
         throw $_.Exception.Message
     }
 
@@ -101,7 +100,6 @@ function Get-AzDevOpsArmServiceConnectionChecks {
         }
     }
     catch {
-        Write-Error "Failed to get checks for service connection $ServiceConnectionId from Azure DevOps"
         throw $_.Exception.Message
     }
     return $response.value

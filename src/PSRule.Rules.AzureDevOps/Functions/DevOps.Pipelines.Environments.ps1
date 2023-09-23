@@ -106,7 +106,6 @@ function Get-AzDevOpsEnvironmentChecks {
         }
     }
     catch {
-        Write-Error "Failed to get checks for environment $Environment from Azure DevOps"
         throw $_.Exception.Message
     }
     $checks = $response.value

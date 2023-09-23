@@ -41,7 +41,6 @@ Function Get-AzDevOpsReleaseDefinitions {
         }
     }
     catch {
-        Write-Error "Failed to get release definitions from Azure DevOps"
         throw $_.Exception.Message
     }
     return @($response.value)
@@ -94,11 +93,13 @@ Function Export-AzDevOpsReleaseDefinitions {
             # try to get the release definition, throw a descriptive error if it fails for authentication or other reasons
             try {
                 $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+                # If the response is not an object but a string, the authentication failed
+                if ($response -is [string]) {
+                    throw "Authentication failed or project not found"	
+                }
             }
             catch {
-                Write-Error "Failed to get release definition with id $definitionId"
-                Write-Error $_.Exception.Message
-                continue
+                throw $_.Exception.Message
             }
             $definitionName = $response.name
             Write-Verbose "Exporting release definition $definitionName as file $definitionName.ado.rd.json"

@@ -41,7 +41,6 @@ Function Get-AzDevOpsVariableGroups {
         }
     }
     catch {
-        Write-Error "Failed to get variable groups from Azure DevOps"
         throw $_.Exception.Message
     }
     return @($response.value)

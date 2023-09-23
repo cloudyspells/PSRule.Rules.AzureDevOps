@@ -42,7 +42,6 @@ Function Get-AzDevOpsRepos {
         }
     }
     catch {
-        Write-Error "Failed to get repos from Azure DevOps"
         throw $_.Exception.Message
     }
     return @($response.value)
@@ -110,7 +109,6 @@ Function Get-AzDevOpsBranchPolicy {
         }
     }
     catch {
-        Write-Error "Failed to get branch policy from Azure DevOps"
         throw $_.Exception.Message
     }
     $branchPolicy = $response.value | Where-Object {$_.settings.scope.refName -eq $Branch -and $_.settings.scope.repositoryId -eq $Repository}
