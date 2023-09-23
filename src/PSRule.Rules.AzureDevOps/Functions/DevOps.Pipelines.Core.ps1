@@ -38,7 +38,7 @@ function Get-AzDevOpsPipelines {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # if the response is not an object but a string, the authentication failed
         if ($response -is [string]) {
-            throw "Authentication failed or organization/project not found"	
+            throw "Authentication failed or project not found"	
         }
     }
     catch {

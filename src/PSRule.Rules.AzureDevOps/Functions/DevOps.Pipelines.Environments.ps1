@@ -42,7 +42,6 @@ function Get-AzDevOpsEnvironments {
         }
     }
     catch {
-        Write-Error "Failed to get environments from Azure DevOps"
         throw $_.Exception.Message
     }
     $environments = $response.value

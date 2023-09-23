@@ -235,16 +235,13 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context 'When running Get-AzDevOpsArmServiceConnectionChecks with a wrong project name and faulty PAT' {
-        BeforeAll {
-            $PAT = 'ThisIsAFaultyPAT'
-            $Organization = $env:ADO_ORGANIZATION
-            $FaultyProject = 'faulty-project'
-            $ServiceConnectionId = 'faulty-service-connection-id'
+    Context 'When running Get-AzDevOpsArmServiceConnectionChecks with wrong parameters' {
+        It 'Should throw an 404 error when all parameters are wrong' {
+            { Get-AzDevOpsArmServiceConnectionChecks -PAT 'FaultyPAT' -Organization 'faulty-org' -Project 'FaultyProject' -ServiceConnectionId 'FaultyServiceConnectionId' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
         }
 
-        It 'Should throw an error' {
-            { Get-AzDevOpsArmServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $FaultyProject -ServiceConnectionId $ServiceConnectionId -ErrorAction Stop } | Should -Throw
+        It 'Should throw a authentication error when the PAT is wrong' {
+            { Get-AzDevOpsArmServiceConnectionChecks -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -Project $env:ADO_PROJECT -ServiceConnectionId 'FaultyServiceConnectionId' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
         }
     }
 
@@ -303,6 +300,16 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsVariableGroups with wrong parameters' {
+        It 'Should throw an 404 error when all parameters are wrong' {
+            { Get-AzDevOpsVariableGroups -PAT 'FaultyPAT' -Organization 'faulty-org' -Project 'FaultyProject' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+        }
+
+        It 'Should throw a authentication error when the PAT is wrong' {
+            { Get-AzDevOpsVariableGroups -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -Project $env:ADO_PROJECT -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+        }
+    }
+
     Context "When running Export-AzDevOpsVariableGroups" {
         BeforeAll {
             $PAT = $env:ADO_PAT
@@ -358,15 +365,13 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context 'When running Get-AzDevOpsPipelines with a wrong project name and faulty PAT' {
-        BeforeAll {
-            $PAT = 'ThisIsAFaultyPAT'
-            $Organization = $env:ADO_ORGANIZATION
-            $FaultyProject = 'faulty-project'
+    Context 'When running Get-AzDevOpsPipelines with wrong parameters' {
+        It 'Should throw an 404 error when all parameters are wrong' {
+            { Get-AzDevOpsPipelines -PAT 'FaultyPAT' -Organization 'faulty-org' -Project 'FaultyProject' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
         }
 
-        It 'Should throw an error' {
-            { Get-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
+        It 'Should throw a authentication error when the PAT is wrong' {
+            { Get-AzDevOpsPipelines -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -Project $env:ADO_PROJECT -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
         }
     }
 
@@ -417,15 +422,13 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context 'When running Get-AzDevOpsReleaseDefinitions with a wrong project name and faulty PAT' {
-        BeforeAll {
-            $PAT = 'ThisIsAFaultyPAT'
-            $Organization = $env:ADO_ORGANIZATION
-            $FaultyProject = 'faulty-project'
+    Context 'When running Get-AzDevOpsReleaseDefinitions with wrong parameters' {
+        It 'Should throw an 404 error when all parameters are wrong' {
+            { Get-AzDevOpsReleaseDefinitions -PAT 'FaultyPAT' -Organization 'faulty-org' -Project 'FaultyProject' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
         }
 
-        It 'Should throw an error' {
-            { Get-AzDevOpsReleaseDefinitions -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
+        It 'Should throw a authentication error when the PAT is wrong' {
+            { Get-AzDevOpsReleaseDefinitions -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -Project $env:ADO_PROJECT -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
         }
     }
 
@@ -477,15 +480,13 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context 'When running Get-AzDevOpsEnvironments with a wrong project name and faulty PAT' {
-        BeforeAll {
-            $PAT = 'ThisIsAFaultyPAT'
-            $Organization = $env:ADO_ORGANIZATION
-            $FaultyProject = 'faulty-project'
+    Context 'When running Get-AzDevOpsEnvironments with wrong parameters' {
+        It 'Should throw an 404 error when all parameters are wrong' {
+            { Get-AzDevOpsEnvironments -PAT 'FaultyPAT' -Organization 'faulty-org' -Project 'FaultyProject' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
         }
 
-        It 'Should throw an error' {
-            { Get-AzDevOpsEnvironments -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
+        It 'Should throw a authentication error when the PAT is wrong' {
+            { Get-AzDevOpsEnvironments -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -Project $env:ADO_PROJECT -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
         }
     }
 
@@ -522,15 +523,13 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context 'When running Get-AzDevOpsEnvironmentChecks with a wrong project name and faulty PAT' {
-        BeforeAll {
-            $PAT = 'ThisIsAFaultyPAT'
-            $Organization = $env:ADO_ORGANIZATION
-            $FaultyProject = 'faulty-project'
+    Context 'When running Get-AzDevOpsEnvironmentChecks with wrong parameters' {
+        It 'Should throw an 404 error when all parameters are wrong' {
+            { Get-AzDevOpsEnvironmentChecks -PAT 'FaultyPAT' -Organization 'faulty-org' -Project 'FaultyProject' -Environment 'faulty-environment' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
         }
 
-        It 'Should throw an error' {
-            { Get-AzDevOpsEnvironmentChecks -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
+        It 'Should throw a authentication error when the PAT is wrong' {
+            { Get-AzDevOpsEnvironmentChecks -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -Project $env:ADO_PROJECT -Environment 'faulty-environment' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
         }
     }
 
