@@ -233,16 +233,12 @@ Function Get-AzDevOpsRepositoryGhas {
         $Project,
         [Parameter()]
         [string]
-        $Repository
+        $ProjectId,
+        [Parameter()]
+        [string]
+        $RepositoryId
     )
-    
     $header = Get-AzDevOpsHeader -PAT $PAT
-    # Get the repository
-    $repo = Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $Project | ?{ $_.name -eq $Repository }
-    # Get the repository id
-    $repoId = $repo.id
-    # Get the project id
-    $projectId = $repo.project.id
     $payload = @{
         contributionIds = @(
             "ms.vss-features.my-organizations-data-provider"
@@ -250,15 +246,18 @@ Function Get-AzDevOpsRepositoryGhas {
         )
         dataProviderContext = @{
             properties = @{
-                givenProjectId = $projectId
-                givenRepoId = $repoId
+                givenProjectId = $ProjectId
+                givenRepoId = $RepositoryId
             }
         }
     }
     $url = "https://dev.azure.com/$Organization/_apis/Contribution/HierarchyQuery?api-version=5.0-preview.1"
-    Write-Verbose "Getting repository $Repository in project $Project in organization $Organization"
     try {
         $response = Invoke-RestMethod -Uri $url -Method Post -Headers $header -Body ($payload | ConvertTo-Json) -ContentType "application/json"
+        # If the response is a string and not an object, throw an exception for authentication failure or project not found
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"	
+        }
     }
     catch {
         throw $_.Exception.Message
@@ -328,7 +327,7 @@ function Export-AzDevOpsReposAndBranchPolicies {
             $repo | Add-Member -MemberType NoteProperty -Name LicenseExists -Value $licenseExists
 
             # Add a property for GitHub Advanced Security (GHAS) data
-            $ghas = Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.name
+            $ghas = Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -ProjectId $repo.project.id -RepositoryId $repo.id
             $repo | Add-Member -MemberType NoteProperty -Name Ghas -Value $ghas
 
             # Export repo object to JSON file

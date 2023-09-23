@@ -154,8 +154,14 @@ Describe 'PSRule.Rules.AzureDevOps' {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
             $Project = $env:ADO_PROJECT
+            $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
             $repositoryName = 'repository-success'
-            $repoGhas = Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -Repository $repositoryName
+            $repoId = "befaaf13-3966-45c0-b481-6387e860d915"
+            $repoGhas = Get-AzDevOpsRepositoryGhas -PAT $PAT `
+                -Organization $Organization `
+                -Project $Project `
+                -ProjectId $ProjectId `
+                -RepositoryId "befaaf13-3966-45c0-b481-6387e860d915"
         }
 
         It 'Should return an object' {
@@ -164,16 +170,17 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context 'When running Get-AzDevOpsRepositoryGhas with a non-existing repository' {
-        BeforeAll {
-            $PAT = $env:ADO_PAT
-            $Organization = $env:ADO_ORGANIZATION
-            $Project = 'project-success'
-            $repositoryName = 'repository-failure'
-        }
-
+    Context 'When running Get-AzDevOpsRepositoryGhas with all wrong parameters' {
         It 'Should return an error' {
-            { Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -Repository $repositoryName } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+            { 
+                $PAT = 'FaultyPAT'
+                $Organization = $env:ADO_ORGANIZATION
+                $Project = 'project-success'
+                $ProjectId = '1fa185aa-ce58-4732-8700-8964802ea538'
+                $repositoryName = 'non-existent'
+                $RepositoryId = 'non-existent'
+                Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -ProjectId $ProjectId -RepositoryId $RepositoryId 
+            } | Should -Throw "Authentication failed or project not found"
         }
     }
 
