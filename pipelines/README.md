@@ -28,4 +28,4 @@ The pipeline will fail if any of the rules fail. The output of the
 run. The results can be viewer with the Sarif Viewer extension in Azure
 DevOps. 
 
-![Sarif Viewer](assets/media/sarif-0.0.11.png)
+![Sarif Viewer](../assets/media/sarif-0.0.11.png)
