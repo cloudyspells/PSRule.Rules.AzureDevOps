@@ -136,3 +136,31 @@ Rule 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' `
         # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#require-a-merge-strategy'
         $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4916e5d171ab'}), "type.displayName", "Require a merge strategy")	
 }
+
+# Synopsis: GitHub Advanced Security should be enabled
+Rule 'Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled' `
+    -Ref 'ADO-RP-010' `
+    -Type 'Azure.DevOps.Repo' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'GitHub Advanced Security should be enabled'
+        Reason 'GitHub Advanced Security is not enabled'
+        Recommend 'Enable GitHub Advanced Security'
+        # Links 'https://learn.microsoft.com/en-us/azure/devops/repos/security/configure-github-advanced-security-features?'
+        $Assert.HasField($TargetObject, "Ghas.advSecEnabled", $true)
+        $Assert.HasFieldValue($TargetObject, "Ghas.advSecEnabled", $true)
+}
+
+# Synopsis: GitHub Advanced Security should block pushes
+Rule 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' `
+    -Ref 'ADO-RP-011' `
+    -Type 'Azure.DevOps.Repo' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'GitHub Advanced Security should block pushes'
+        Reason 'GitHub Advanced Security does not block pushes'
+        Recommend 'Consider blocking pushes'
+        # Links 'https://learn.microsoft.com/en-us/azure/devops/repos/security/configure-github-advanced-security-features?'
+        $Assert.HasField($TargetObject, "Ghas.blockPushes", $true)
+        $Assert.HasFieldValue($TargetObject, "Ghas.blockPushes", $true)
+}
