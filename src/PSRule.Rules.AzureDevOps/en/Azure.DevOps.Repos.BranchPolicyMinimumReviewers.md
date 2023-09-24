@@ -17,6 +17,11 @@ Having a minimum number of reviewers for a branch policy helps ensure that the
 code in the default branch is of a high quality and that the team's Git
 workflow is followed. 
 
+You can configure the minimum number of reviewers for this rule by setting the
+`branchMinimumApproverCount` configuration value in PSRule. The default
+value is `1`.
+
+
 ## RECOMMENDATION
 
 Make sure that the branch policy has a minimum number of reviewers for the

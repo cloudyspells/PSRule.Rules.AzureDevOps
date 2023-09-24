@@ -40,7 +40,7 @@ Rule 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' `
         Recommend 'Require a minimum number of reviewers to approve pull requests.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#repositories-and-branches
         $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", $true)
-        $Assert.GreaterOrEqual(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", $Configuration.GetIntOrDefault('branchMinimumApproverCount', 1))
+        $Assert.GreaterOrEqual(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", $Configuration.GetValueOrDefault('branchMinimumApproverCount', 1))
 }
 
 # Synopsis: The branch policy should not allow creators to approve their own changes

@@ -17,6 +17,10 @@ accidental changes to production resources. For example, a service connection sc
 to production should be protected with a check that requires a minimum number of
 reviewers or a specific CI pipeline must pass.
 
+You can configure the minimum number of approvers for this rule by setting the
+`releaseMinimumProductionApproverCount` configuration value in PSRule. The default
+value is `1`.
+
 ## RECOMMENDATION
 
 Consider protecting a release stage environment scoped to production with a human

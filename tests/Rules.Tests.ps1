@@ -43,6 +43,10 @@ Describe 'AzureDevOps ' {
             $ruleHits.Count | Should -Be 1;
         }
 
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'AzureDevOps.Tasks.VariableGroup.Description ' {
@@ -56,6 +60,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.Description' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Tasks.VariableGroup.Description.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -71,6 +80,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Environments.ProductionCheckProtection.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.Pipelines.Environments.ProductionHumanApproval' {
@@ -84,6 +98,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Environments.ProductionHumanApproval' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Environments.ProductionHumanApproval.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -99,6 +118,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Environments.Description.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' {
@@ -112,6 +136,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Core.UseYamlDefinition.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -127,6 +156,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.Pipelines.Releases.Definition.SelfApproval' {
@@ -140,6 +174,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Releases.Definition.SelfApproval' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Releases.Definition.SelfApproval.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -155,6 +194,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.HasBranchPolicy.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.Repos.BranchPolicyIsEnabled' {
@@ -168,6 +212,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyIsEnabled' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.BranchPolicyIsEnabled.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -183,6 +232,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.BranchPolicyMinimumReviewers.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' {
@@ -196,6 +250,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.BranchPolicyAllowSelfApproval.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -211,6 +270,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.BranchPolicyResetVotes.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.Repos.Readme' {
@@ -224,6 +288,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.Readme' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have a markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.Readme.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -239,6 +308,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should have a markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.License.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' {
@@ -252,6 +326,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have a markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -267,6 +346,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should have a markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.BranchPolicyCommentResolution.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' {
@@ -280,6 +364,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.BranchPolicyMergeStrategy.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -300,6 +389,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($noExtraLicenseBaselineResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled' })
             $ruleHits.Count | Should -Be 0;
         }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' {
@@ -319,6 +413,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($noExtraLicenseBaselineResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' })
             $ruleHits.Count | Should -Be 0;
         }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.ServiceConnections.Description' {
@@ -332,6 +431,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Description' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.Description.md');
+            $fileExists | Should -Be $true;
         }
     }
 
@@ -347,6 +451,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.Scope.md');
+            $fileExists | Should -Be $true;
+        }
     }
 
     Context 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' {
@@ -360,6 +469,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.WorkloadIdentityFederation.md');
+            $fileExists | Should -Be $true;
         }
     }
 }
