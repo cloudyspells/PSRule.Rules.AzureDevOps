@@ -40,7 +40,7 @@ Rule 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' `
         Recommend 'Require a minimum number of reviewers to approve pull requests.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#repositories-and-branches
         $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", $true)
-        $Assert.Greater(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", 0)
+        $Assert.GreaterOrEqual(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", $Configuration.GetIntOrDefault('branchMinimumApproverCount', 1))
 }
 
 # Synopsis: The branch policy should not allow creators to approve their own changes
@@ -148,7 +148,7 @@ Rule 'Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled' `
         Recommend 'Enable GitHub Advanced Security'
         # Links 'https://learn.microsoft.com/en-us/azure/devops/repos/security/configure-github-advanced-security-features?'
         $Assert.HasField($TargetObject, "Ghas.advSecEnabled", $true)
-        $Assert.HasFieldValue($TargetObject, "Ghas.advSecEnabled", $true)
+        $Assert.HasFieldValue($TargetObject, "Ghas.advSecEnabled", $Configuration.GetBoolOrDefault('ghasEnabled', $True))
 }
 
 # Synopsis: GitHub Advanced Security should block pushes
@@ -162,5 +162,5 @@ Rule 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' `
         Recommend 'Consider blocking pushes'
         # Links 'https://learn.microsoft.com/en-us/azure/devops/repos/security/configure-github-advanced-security-features?'
         $Assert.HasField($TargetObject, "Ghas.blockPushes", $true)
-        $Assert.HasFieldValue($TargetObject, "Ghas.blockPushes", $true)
+        $Assert.HasFieldValue($TargetObject, "Ghas.blockPushes", $Configuration.GetBoolOrDefault('ghasBlockPushesEnabled', $True))
 }

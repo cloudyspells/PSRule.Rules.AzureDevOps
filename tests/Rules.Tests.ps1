@@ -25,6 +25,7 @@ BeforeAll {
     # Export all Azure DevOps rule data for project 'psrule-fail-project' to output folder
     Export-AzDevOpsRuleData -PAT $env:ADO_PAT -Project $env:ADO_PROJECT -Organization $env:ADO_ORGANIZATION -OutputPath $outPath
     $ruleResult = Invoke-PSRule -InputPath "$($outPath)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en
+    $noExtraLicenseBaselineResult = Invoke-PSRule -InputPath "$($outPath)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en -Baseline Baseline.NoExtraLicense
 }
 
 Describe 'AzureDevOps ' {
@@ -294,6 +295,11 @@ Describe 'AzureDevOps ' {
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
+
+        It 'Should not be run in the Baseline.NoExtraLicense baseline' {
+            $ruleHits = @($noExtraLicenseBaselineResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled' })
+            $ruleHits.Count | Should -Be 0;
+        }
     }
 
     Context 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' {
@@ -307,6 +313,11 @@ Describe 'AzureDevOps ' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should not be run in the Baseline.NoExtraLicense baseline' {
+            $ruleHits = @($noExtraLicenseBaselineResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' })
+            $ruleHits.Count | Should -Be 0;
         }
     }
 

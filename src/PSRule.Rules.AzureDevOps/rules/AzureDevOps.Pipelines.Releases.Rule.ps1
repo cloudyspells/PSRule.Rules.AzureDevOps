@@ -14,6 +14,7 @@ Rule 'Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval' `
             $Assert.HasField($_, "preDeployApprovals", $true)
             $Assert.HasField($_.preDeployApprovals, "approvals[0].approver", $true)
             $Assert.HasFieldValue($_.preDeployApprovals, "approvals[0].approver.displayName")
+            $Assert.GreaterOrEqual($_.preDeployApprovals.approvals, "count", $Configuration.GetIntOrDefault('releaseMinimumProductionApproverCount', 1))
         }
 }
 
