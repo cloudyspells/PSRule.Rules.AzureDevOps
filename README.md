@@ -19,7 +19,7 @@ should not be considered stable. Any input on the direction
 of the module and included rules is very much appreciated.
 Please consider opening an issue with your ideas.
 
-![Screenshot of version 0.0.9 run](assets/media/run-0.0.9.png)
+![Screenshot of version 0.0.11 Sarif output in Azure DevOps](assets/media/sarif-0.0.11.png)
 
 ## Usage
 
@@ -52,6 +52,8 @@ Assert-PSRule `
     -InputPath "C:\Temp\MyProject\" `
     -Module PSRule.Rules.AzureDevOps
 ```
+
+![Screenshot of version 0.0.9 run](assets/media/run-0.0.9.png)
 
 ### Organization level export
 
