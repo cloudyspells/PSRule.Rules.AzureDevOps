@@ -53,10 +53,6 @@ function Get-AzDevOpsPipelines {
         Write-Verbose "URI: $uri"
         try {
             $pipelineDetails = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
-            # if the response is not an object but a string, the authentication failed or the pipeline was not found
-            if ($pipelineDetails -is [string]) {
-                throw "Authentication failed or pipeline not found"
-            }
         }
         catch {
             throw $_.Exception.Message

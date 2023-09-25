@@ -93,10 +93,6 @@ Function Export-AzDevOpsReleaseDefinitions {
             # try to get the release definition, throw a descriptive error if it fails for authentication or other reasons
             try {
                 $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
-                # If the response is not an object but a string, the authentication failed
-                if ($response -is [string]) {
-                    throw "Authentication failed or project not found"
-                }
             }
             catch {
                 throw $_.Exception.Message
