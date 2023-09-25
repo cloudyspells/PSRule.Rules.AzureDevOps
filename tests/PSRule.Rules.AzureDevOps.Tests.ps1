@@ -159,7 +159,6 @@ Describe 'PSRule.Rules.AzureDevOps' {
             $repoId = "befaaf13-3966-45c0-b481-6387e860d915"
             $repoGhas = Get-AzDevOpsRepositoryGhas -PAT $PAT `
                 -Organization $Organization `
-                -Project $Project `
                 -ProjectId $ProjectId `
                 -RepositoryId "befaaf13-3966-45c0-b481-6387e860d915"
         }
@@ -179,7 +178,7 @@ Describe 'PSRule.Rules.AzureDevOps' {
                 $ProjectId = '1fa185aa-ce58-4732-8700-8964802ea538'
                 $repositoryName = 'non-existent'
                 $RepositoryId = 'non-existent'
-                Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -ProjectId $ProjectId -RepositoryId $RepositoryId 
+                Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId
             } | Should -Throw "Authentication failed or project not found"
         }
     }

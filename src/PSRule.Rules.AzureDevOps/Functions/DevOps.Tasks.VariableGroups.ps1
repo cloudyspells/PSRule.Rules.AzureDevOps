@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
     Get all variable groups for a project from Azure DevOps.
 
@@ -37,7 +37,7 @@ Function Get-AzDevOpsVariableGroups {
         $response = Invoke-RestMethod -Uri $url -Method Get -Headers $header
         # If the response is not an object but a string, the authentication failed
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {

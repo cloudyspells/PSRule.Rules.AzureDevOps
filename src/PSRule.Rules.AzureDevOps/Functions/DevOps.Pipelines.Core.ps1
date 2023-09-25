@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
     Get all Azure Pipelines definitions from Azure DevOps project
 
@@ -38,7 +38,7 @@ function Get-AzDevOpsPipelines {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # if the response is not an object but a string, the authentication failed
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {
@@ -55,7 +55,7 @@ function Get-AzDevOpsPipelines {
             $pipelineDetails = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
             # if the response is not an object but a string, the authentication failed or the pipeline was not found
             if ($pipelineDetails -is [string]) {
-                throw "Authentication failed or pipeline not found"	
+                throw "Authentication failed or pipeline not found"
             }
         }
         catch {
@@ -77,7 +77,7 @@ Export-ModuleMember -Function Get-AzDevOpsPipelines
 
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
-    
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 

@@ -45,7 +45,6 @@ Function Get-AzDevOpsPipelinesSettings {
                         action = "Execute"
                         adminPivot = "settings"
                         controller = "ContributedPage"
-                        # serviceHost = "64696994-e323-4e1e-b7ee-262d80881a2b (cloudyspells)"
                     }
                 }
             }
@@ -55,7 +54,7 @@ Function Get-AzDevOpsPipelinesSettings {
         $pipelinesSettings = Invoke-RestMethod -Uri $uri -Method Post -Headers $header -Body ($postObject | ConvertTo-Json -Depth 100) -ContentType 'application/json'
         # if the response is not an object but a string, the authentication failed or the pipeline was not found
         if ($pipelinesSettings -is [string]) {
-            throw "Authentication failed or pipeline not found"	
+            throw "Authentication failed or pipeline not found"
         }
     }
     catch {
@@ -75,7 +74,7 @@ Export-ModuleMember -Function Get-AzDevOpsPipelinesSettings
 
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
-    
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 

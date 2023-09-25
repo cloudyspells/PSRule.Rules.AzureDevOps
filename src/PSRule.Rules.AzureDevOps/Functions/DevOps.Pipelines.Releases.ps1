@@ -37,7 +37,7 @@ Function Get-AzDevOpsReleaseDefinitions {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # If the response is not an object but a string, the authentication failed
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {
@@ -95,7 +95,7 @@ Function Export-AzDevOpsReleaseDefinitions {
                 $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
                 # If the response is not an object but a string, the authentication failed
                 if ($response -is [string]) {
-                    throw "Authentication failed or project not found"	
+                    throw "Authentication failed or project not found"
                 }
             }
             catch {

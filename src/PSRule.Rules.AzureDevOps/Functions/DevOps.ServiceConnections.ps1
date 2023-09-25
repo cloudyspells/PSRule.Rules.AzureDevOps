@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
     Get all Azure Resource Manager service connections from Azure DevOps project
 
@@ -36,7 +36,7 @@ function Get-AzDevOpsArmServiceConnections {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # If the response is not an object but a string, the authentication failed
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {
@@ -96,7 +96,7 @@ function Get-AzDevOpsArmServiceConnectionChecks {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # If the response is not an object but a string, the authentication failed
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {

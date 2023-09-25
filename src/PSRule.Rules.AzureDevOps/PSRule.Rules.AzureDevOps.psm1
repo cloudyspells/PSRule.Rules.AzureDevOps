@@ -30,7 +30,7 @@ Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
     Output path for JSON files
 
     .EXAMPLE
-    Export-AzDevOpsRuleData -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath    
+    Export-AzDevOpsRuleData -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
 #>
 Function Export-AzDevOpsRuleData {
     [CmdletBinding()]
@@ -95,7 +95,7 @@ Function Export-AzDevOpsOrganizationRuleData {
     $projects | ForEach-Object {
         $project = $_
         # Create a subfolder for each project
-        $subPath = "$OutputPath\$($project.name)"
+        $subPath = "$($OutputPath)\$($project.name)"
         if(!(Test-Path -Path $subPath)) {
             New-Item -Path $subPath -ItemType Directory
         }

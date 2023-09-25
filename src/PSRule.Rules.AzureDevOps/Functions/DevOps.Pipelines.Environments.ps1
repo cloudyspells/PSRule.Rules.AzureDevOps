@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
     Get all Azure Pipelines environments from Azure DevOps project
 
@@ -38,7 +38,7 @@ function Get-AzDevOpsEnvironments {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # If the response is a string and not an object, throw an exception for authentication failure or project not found
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {
@@ -101,7 +101,7 @@ function Get-AzDevOpsEnvironmentChecks {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # If the response is a string and not an object, throw an exception for authentication failure or project not found
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {
@@ -138,6 +138,7 @@ Export-ModuleMember -Function Get-AzDevOpsEnvironmentChecks
 #>
 function Export-AzDevOpsEnvironmentChecks {
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param (
         [Parameter()]
         [string]
