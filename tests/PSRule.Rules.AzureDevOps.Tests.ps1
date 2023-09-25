@@ -425,6 +425,46 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsPipelinesSettings' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $pipelinesSettings = Get-AzDevOpsPipelinesSettings -PAT $PAT -Organization $Organization -Project $Project
+        }
+
+        It 'Should return pipeline settings' {
+            $pipelinesSettings | Should -Not -BeNullOrEmpty
+            $pipelinesSettings | Should -BeOfType [PSCustomObject]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsPipelinesSettings with all wrong parameters' {
+        It 'Should throw an error' {
+            { 
+                $PAT = 'FaultyPAT'
+                $Organization = $env:ADO_ORGANIZATION
+                $Project = 'project-success'
+                Get-AzDevOpsPipelinesSettings -PAT $PAT -Organization $Organization -Project $Project 
+            } | Should -Throw "Authentication failed or pipeline not found"
+        }
+    }
+
+    Context 'When running Export-AzDevOpsPipelinesSettings' {
+        It 'Should export all JSON files with an ObjectType property set as Azure.DevOps.Pipelines.Settings' {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $OutputPath = $env:ADO_EXPORT_DIR
+            Export-AzDevOpsPipelinesSettings -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
+            $files = Get-ChildItem -Path $OutputPath -Recurse -File | Where-Object { $_.Name -eq "ado.pls.json" }
+            $files | ForEach-Object {
+                $json = Get-Content -Path $_.FullName -Raw | ConvertFrom-Json
+                $json.ObjectType | Should -Be "Azure.DevOps.Pipelines.Settings"
+            }
+        }
+    }
+
     Context "When running Get-AzDevOpsReleaseDefinitions on a project containing release definitions" {
         BeforeAll {
             $PAT = $env:ADO_PAT
