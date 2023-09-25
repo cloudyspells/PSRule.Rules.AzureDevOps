@@ -12,7 +12,7 @@
 RootModule = 'PSRule.Rules.AzureDevOps.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.10'
+ModuleVersion = '0.0.12'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core','Desktop')
@@ -30,7 +30,7 @@ CompanyName = 'Private Entity'
 Copyright = '(c) Roderick Bant. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'PSRule rules for Azure DevOps project configuration best practices'
+Description = 'PSRule rules module for Azure DevOps project configuration best practices. This module helps to audit an Azure DevOps project for secure and best practice configuration. The module requires PSRule to be installed.'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.1'
@@ -95,7 +95,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('PSRule-rules')
+        Tags = @('PSRule-rules','PSRule','AzureDevOps','Security')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/LICENSE'
@@ -123,7 +123,7 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/wiki'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
