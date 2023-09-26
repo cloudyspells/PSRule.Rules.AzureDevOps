@@ -51,7 +51,7 @@ stages:
                   -Organization $(devops_organization) `
                   -Project $(devops_project) `
                   -OutputPath .\Temp `
-                  -PAT $(ADO_PAT)
+                  -PAT $(ADOPAT)
                 Assert-PSRule -Style AzurePipelines `
                   -Module PSRule.Rules.AzureDevOps `
                   -InputPath '$(Build.SourcesDirectory)/Temp/' `
