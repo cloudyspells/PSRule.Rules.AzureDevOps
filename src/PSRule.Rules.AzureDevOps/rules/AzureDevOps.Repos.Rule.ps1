@@ -24,8 +24,8 @@ Rule 'Azure.DevOps.Repos.BranchPolicyIsEnabled' `
         Reason 'The default branch does not have its branch policy enabled.'
         Recommend 'Protect your main branch with a branch policy.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#secure-azure-repos
-        $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "isEnabled", $true)
-        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "isEnabled", $true)
+        $Assert.HasField(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "isEnabled", $true)
+        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "isEnabled", $true)
 }
 
 
@@ -39,8 +39,8 @@ Rule 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' `
         Reason 'The branch policy does not require any reviewers.'
         Recommend 'Require a minimum number of reviewers to approve pull requests.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#repositories-and-branches
-        $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", $true)
-        $Assert.Greater(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", 0)
+        $Assert.HasField(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", $true)
+        $Assert.GreaterOrEqual(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.minimumApproverCount", $Configuration.GetValueOrDefault('branchMinimumApproverCount', 1))
 }
 
 # Synopsis: The branch policy should not allow creators to approve their own changes
@@ -53,8 +53,8 @@ Rule 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' `
         Reason 'The branch policy allows creators to approve their own changes.'
         Recommend 'Require a minimum number of reviewers to approve pull requests.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#policies
-        $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.creatorVoteCounts", $true)
-        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.creatorVoteCounts", $false)
+        $Assert.HasField(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.creatorVoteCounts", $true)
+        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.creatorVoteCounts", $false)
 }
 
 # Synopsis: The branch policy should reset code reviewer votes when new changes are pushed
@@ -67,8 +67,8 @@ Rule 'Azure.DevOps.Repos.BranchPolicyResetVotes' `
         Reason 'The branch policy does not reset code reviewer votes when new changes are pushed.'
         Recommend 'Reset code reviewer votes when new changes are pushed.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#policies
-        $Assert.HasField(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.resetOnSourcePush", $true)
-        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.resetOnSourcePush", $true)
+        $Assert.HasField(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.resetOnSourcePush", $true)
+        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "settings.resetOnSourcePush", $true)
 }
 
 # Synopsis: The repository should contain a README file
@@ -121,7 +121,7 @@ Rule 'Azure.DevOps.Repos.BranchPolicyCommentResolution' `
         Reason 'The branch policy does not enforce comment resolution'
         Recommend 'Enforce comment resolution'
         # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#enforce-comment-resolution'
-        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'c6a1889d-b943-4856-b76f-9e46bb6b0df2'}), "type.displayName", "Comment requirements")	
+        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'c6a1889d-b943-4856-b76f-9e46bb6b0df2'}), "type.displayName", "Comment requirements")
 }
 
 # Synopsis: The branch policy should require a merge strategy
@@ -134,7 +134,7 @@ Rule 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' `
         Reason 'The branch policy does not require a merge strategy'
         Recommend 'Consider requiring a merge strategy'
         # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#require-a-merge-strategy'
-        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | ?{ $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4916e5d171ab'}), "type.displayName", "Require a merge strategy")	
+        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4916e5d171ab'}), "type.displayName", "Require a merge strategy")
 }
 
 # Synopsis: GitHub Advanced Security should be enabled
@@ -148,7 +148,7 @@ Rule 'Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled' `
         Recommend 'Enable GitHub Advanced Security'
         # Links 'https://learn.microsoft.com/en-us/azure/devops/repos/security/configure-github-advanced-security-features?'
         $Assert.HasField($TargetObject, "Ghas.advSecEnabled", $true)
-        $Assert.HasFieldValue($TargetObject, "Ghas.advSecEnabled", $true)
+        $Assert.HasFieldValue($TargetObject, "Ghas.advSecEnabled", $Configuration.GetBoolOrDefault('ghasEnabled', $True))
 }
 
 # Synopsis: GitHub Advanced Security should block pushes
@@ -162,5 +162,5 @@ Rule 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' `
         Recommend 'Consider blocking pushes'
         # Links 'https://learn.microsoft.com/en-us/azure/devops/repos/security/configure-github-advanced-security-features?'
         $Assert.HasField($TargetObject, "Ghas.blockPushes", $true)
-        $Assert.HasFieldValue($TargetObject, "Ghas.blockPushes", $true)
+        $Assert.HasFieldValue($TargetObject, "Ghas.blockPushes", $Configuration.GetBoolOrDefault('ghasBlockPushesEnabled', $True))
 }

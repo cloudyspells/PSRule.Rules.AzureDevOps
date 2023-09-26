@@ -1,0 +1,68 @@
+name: PSRule-ADO
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  # Set to your variable group containing ADO_PAT
+  - group: 'ado-psrule-run'
+  # Set to your Azure DevOps organization
+  - name: devops_organization
+    value: 'cloudyspells'
+  # Set to your Azure DevOps project
+  - name: devops_project
+    value: 'psrule-fail-project'
+
+schedules:
+- cron: "5 8 * * 0"
+  displayName: Run every Sunday
+  branches:
+    include:
+    - '*'
+
+stages:
+  - stage: Run
+    displayName: Run
+    jobs:
+      - job: Run
+        displayName: Run
+        steps:
+          - checkout: self
+            clean: true
+          - task: PowerShell@2
+            displayName: Install PSRule
+            inputs:
+              targetType: 'inline'
+              script: |
+                Install-Module -Name PSRule -Scope CurrentUser -Force
+                Install-Module -Name PSRule.Rules.AzureDevOps -Scope CurrentUser -Force
+          - task: PowerShell@2
+            displayName: Create temporary output directory
+            inputs:
+              targetType: 'inline'
+              script: |
+                New-Item -Path $(Build.SourcesDirectory) -Name Temp -ItemType Directory -Force
+          - task: PowerShell@2
+            displayName: Run PSRule
+            inputs:
+              targetType: 'inline'
+              script: |
+                Export-AzDevOpsRuleData `
+                  -Organization $(devops_organization) `
+                  -Project $(devops_project) `
+                  -OutputPath .\Temp `
+                  -PAT $(ADOPAT)
+                Assert-PSRule -Style AzurePipelines `
+                  -Module PSRule.Rules.AzureDevOps `
+                  -InputPath '$(Build.SourcesDirectory)/Temp/' `
+                  -Format Detect `
+                  -OutputPath ./results.sarif `
+                  -OutputFormat Sarif `
+                  -Culture en
+
+          - task: PublishPipelineArtifact@1
+            condition: always()
+            displayName: Publish results
+            inputs:
+              targetPath: ./results.sarif
+              artifact: 'CodeAnalysisLogs'

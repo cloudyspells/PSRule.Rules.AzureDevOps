@@ -1,13 +1,14 @@
 apiVersion: github.com/microsoft/PSRule/v1
 kind: Baseline
 metadata:
-  name: Baseline.Default
+  name: Baseline.NoExtraLicense
 spec:
   rule:
     tag:
       release: GA
+    exclude:
+      - Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled
+      - Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes
   configuration:
-    ghasEnabled: true
-    ghasBlockPushesEnabled: true
     branchMinimumApproverCount: 1
     releaseMinimumProductionApproverCount: 1

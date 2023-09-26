@@ -19,6 +19,10 @@ release stage die is beperkt tot productie kan helpen om per ongeluk wijzigingen
 gebruikt om te eisen dat een gebruiker een implementatie goedkeurt voordat
 deze kan worden uitgevoerd.
 
+U kunt het vereiste aantal goedkeurders voor deze regel configureren door de
+`releaseMinimumProductionApproverCount` configuratiewaarde in PSRule in te
+stellen. De standaardwaarde is `1`.
+
 ## RECOMMENDATION
 
 Overweeg om een menselijke goedkeuring toe te voegen aan de Azure DevOps

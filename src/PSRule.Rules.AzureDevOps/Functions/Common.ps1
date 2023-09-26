@@ -1,4 +1,4 @@
-# Function to create Azure DevOps Rest API header from PAT
+﻿# Function to create Azure DevOps Rest API header from PAT
 # Usage: $header = Get-AzDevOpsHeader -PAT $PAT
 # --------------------------------------------------
 
@@ -17,6 +17,7 @@
 #>
 function Get-AzDevOpsHeader {
     [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
     param (
         [Parameter()]
         [string]
@@ -48,6 +49,7 @@ Export-ModuleMember -Function Get-AzDevOpsHeader
 #>
 function Get-AzDevOpsProjects {
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param (
         [Parameter()]
         [string]
@@ -64,7 +66,7 @@ function Get-AzDevOpsProjects {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # If the response is not an object but a string, the authentication failed
         if ($response -is [string]) {
-            throw "Authentication failed or organization not found"	
+            throw "Authentication failed or organization not found"
         }
     }
     catch {
@@ -72,7 +74,7 @@ function Get-AzDevOpsProjects {
         throw $_.Exception.Message
     }
     $projects = $response.value
-    return $projects
+    return @($projects)
 }
 Export-ModuleMember -Function Get-AzDevOpsProjects
 # End of Function Get-AzDevOpsProjects

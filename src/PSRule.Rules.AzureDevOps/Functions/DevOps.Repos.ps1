@@ -19,6 +19,7 @@
 #>
 Function Get-AzDevOpsRepos {
     [CmdletBinding()]
+    [OutputType([System.Object[]])]
     param (
         [Parameter()]
         [string]
@@ -38,7 +39,7 @@ Function Get-AzDevOpsRepos {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # If the response is a string and not an object, throw an exception for authentication failure or project not found
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {
@@ -79,6 +80,7 @@ Export-ModuleMember -Function Get-AzDevOpsRepos
 #>
 Function Get-AzDevOpsBranchPolicy {
     [CmdletBinding()]
+    [OutputType([object[]])]
     param (
         [Parameter()]
         [string]
@@ -105,13 +107,13 @@ Function Get-AzDevOpsBranchPolicy {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # If the response is a string and not an object, throw an exception for authentication failure or project not found
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {
         throw $_.Exception.Message
     }
-    $branchPolicy = $response.value | Where-Object {$_.settings.scope.refName -eq $Branch -and $_.settings.scope.repositoryId -eq $Repository}
+    $branchPolicy = @($response.value | Where-Object {$_.settings.scope.refName -eq $Branch -and $_.settings.scope.repositoryId -eq $Repository})
 
     return $branchPolicy
 }
@@ -148,6 +150,7 @@ Export-ModuleMember -Function Get-AzDevOpsBranchPolicy
 #>
 function Test-AzDevOpsFileExists {
     [CmdletBinding()]
+    [OutputType([bool])]
     param (
         [Parameter()]
         [string]
@@ -210,8 +213,8 @@ Export-ModuleMember -Function Test-AzDevOpsFileExists
     .PARAMETER Organization
     Organization name for Azure DevOps
 
-    .PARAMETER Project
-    Project name for Azure DevOps
+    .PARAMETER ProjectId
+    Project ID for Azure DevOps
 
     .PARAMETER Repository
     Repository name for Azure DevOps
@@ -221,6 +224,7 @@ Export-ModuleMember -Function Test-AzDevOpsFileExists
 #>
 Function Get-AzDevOpsRepositoryGhas {
     [CmdletBinding()]
+    [OutputType([object])]
     param (
         [Parameter()]
         [string]
@@ -228,9 +232,6 @@ Function Get-AzDevOpsRepositoryGhas {
         [Parameter()]
         [string]
         $Organization,
-        [Parameter()]
-        [string]
-        $Project,
         [Parameter()]
         [string]
         $ProjectId,
@@ -256,7 +257,7 @@ Function Get-AzDevOpsRepositoryGhas {
         $response = Invoke-RestMethod -Uri $url -Method Post -Headers $header -Body ($payload | ConvertTo-Json) -ContentType "application/json"
         # If the response is a string and not an object, throw an exception for authentication failure or project not found
         if ($response -is [string]) {
-            throw "Authentication failed or project not found"	
+            throw "Authentication failed or project not found"
         }
     }
     catch {
@@ -321,13 +322,13 @@ function Export-AzDevOpsReposAndBranchPolicies {
             # Add a property indicating if a file named README.md or README exists in the repo
             $readmeExists = ((Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "README.md") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "README"))
             $repo | Add-Member -MemberType NoteProperty -Name ReadmeExists -Value $readmeExists
-            
+
             # Add a property indicating if a file named LICENSE or LICENSE.md exists in the repo
             $licenseExists = ((Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE.md"))
             $repo | Add-Member -MemberType NoteProperty -Name LicenseExists -Value $licenseExists
 
             # Add a property for GitHub Advanced Security (GHAS) data
-            $ghas = Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -ProjectId $repo.project.id -RepositoryId $repo.id
+            $ghas = Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
             $repo | Add-Member -MemberType NoteProperty -Name Ghas -Value $ghas
 
             # Export repo object to JSON file
