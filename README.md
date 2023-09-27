@@ -3,10 +3,9 @@
 [![PowerShell Gallery Version (including pre-releases)](https://img.shields.io/powershellgallery/v/PSRule.Rules.AzureDevOps?logo=powershell&link=https%3A%2F%2Fwww.powershellgallery.com%2Fpackages%2FPSRule.Rules.AzureDevOps)](https://www.powershellgallery.com/packages/PSRule.Rules.AzureDevOps)
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/PSRule.Rules.AzureDevOps?logo=powershell&link=https%3A%2F%2Fwww.powershellgallery.com%2Fpackages%2FPSRule.Rules.AzureDevOps)](https://www.powershellgallery.com/packages/PSRule.Rules.AzureDevOps)
 [![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/cloudyspells/PSRule.Rules.AzureDevOps/module-ci.yml?label=Pester%20Unit%20Tests)](https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/actions/workflows/module-ci.yml)
-
 [![codecov](https://codecov.io/gh/cloudyspells/PSRule.Rules.AzureDevOps/graph/badge.svg?token=SULG2MXS9U)](https://codecov.io/gh/cloudyspells/PSRule.Rules.AzureDevOps)
 
-## Azure DevOps rules module for PSRule
+## PS Rule Module for Azure DevOps
 
 This powershell module is built to be used with
 [Bernie White's](https://github.com/BernieWhite) excellent
@@ -17,7 +16,9 @@ secure development environment.
 This module is very much in early stage of development and
 should not be considered stable. Any input on the direction
 of the module and included rules is very much appreciated.
-Please consider opening an issue with your ideas.
+Please consider opening an
+[issue](https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/issues)
+with your ideas.
 
 ![Screenshot of version 0.0.11 Sarif output in Azure DevOps](assets/media/sarif-0.0.11.png)
 
@@ -38,9 +39,9 @@ Install-Module -Name PSRule.Rules.AzureDevOps -Scope CurrentUser
 ```
 
 Once you have both modules installed, you can run an export of
-your Azure DevOps project and run the rules against it. The `-PAT`
-value needs to be an Azure DevOps Personal Access Token with
-sufficient permissions to read the project data.
+your Azure DevOps project and run the rules on the exported data.
+The `-PAT` value needs to be an Azure DevOps Personal Access Token
+with sufficient permissions to read the project data.
 
 ```powershell
 Export-AzDevOpsRuleData `
@@ -86,7 +87,7 @@ Assert-PSRule `
 ## Rules
 
 Documentation for the implemented rules can be found in the
-[en](src/PSRule.Rules.AzureDevOps/en/) folder.
+[en](src/PSRule.Rules.AzureDevOps/en/) folder in the module folder.
 
 - [Azure.DevOps.Pipelines.Core.UseYamlDefinition](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.UseYamlDefinition.md)
 - [Azure.DevOps.Pipelines.Environments.Description](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Environments.Description.md)
@@ -119,3 +120,17 @@ Documentation for the implemented rules can be found in the
 - [Azure.DevOps.ServiceConnections.WorkloadIdentityFederation](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.WorkloadIdentityFederation.md)
 - [Azure.DevOps.Tasks.VariableGroup.Description](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.Description.md)
 - [Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets.md)
+
+## Contributing
+
+This project welcomes contributions and suggestions. Please read
+[CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute.
+
+## License
+
+This project is [licensed under the MIT License](LICENSE).
+
+## Acknowledgements
+
+- [Bernie White](https://github.com/BernieWhite) for creating
+  [PSRule](https://microsoft.github.io/PSRule/V2).

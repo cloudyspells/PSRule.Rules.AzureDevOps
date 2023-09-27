@@ -8,7 +8,7 @@ Copy the contents of this folder to your own Azure DevOps repository and
 update the `azure-pipelines.yml` file to point to your own repository using
 the variables for `devops_organization` and `devops_project`. The variable
 group `my-group` is used to store the PAT for the Azure DevOps project.
-The variable should be named `ADO_PAT`.
+The variable should be named `ADOPAT`.
 
 ```yaml
 variables:
