@@ -5,7 +5,7 @@
 [![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/cloudyspells/PSRule.Rules.AzureDevOps/module-ci.yml?label=Pester%20Unit%20Tests)](https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/actions/workflows/module-ci.yml)
 [![codecov](https://codecov.io/gh/cloudyspells/PSRule.Rules.AzureDevOps/graph/badge.svg?token=SULG2MXS9U)](https://codecov.io/gh/cloudyspells/PSRule.Rules.AzureDevOps)
 
-## PS Rule Module for Azure DevOps
+## PSRule Module for Azure DevOps
 
 This powershell module is built to be used with
 [Bernie White's](https://github.com/BernieWhite) excellent
@@ -134,3 +134,13 @@ This project is [licensed under the MIT License](LICENSE).
 
 - [Bernie White](https://github.com/BernieWhite) for creating
   [PSRule](https://microsoft.github.io/PSRule/V2).
+
+# Maintainer
+
+- [Roderick Bant](https://github.com/webtonize)
+
+# References
+
+- [PSRule](https://microsoft.github.io/PSRule/V2)
+- [Auditing an Azure DevOps project configuration with PSRule](https://medium.com/@webtonize/auditing-an-azure-devops-project-configuration-with-psrule-73cf17753827)
+- [Audit Azure DevOps configuration with Sarif scan reports from the pipeline](https://medium.com/@webtonize/)audit-azure-devops-configuration-with-sarif-scan-reports-from-the-pipeline-4ced6fc47988)
