@@ -409,6 +409,48 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsPipelineYaml with a pipeline with all defaults' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $PipelineId = '7'
+            $yaml = Get-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $PipelineId
+        }
+
+        It 'Should return a string' {
+            $yaml | Should -Not -BeNullOrEmpty
+            $yaml | Should -BeOfType [System.String]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsPipelineYaml with a pipeline that needs parameters' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $PipelineId = '10'
+            $yaml = Get-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $PipelineId
+        }
+
+        It 'Should return a string' {
+            $yaml | Should -Not -BeNullOrEmpty
+            $yaml | Should -BeOfType [System.String]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsPipelineYaml all wrong parameters' {
+        It 'Should throw an error' {
+            { 
+                $PAT = 'FaultyPAT'
+                $Organization = 'faulty-org'
+                $Project = 'project-success'
+                $PipelineId = '10'
+                Get-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $PipelineId
+            } | Should -Throw
+        }
+    }
+
     Context "When running Export-AzDevOpsPipelines" {
         It 'Should export all JSON files with an ObjectType property set as Azure.DevOps.Pipeline' {
             $PAT = $env:ADO_PAT
