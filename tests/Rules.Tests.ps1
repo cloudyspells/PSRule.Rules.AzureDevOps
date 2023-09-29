@@ -166,7 +166,6 @@ Describe 'AzureDevOps ' {
     Context 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' {
         It 'Should fail for targets named fail' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail' })
-            # $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 2;
         }
 
