@@ -95,7 +95,7 @@ function Get-AzDevOpsEnvironmentChecks {
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
     Write-Verbose "Getting checks for environment $Environment"
-    $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/checks/configurations?api-version=7.2-preview.1&resourceType=environment&resourceId=$($Environment)&"
+    $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/checks/configurations?api-version=7.2-preview.1&resourceType=environment&resourceId=$($Environment)&`$expand=settings"
     Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
