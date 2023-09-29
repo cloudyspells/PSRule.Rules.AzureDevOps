@@ -136,13 +136,8 @@ function Get-AzDevOpsPipelineYaml {
         $YamlPath = $response.configuration.path
         $uri = "https://dev.azure.com/$Organization/$Project/_apis/git/repositories/$RepositoryId/items?path=$YamlPath&api-version=6.0"
         Write-Verbose "Getting raw YAML definition from $uri"
-        try {
-            $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
-            $yaml = $response
-        }
-        catch {
-            throw $_.Exception.Message
-        }
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        $yaml = $response
     }
     return $yaml
 }
