@@ -93,6 +93,7 @@ Documentation for the implemented rules can be found in the
 - [Azure.DevOps.Pipelines.PipelineYaml.AgentPoolVersionNotLatest](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.PipelineYaml.AgentPoolVersionNotLatest.md)
 - [Azure.DevOps.Pipelines.PipelineYaml.StepDisplayName](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.PipelineYaml.StepDisplayName.md)
 - [Azure.DevOps.Pipelines.Environments.Description](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Environments.Description.md)
+- [Azure.DevOps.Pipelines.Environments.ProductionBranchLimit](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Environments.ProductionBranchLimit.md)
 - [Azure.DevOps.Pipelines.Environments.ProductionCheckProtection](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Environments.ProductionCheckProtection.md)
 - [Azure.DevOps.Pipelines.Environments.ProductionHumanApproval](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Environments.ProductionHumanApproval.md)
 - [Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Releases.Definition.ProductionApproval.md)
@@ -116,6 +117,7 @@ Documentation for the implemented rules can be found in the
 - [Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled.md)
 - [Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes.md)
 - [Azure.DevOps.ServiceConnections.Description](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.Description.md)
+- [Azure.DevOps.ServiceConnections.ProductionBranchLimit](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.ProductionBranchLimit.md)
 - [Azure.DevOps.ServiceConnections.ProductionCheckProtection](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.ProductionCheckProtection.md)
 - [Azure.DevOps.ServiceConnections.ProductionHumanApproval](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.ProductionHumanApproval.md)
 - [Azure.DevOps.ServiceConnections.Scope](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.Scope.md)
@@ -137,11 +139,11 @@ This project is [licensed under the MIT License](LICENSE).
 - [Bernie White](https://github.com/BernieWhite) for creating
   [PSRule](https://microsoft.github.io/PSRule/V2).
 
-# Maintainer
+## Maintainer
 
 - [Roderick Bant](https://github.com/webtonize)
 
-# References
+## References
 
 - [PSRule](https://microsoft.github.io/PSRule/V2)
 - [Auditing an Azure DevOps project configuration with PSRule](https://medium.com/@webtonize/auditing-an-azure-devops-project-configuration-with-psrule-73cf17753827)
