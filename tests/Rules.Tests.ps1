@@ -30,9 +30,9 @@ BeforeAll {
 
 Describe 'AzureDevOps ' {
     Context 'Base rules ' {
-        It 'Should contain 34 rules' {
+        It 'Should contain 36 rules' {
             $rules = Get-PSRule -Module PSRule.Rules.AzureDevOps;
-            $rules.Count | Should -Be 34;
+            $rules.Count | Should -Be 36;
         }
     }
 
@@ -159,6 +159,25 @@ Describe 'AzureDevOps ' {
 
         It 'Should have an English markdown help file' {
             $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Environments.Description.md');
+            $fileExists | Should -Be $true;
+        }
+    }
+
+    Context 'Azure.DevOps.Pipelines.Environments.ProductionBranchLimit' {
+        It 'Should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Environments.ProductionBranchLimit' -and $_.TargetName -match 'fail' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Environments.ProductionBranchLimit' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Environments.ProductionBranchLimit.md');
             $fileExists | Should -Be $true;
         }
     }
@@ -550,13 +569,13 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.ServiceConnections.Description' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Description' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Description' -and $_.TargetName -like '*fail*' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
 
         It 'Should pass for targets named success' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Description' -and $_.TargetName -match 'success' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Description' -and $_.TargetName -like '*success*' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
@@ -569,13 +588,13 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.ServiceConnections.Scope' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Scope' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Scope' -and $_.TargetName -like '*fail*' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
 
         It 'Should pass for targets named success' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Scope' -and $_.TargetName -match 'success' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Scope' -and $_.TargetName -like '*success*' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
@@ -588,19 +607,37 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' -and $_.TargetName -like '*fail*' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
 
         It 'Should pass for targets named success' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' -and $_.TargetName -match 'success' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' -and $_.TargetName -like '*success*' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
 
         It 'Should have an English markdown help file' {
             $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.WorkloadIdentityFederation.md');
+            $fileExists | Should -Be $true;
+        }
+    }
+
+    Context 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' {
+        It 'Should not touch non-production service connections' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' -and $_.TargetName -like '*fail*' })
+            $ruleHits.Count | Should -Be 0;
+        }
+
+        It 'Should pass for production targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' -and $_.TargetName -like '*success*' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have a markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.ProductionBranchLimit.md');
             $fileExists | Should -Be $true;
         }
     }

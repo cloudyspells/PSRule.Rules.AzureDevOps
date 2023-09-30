@@ -74,4 +74,18 @@ Rule 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' `
             $Assert.HasField($TargetObject, "data.scopeLevel", $true)
             $Assert.HasField($TargetObject, "authorization.parameters.workloadIdentityFederationSubject", $true)
         }
-    }
+}
+
+# Synopsis: Production service connection should be limited to specific branches
+Rule 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' `
+    -Ref 'ADO-SC-006' `
+    -Type 'Azure.DevOps.ServiceConnection' `
+    -With 'IsProduction' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'Production service connection should be limited to specific branches.'
+        Reason 'The service connection is not limited to specific branches.'
+        Recommend 'Limit the service connection to specific branches.'
+        $Assert.HasField($TargetObject, "Checks[?@settings.displayName == 'Branch control'].settings.inputs.allowedBranches", $true)
+        $Assert.HasFieldValue($TargetObject, "Checks[?@settings.displayName == 'Branch control'].settings.inputs.allowedBranches")
+}

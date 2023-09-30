@@ -46,3 +46,18 @@ Rule 'Azure.DevOps.Pipelines.Environments.Description' `
         $Assert.HasField($TargetObject, "description", $true)
         $Assert.HasFieldValue($TargetObject, "description")
 }
+
+# Synopsis: Production environment should be limited to specific branches
+Rule 'Azure.DevOps.Pipelines.Environments.ProductionBranchLimit' `
+    -Ref 'ADO-E-004' `
+    -Type 'Azure.DevOps.Pipelines.Environment' `
+    -With 'IsProduction' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'Production environment should be limited to specific branches'
+        Reason 'The environment is not limited to specific branches'
+        Recommend 'Limit the environment to specific branches'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops#check-gates'
+        $Assert.HasField($TargetObject, "checks[?@settings.displayName == 'Branch control'].settings.inputs.allowedBranches", $true)
+        $Assert.HasFieldValue($TargetObject, "checks[?@settings.displayName == 'Branch control'].settings.inputs.allowedBranches")
+}
