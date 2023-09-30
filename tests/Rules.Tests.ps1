@@ -30,9 +30,9 @@ BeforeAll {
 
 Describe 'AzureDevOps ' {
     Context 'Base rules ' {
-        It 'Should contain 32 rules' {
+        It 'Should contain 34 rules' {
             $rules = Get-PSRule -Module PSRule.Rules.AzureDevOps;
-            $rules.Count | Should -Be 32;
+            $rules.Count | Should -Be 34;
         }
     }
 
@@ -64,6 +64,44 @@ Describe 'AzureDevOps ' {
 
         It 'Should have an English markdown help file' {
             $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Tasks.VariableGroup.Description.md');
+            $fileExists | Should -Be $true;
+        }
+    }
+
+    Context 'Azure.DevOps.Pipelines.PipelineYaml.AgentPoolVersionNotLatest' {
+        It 'Should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.PipelineYaml.AgentPoolVersionNotLatest' -and $_.Outcome -eq 'Fail' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.PipelineYaml.AgentPoolVersionNotLatest' -and $_.Outcome -eq 'Pass' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.PipelineYaml.AgentPoolVersionNotLatest.md');
+            $fileExists | Should -Be $true;
+        }
+    }
+
+    Context 'Azure.DevOps.Pipelines.PipelineYaml.StepDisplayName' {
+        It 'Should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.PipelineYaml.StepDisplayName' -and $_.Outcome -eq 'Fail' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.PipelineYaml.StepDisplayName' -and $_.Outcome -eq 'Pass' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.PipelineYaml.StepDisplayName.md');
             $fileExists | Should -Be $true;
         }
     }
@@ -128,8 +166,7 @@ Describe 'AzureDevOps ' {
     Context 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' {
         It 'Should fail for targets named fail' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail' })
-            $ruleHits[0].Outcome | Should -Be 'Fail';
-            $ruleHits.Count | Should -Be 1;
+            $ruleHits.Count | Should -Be 2;
         }
 
         It 'Should pass for targets named success' {
