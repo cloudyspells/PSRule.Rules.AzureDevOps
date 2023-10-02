@@ -22,6 +22,11 @@ with your ideas.
 
 ![Screenshot of version 0.0.11 Sarif output in Azure DevOps](assets/media/sarif-0.0.11.png)
 
+This [annotated version of the official security best practices](docs/security-best-practices.md)
+provides a reference for how the rules in this module are related to the
+best practices recommended by Microsoft. It is the main guiding document
+in building the ruleset for this module.
+
 ## Usage
 
 To use this module, you need to have _PSRule_ installed.
