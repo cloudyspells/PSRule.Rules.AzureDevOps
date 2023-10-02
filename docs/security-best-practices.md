@@ -14,7 +14,7 @@ ms.date: 09/18/2023
 
 [!INCLUDE [version-lt-eq-azure-devops](../../includes/version-lt-eq-azure-devops.md)]
 
-> This document is taken from [https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops](https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops) and is updated to reflect how the rules from this repository indicated in **bold** are related to the best practices in the original document.
+> This document is taken from [https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops](https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops) and is updated to reflect how the rules from this repository indicated with :o: **bold** are related to the best practices in the original document.
 
 When you're working with information and data, particularly in a cloud-based solution like Azure DevOps Services, prioritizing security should always be your primary concern. While Microsoft maintains the security of the underlying cloud infrastructure, it's your responsibility to configure security in Azure DevOps.
 
@@ -149,7 +149,7 @@ You can change the configuration of your organization or project if you have [Pr
 
 - Scope [Azure Resource Manager](/azure/azure-resource-manager/management/overview), and [other service connections](../../pipelines/library/service-endpoints.md), only to the resources and groups to which they need access. Service connections shouldn't have broad contributor rights on the entire Azure subscription.
 
-  > **Azure.DevOps.ServiceConnections.Scope**
+  > :o: [**Azure.DevOps.ServiceConnections.Scope**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.Scope.md)
 
 - Don’t give users generic or broad contributor rights on the Azure subscription. 
 - Don’t use Azure Classic service connections, as there’s no way to scope the permissions. 
@@ -215,28 +215,28 @@ If possible, we recommended to always use identity services for authentication i
 
 - Require at least one reviewer outside of the original requester. The approver shares coownership of the changes and should be held equally accountable for any potential impact.
 
-  > **AzureDevOps.Repos.BranchPolicyMinimumReviewers**
+  > :o: [**AzureDevOps.Repos.BranchPolicyMinimumReviewers**](../src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyMinimumReviewers.md)
 
 - Require CI build to pass. This requirement is useful for establishing baseline code quality, through code linting, unit tests, and security checks, like virus and credential scans. 
 
-  > **WIP**
+  > :o: **WIP**
 
 - Ensure that the original pull requester can’t approve the change.
 
-  > **AzureDevOps.Repos.BranchPolicyAllowSelfApproval** 
+  > :o: [**AzureDevOps.Repos.BranchPolicyAllowSelfApproval**](../src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyAllowSelfApproval.md)
 
 - Disallow completion of a PR (Pull Request), even if some reviewers vote to wait or reject. 
 
-> **AzureDevOps.Repos.BranchPolicyMinimumReviewers**
+  > :o: [**AzureDevOps.Repos.BranchPolicyMinimumReviewers**](../src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyMinimumReviewers.md)
 
 - Reset code reviewer votes when recent changes get pushed.
 
-  > **AzureDevOps.Repos.BranchPolicyResetVotes**
+  > :o: [**AzureDevOps.Repos.BranchPolicyResetVotes**](../src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyResetVotes.md)
 
 - Lock down release pipelines by running them only on specific production branches. 
 - Enable “Enforce settable at queue time for variables” in your organization’s pipeline settings. 
 
-  > **Azure.DevOps.Pipelines.Settings.LimitSetVariablesAtQueueTime**
+  > :o: [**Azure.DevOps.Pipelines.Settings.LimitSetVariablesAtQueueTime**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.LimitSetVariablesAtQueueTime.md)
 
 - Don’t allow “Let users override this value when running this pipeline,” for variables set in the editor. 
 
@@ -252,7 +252,7 @@ If possible, we recommended to always use identity services for authentication i
 
 - Manage pipeline definitions with YAML (Yet Another Markup Language). YAML is the preferred method for managing pipeline definitions, as it provides traceability for changes and can follow approval guidelines.
 
-  > **Azure.DevOps.Pipelines.Core.UseYamlDefinition**
+  > :o: [**Azure.DevOps.Pipelines.Core.UseYamlDefinition**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.UseYamlDefinition.md)
 
 - Secure the pipeline definition *Edit* access to the minimum number of accounts. 
 
@@ -260,7 +260,7 @@ If possible, we recommended to always use identity services for authentication i
 
 - Include sanity checks for variables in build scripts. A sanity check can mitigate a command injection attack through the settable variables.
 
-  > **Azure.DevOps.Pipelines.Settings.SanitizeShellTaskArguments**
+  > :o: [**Azure.DevOps.Pipelines.Settings.SanitizeShellTaskArguments**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.SanitizeShellTaskArguments.md)
 
 - Set as few build variables as possible to “Settable at release time.” 
 
@@ -270,13 +270,13 @@ If possible, we recommended to always use identity services for authentication i
 - Don’t log secrets. 
 - Don’t store secrets in pipeline variables, use Azure KeyVault. Regularly scan your build pipelines to ensure secrets aren’t being stored in build pipeline variables.
 
-  > **Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets**
+  > :o: [**Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets.md)
 
 - Don’t let users run builds against arbitrary branches or tags on security-critical pipelines. 
 - Disable inheritance on the pipeline, as inherited permissions are broad and don’t accurately reflect your needs for permissions. 
 - Limit job authorization scopes in all cases.
 
-  > **Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScope**, **Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForReleasePipelines** and **Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForYamlPipelines**
+  > :o: [**Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScope**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScope.md), [**Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForReleasePipelines**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForReleasePipelines.md) and [**Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForYamlPipelines**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForYamlPipelines.md)
 
 
 
@@ -284,7 +284,7 @@ If possible, we recommended to always use identity services for authentication i
 
 - Set the “Require a minimum number of reviewers,” policy to *on*, so that every pull request gets reviewed by at least two approvers.
 
-  > **AzureDevOps.Repos.BranchPolicyMinimumReviewers**
+  > :o: [**AzureDevOps.Repos.BranchPolicyMinimumReviewers**](../src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyMinimumReviewers.md)
 
 - Configure security policies specific to each repository or branch, instead of project wide. Security policies reduce risk, enforce change management standards, and improve your team’s quality of code.  
 - Store production secrets in a separate KeyVault and ensure that access is only granted on a need-to-know basis to keep nonproduction builds separate. 
@@ -292,14 +292,14 @@ If possible, we recommended to always use identity services for authentication i
 - Disable forking. The more forks there are, the harder it's to keep track of each fork’s security. Also, a user can easily fork a copy of a repository to their own private account.
 - [Don't provide secrets to fork builds](../../pipelines/security/repos.md#dont-provide-secrets-to-fork-builds).
 
-  > **Azure.DevOps.Pipelines.Settings.RestrictSecretsForPullRequestFromFork**
+  > :o: [**Azure.DevOps.Pipelines.Settings.RestrictSecretsForPullRequestFromFork**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.RestrictSecretsForPullRequestFromFork.md)
 
 - [Consider manually triggering fork builds](../../pipelines/security/repos.md#consider-manually-triggering-fork-builds). 
 - [Use Microsoft-hosted agents for fork builds](../../pipelines/security/repos.md#use-microsoft-hosted-agents-for-fork-builds).
 - For Git, check your production build definitions in the project’s git repository, so they can be scanned for credentials.
 - Configure a branch control check so that only pipelines running in the context of the `production` branch may use the `prod-connection`.
 
-  > **Azure.DevOps.ServiceConnections.ProductionBranchLimit** and **Azure.DevOps.Pipelines.Environments.ProductionBranchLimit**
+  > :o: [**Azure.DevOps.ServiceConnections.ProductionBranchLimit**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.ProductionBranchLimit.md) and [**Azure.DevOps.Pipelines.Environments.ProductionBranchLimit**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Environments.ProductionBranchLimit.md)
 
 - For more information, see [Other security considerations](../../pipelines/security/misc.md).
 
@@ -307,7 +307,7 @@ If possible, we recommended to always use identity services for authentication i
 
 - [Improve code quality with branch policies](../../repos/git/branch-policies.md). For more information about branch permissions and policies, see [Set branch permissions](../../repos/git/branch-permissions.md).
 
-  > **Azure.DevOps.Repos.BranchPolicyIsEnabled**
+  > :o: [**Azure.DevOps.Repos.BranchPolicyIsEnabled**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyIsEnabled.md)
 
 ## Secure Azure Test Plans
 
