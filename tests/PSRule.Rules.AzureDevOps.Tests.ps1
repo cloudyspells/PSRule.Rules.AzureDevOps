@@ -600,6 +600,31 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context "When running Get-AzDevOpsReleaseDefinitionAcls" {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $releaseDefinitionId = 2
+            $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
+            $releaseDefinitionAcls = Get-AzDevOpsReleaseDefinitionAcls -PAT $PAT -Organization $Organization -ReleaseDefinitionId $releaseDefinitionId -ProjectId $ProjectId -Folder ''
+        }
+
+        It 'Should return a list of release definition acls' {
+            $releaseDefinitionAcls | Should -Not -BeNullOrEmpty
+            $releaseDefinitionAcls[0] | Should -BeOfType [PSCustomObject]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsReleaseDefinitionAcls with wrong parameters' {
+        It 'Should throw an 404 error when all parameters are wrong' {
+            { Get-AzDevOpsReleaseDefinitionAcls -PAT 'FaultyPAT' -Organization 'faulty-org' -ProjectId 'faulty' -ReleaseDefinitionId 99999 -Folder '' -ErrorAction Stop} | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+        }
+
+        It 'Should throw a authentication error when the PAT is wrong' {
+            { Get-AzDevOpsReleaseDefinitionAcls -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -ProjectId 'faulty' -ReleaseDefinitionId 99999 -Folder '\notexist' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+        }
+    }
+
     Context "When running Export-AzDevOpsReleaseDefinitions" {
         It 'Should export all JSON files with an ObjectType property set as Azure.DevOps.Releases.Definition' {
             $PAT = $env:ADO_PAT

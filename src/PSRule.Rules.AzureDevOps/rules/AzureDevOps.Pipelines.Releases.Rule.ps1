@@ -36,3 +36,19 @@ Rule 'Azure.DevOps.Pipelines.Releases.Definition.SelfApproval' `
             $Assert.HasFieldValue($_.preDeployApprovals, "approvalOptions.releaseCreatorCanBeApprover", $false)
         }
 }
+
+# Synopsis: Release pipeline should not inherit permissions from the project.
+Rule 'Azure.DevOps.Pipelines.Releases.Definition.InheritedPermissions' `
+    -Ref 'ADO-RD-003' `
+    -Type 'Azure.DevOps.Pipelines.Releases.Definition' `
+    -Tag @{ release = 'GA'} `
+    -Level Error {
+        # Description 'Release pipeline should not inherit permissions from the project.'
+        Reason 'The release pipeline inherits permissions from the project.'
+        Recommend 'Consider removing inherited permissions'
+        # Links 'https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#scoped-permissions'
+        AllOf {
+            $Assert.HasField($TargetObject, "Acls.inheritPermissions", $true)
+            $Assert.HasFieldValue($TargetObject, "Acls.inheritPermissions", $false)
+        }
+}
