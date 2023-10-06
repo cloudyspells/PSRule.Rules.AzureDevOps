@@ -132,6 +132,33 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsRepositoryAcls' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
+            $repos = Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $Project
+            $RepositoryId = ($repos | Where-Object { $_.name -eq 'repository-success'})[0].id
+            $repositoryAcls = Get-AzDevOpsRepositoryAcls -PAT $PAT -Organization $Organization -RepositoryId $RepositoryId -ProjectId $ProjectId
+        }
+
+        It 'Should return a list of repository acls' {
+            $repositoryAcls | Should -Not -BeNullOrEmpty
+            $repositoryAcls[0] | Should -BeOfType [PSCustomObject]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsRepositoryAcls with wrong parameters' {
+        It 'Should throw an 404 error when all parameters are wrong' {
+            { Get-AzDevOpsRepositoryAcls -PAT 'FaultyPAT' -Organization 'faulty-org' -RepositoryId 'FaultyRepositoryId' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+        }
+
+        It 'Should throw a authentication error when the PAT is wrong' {
+            { Get-AzDevOpsRepositoryAcls -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -RepositoryId 'FaultyRepositoryId' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+        }
+    }
+
     Context "When running Test-AzDevOpsFileExists" {
         BeforeAll {
             $PAT = $env:ADO_PAT
@@ -406,6 +433,31 @@ Describe 'PSRule.Rules.AzureDevOps' {
 
         It 'Should throw a authentication error when the PAT is wrong' {
             { Get-AzDevOpsPipelines -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -Project $env:ADO_PROJECT -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+        }
+    }
+
+    Context 'When running Get-AzDevOpsPipelineAcls' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $pipelineId = 7
+            $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
+            $pipelineAcls = Get-AzDevOpsPipelineAcls -PAT $PAT -Organization $Organization -PipelineId $PipelineId -ProjectId $ProjectId
+        }
+
+        It 'Should return a list of pipeline acls' {
+            $pipelineAcls | Should -Not -BeNullOrEmpty
+            $pipelineAcls[0] | Should -BeOfType [PSCustomObject]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsPipelineAcls with wrong parameters' {
+        It 'Should throw an 404 error when all parameters are wrong' {
+            { Get-AzDevOpsPipelineAcls -PAT 'FaultyPAT' -Organization 'faulty-org' -PipelineId 'FaultyPipelineId' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+        }
+
+        It 'Should throw a authentication error when the PAT is wrong' {
+            { Get-AzDevOpsPipelineAcls -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -PipelineId 'FaultyPipelineId' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
         }
     }
 

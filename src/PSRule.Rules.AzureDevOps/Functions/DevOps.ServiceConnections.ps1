@@ -31,7 +31,7 @@ function Get-AzDevOpsArmServiceConnections {
         $Project
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
-    $uri = "https://dev.azure.com/$Organization/$Project/_apis/serviceendpoint/endpoints?api-version=6.0-preview.4"
+    $uri = "https://dev.azure.com/$Organization/$Project/_apis/serviceendpoint/endpoints?api-version=6.0-preview.4&includeDetails=True"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
         # If the response is not an object but a string, the authentication failed
