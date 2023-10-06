@@ -210,6 +210,43 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsRepositoryPipelinePermissions' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT
+            $Organization = $env:ADO_ORGANIZATION
+            $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
+            $repositoryName = 'repository-success'
+            $repoId = "befaaf13-3966-45c0-b481-6387e860d915"
+            $repoPipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT `
+                -Organization $Organization `
+                -ProjectId $ProjectId `
+                -RepositoryId "befaaf13-3966-45c0-b481-6387e860d915"
+        }
+
+        It 'Should return an object' {
+            $repoPipelinePermissions | Should -Not -BeNullOrEmpty
+            $repoPipelinePermissions | Should -BeOfType [PSCustomObject]
+        }
+    }
+
+    Context 'When running Get-AzDevOpsRepositoryPipelinePermissions with wrong parameters' {
+        It 'Should return a 404 when all parameters are wrong' {
+            $PAT = 'FaultyPAT'
+            $Organization = 'faultyOrg'
+            $ProjectId = 'faultyProject'
+            $RepositoryId = 'faultyRepository'
+            { Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+        }
+
+        It 'Should throw an authentication error if the PAT is wrong' {
+            $PAT = 'FaultyPAT'
+            $Organization = $env:ADO_ORGANIZATION
+            $ProjectId = '1fa185aa-ce58-4732-8700-8964802ea538'
+            $RepositoryId = 'befaaf13-3966-45c0-b481-6387e860d915'
+            { Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+        }
+    }
+
     Context "When running Export-AzDevOpsReposAndBranchPolicies" {
         BeforeAll {
             $PAT = $env:ADO_PAT
