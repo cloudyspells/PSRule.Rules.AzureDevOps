@@ -66,6 +66,63 @@ function Get-AzDevOpsPipelines {
 Export-ModuleMember -Function Get-AzDevOpsPipelines
 # End of Function Get-AzDevOpsPipelines
 
+<#
+    .SYNOPSIS
+    Get Azure DevOps pipeline ACLs
+
+    .DESCRIPTION
+    Get Azure DevOps pipeline ACLs using Azure DevOps Rest API
+
+    .PARAMETER PAT
+    Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
+
+    .PARAMETER ProjectId
+    Project ID for Azure DevOps
+
+    .PARAMETER PipelineId
+    Pipeline ID for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsPipelineAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -PipelineId $PipelineId
+#>
+function Get-AzDevOpsPipelineAcls {
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [string]
+        $PAT,
+        [Parameter()]
+        [string]
+        $Organization,
+        [Parameter()]
+        [string]
+        $ProjectId,
+        [Parameter()]
+        [string]
+        $PipelineId
+    )
+    $header = Get-AzDevOpsHeader -PAT $PAT
+    $uri = "https://dev.azure.com/$Organization/_apis/accesscontrollists/33344d9c-fc72-4d6f-aba5-fa317101a7e9?api-version=6.0&token=$($ProjectId)/$($PipelineId)"
+    Write-Verbose "Getting pipeline ACLs from $uri"
+    Write-Verbose "PROJECTID: $ProjectId"
+    try {
+        $response = (Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json") #| Where-Object { $_.token -eq "$($ProjectId)/$($PipelineId)" }
+        # if the response is not an object but a string, the authentication failed
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"
+        }
+    }
+    catch {
+        throw $_.Exception.Message
+    }
+    return $response.value
+}
+Export-ModuleMember -Function Get-AzDevOpsPipelineAcls
+# End of Function Get-AzDevOpsPipelineAcls
+
 # Begin of Function Get-AzDevOpsPipelineYaml
 <#
     .SYNOPSIS
@@ -245,6 +302,11 @@ function Export-AzDevOpsPipelines {
     foreach ($pipeline in $pipelines) {
         # Add ObjectType Azure.DevOps.Pipeline to the pipeline object
         $pipeline | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Pipeline"
+        # Get the project ID from the pipeline object web.href property
+        $ProjectId = $pipeline._links.web.href.Split('/')[4]
+        # Add the pipeline ACLs to the pipeline object
+        $pipeline | Add-Member -MemberType NoteProperty -Name Acls -Value (Get-AzDevOpsPipelineAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -PipelineId $pipeline.id)
+
         Write-Verbose "Exporting pipeline $($pipeline.name) to JSON file"
         Write-Verbose "Exporting pipeline as JSON file to $OutputPath\$($pipeline.name).ado.pl.json"
         $pipeline | ConvertTo-Json -Depth 100 | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"

@@ -164,3 +164,19 @@ Rule 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' `
         $Assert.HasField($TargetObject, "Ghas.blockPushes", $true)
         $Assert.HasFieldValue($TargetObject, "Ghas.blockPushes", $Configuration.GetBoolOrDefault('ghasBlockPushesEnabled', $True))
 }
+
+# Synopsis: Repository should not have inherited permissions
+Rule 'Azure.DevOps.Repos.InheritedPermissions' `
+    -Ref 'ADO-RP-012' `
+    -Type 'Azure.DevOps.Repo' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'Repository should not have inherited permissions'
+        Reason 'Repository has inherited permissions'
+        Recommend 'Consider removing inherited permissions'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/set-git-repository-permissions?view=azure-devops'
+        AllOf {
+            $Assert.HasField($TargetObject, "Acls.inheritPermissions", $true)
+            $Assert.HasFieldValue($TargetObject, "Acls.inheritPermissions", $false)
+        }
+}

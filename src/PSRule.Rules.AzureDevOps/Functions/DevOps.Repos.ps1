@@ -122,6 +122,119 @@ Export-ModuleMember -Function Get-AzDevOpsBranchPolicy
 
 <#
     .SYNOPSIS
+    Get Repository pipeline permissions for a repo
+
+    .DESCRIPTION
+    Get Repository pipeline permissions for a repo using Azure DevOps Rest API
+
+    .PARAMETER PAT
+    Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
+
+    .PARAMETER ProjectId
+    Project ID for Azure DevOps project
+
+    .PARAMETER RepositoryId
+    Repository ID for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId
+#>
+Function Get-AzDevOpsRepositoryPipelinePermissions {
+    [CmdletBinding()]
+    [OutputType([object[]])]
+    param (
+        [Parameter()]
+        [string]
+        $PAT,
+        [Parameter()]
+        [string]
+        $Organization,
+        [Parameter()]
+        [string]
+        $ProjectId,
+        [Parameter()]
+        [string]
+        $RepositoryId
+    )
+    $header = Get-AzDevOpsHeader -PAT $PAT
+    $uri = "https://dev.azure.com/{0}/{1}/_apis/pipelines/pipelinePermissions/repository/{2}.{3}" -f $Organization, $ProjectId, $ProjectId, $RepositoryId
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json"
+        # If the response is a string and not an object, throw an exception for authentication failure or project not found
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"
+        }
+    }
+    catch {
+        throw $_.Exception.Message
+    }
+    return $response
+}
+Export-ModuleMember -Function Get-AzDevOpsRepositoryPipelinePermissions
+# End of Function Get-AzDevOpsRepositoryPipelinePermissions
+
+<#
+    .SYNOPSIS
+    Get Azure DevOps repos ACLs
+
+    .DESCRIPTION
+    Get Azure DevOps repos ACLs using Azure DevOps Rest API
+
+    .PARAMETER PAT
+    Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
+
+    .PARAMETER ProjectId
+    Project ID for Azure DevOps project
+
+    .PARAMETER RepositoryId
+    Repository ID for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsRepositoryAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId
+#>
+Function Get-AzDevOpsRepositoryAcls {
+    [CmdletBinding()]
+    [OutputType([object[]])]
+    param (
+        [Parameter()]
+        [string]
+        $PAT,
+        [Parameter()]
+        [string]
+        $Organization,
+        [Parameter()]
+        [string]
+        $ProjectId,
+        [Parameter()]
+        [string]
+        $RepositoryId
+    )
+    $header = Get-AzDevOpsHeader -PAT $PAT
+    $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/2e9eb7ed-3c0a-47d4-87c1-0ffdd275fd87?api-version=6.0" -f $Organization
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json"
+        # If the response is a string and not an object, throw an exception for authentication failure or project not found
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"
+        }
+        $thisRepoPerms = $response.value | where-object {($_.token -eq "repoV2/$($ProjectId)/$($RepositoryId)")}
+    }
+    catch {
+        throw $_.Exception.Message
+    }
+    return $thisRepoPerms
+}
+Export-ModuleMember -Function Get-AzDevOpsRepositoryAcls
+# End of Function Get-AzDevOpsRepositoryAcls
+
+<#
+    .SYNOPSIS
     Check the existance of a file in an Azure DevOps repo
 
     .DESCRIPTION
@@ -182,23 +295,6 @@ function Test-AzDevOpsFileExists {
 }
 Export-ModuleMember -Function Test-AzDevOpsFileExists
 # End of Function Test-AzDevOpsFileExists
-
-<#
-    .SYNOPSIS
-    Get Azure DevOps organization information
-
-    .DESCRIPTION
-    Get Azure DevOps organization information using Azure DevOps Rest API
-
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
-    .EXAMPLE
-    Get-AzDevOpsOrganization -PAT $PAT -Organization $Organization
-#>
 
 <#
     .SYNOPSIS
@@ -330,6 +426,14 @@ function Export-AzDevOpsReposAndBranchPolicies {
             # Add a property for GitHub Advanced Security (GHAS) data
             $ghas = Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
             $repo | Add-Member -MemberType NoteProperty -Name Ghas -Value $ghas
+
+            # Add a property with pipeline permissions
+            $pipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
+            $repo | Add-Member -MemberType NoteProperty -Name PipelinePermissions -Value $pipelinePermissions
+
+            # Add a property with repo ACLs
+            $repoAcls = Get-AzDevOpsRepositoryAcls -PAT $PAT -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
+            $repo | Add-Member -MemberType NoteProperty -Name Acls -Value $repoAcls
 
             # Export repo object to JSON file
             Write-Verbose "Exporting repo $($repo.name) to JSON as file $($repo.name).ado.repo.json"

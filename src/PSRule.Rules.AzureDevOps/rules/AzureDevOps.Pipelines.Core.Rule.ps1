@@ -15,3 +15,19 @@ Rule 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' `
             $Assert.HasFieldValue($TargetObject, "configuration.type", "yaml")
         }
 }
+
+# Synopsis: Pipelines should not have inherited permissions
+Rule 'Azure.DevOps.Pipelines.Core.InheritedPermissions' `
+    -Ref 'ADO-PL-002' `
+    -Type 'Azure.DevOps.Pipeline' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description "Pipelines should not have inherited permissions"
+        Reason "The pipeline is using inherited permissions"
+        Recommend "Consider using explicit permissions for your pipelines"
+        # Links "https://docs.microsoft.com/en-us/azure/devops/pipelines/policies/permissions?view=azure-devops&tabs=yaml"
+        AllOf {
+            $Assert.HasField($TargetObject, "Acls.inheritPermissions", $true)
+            $Assert.HasFieldValue($TargetObject, "Acls.inheritPermissions", $false)
+        }
+}

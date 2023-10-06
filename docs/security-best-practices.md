@@ -70,7 +70,10 @@ A few ways to do so might include:
 The system manages permissions at different levels - individual, collection, project, and object - and assigns them to one or more built-in groups by default.
 
 - Only give users and services the minimum amount of access needed to perform their business functions.
-- Disable inheritance where possible. Due to the allow-by-default nature of inheritance, unexpected users can get access or permissions. For more information, read about [inheritance](https://learn.microsoft.com/en-us/azure/devops/organizations/security/about-permissions.md#permission-inheritance-and-security-groups). 
+- Disable inheritance where possible. Due to the allow-by-default nature of inheritance, unexpected users can get access or permissions. For more information, read about [inheritance](https://learn.microsoft.com/en-us/azure/devops/organizations/security/about-permissions.md#permission-inheritance-and-security-groups).
+  > :o: [**Azure.DevOps.Pipelines.Releases.Definition.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Releases.Definition.InheritedPermissions.md)
+  > [**Azure.DevOps.Repos.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.InheritedPermissions.md)
+  > [**Azure.DevOps.Pipelines.Core.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.InheritedPermissions.md)
 - Learn more about permissions here:
   - [Permissions and role lookup guide](https://learn.microsoft.com/en-us/azure/devops/organizations/security/permissions-lookup-guide.md)
   - [Permissions, security groups, and service accounts reference](https://learn.microsoft.com/en-us/azure/devops/organizations/security/permissions.md)
