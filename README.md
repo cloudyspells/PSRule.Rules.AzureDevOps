@@ -10,7 +10,7 @@
 This powershell module is built to be used with
 [Bernie White's](https://github.com/BernieWhite) excellent
 [PSRule](https://github.com/microsoft/PSRule) module to check
-an Azure DevOps project against some best practices for a
+an Azure DevOps project for best practices for a
 secure development environment.
 
 This module is very much in early stage of development and
@@ -131,6 +131,7 @@ Documentation for the implemented rules can be found in the
 - [Azure.DevOps.ServiceConnections.WorkloadIdentityFederation](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.WorkloadIdentityFederation.md)
 - [Azure.DevOps.Tasks.VariableGroup.Description](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.Description.md)
 - [Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets.md)
+- [Azure.DevOps.Tasks.VariableGroup.NoPlainTextSecrets](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoPlainTextSecrets.md)
 
 ## Contributing
 
