@@ -274,9 +274,11 @@ If possible, we recommended to always use identity services for authentication i
 - Don’t store secrets in pipeline variables, use Azure KeyVault. Regularly scan your build pipelines to ensure secrets aren’t being stored in build pipeline variables.
 
   > :o: [**Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets.md)
+  > [**Azure.DevOps.Tasks.VariableGroup.NoPlainTextSecrets**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoPlainTextSecrets.md)
 
-- Don’t let users run builds against arbitrary branches or tags on security-critical pipelines. 
-- Disable inheritance on the pipeline, as inherited permissions are broad and don’t accurately reflect your needs for permissions. 
+- Don’t let users run builds against arbitrary branches or tags on security-critical pipelines.
+- Disable inheritance on the pipeline, as inherited permissions are broad and don’t accurately reflect your needs for permissions.
+  > :o: [**Azure.DevOps.Pipelines.Core.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.InheritedPermissions.md)
 - Limit job authorization scopes in all cases.
 
   > :o: [**Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScope**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScope.md), [**Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForReleasePipelines**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForReleasePipelines.md) and [**Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForYamlPipelines**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.LimitJobAuthorizationScopeForYamlPipelines.md)
@@ -289,7 +291,7 @@ If possible, we recommended to always use identity services for authentication i
 
   > :o: [**AzureDevOps.Repos.BranchPolicyMinimumReviewers**](../src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyMinimumReviewers.md)
 
-- Configure security policies specific to each repository or branch, instead of project wide. Security policies reduce risk, enforce change management standards, and improve your team’s quality of code.  
+- Configure security policies specific to each repository or branch, instead of project wide. Security policies reduce risk, enforce change management standards, and improve your team’s quality of code.
 - Store production secrets in a separate KeyVault and ensure that access is only granted on a need-to-know basis to keep nonproduction builds separate. 
 - Don’t mix test environments with production, including use of credentials.  
 - Disable forking. The more forks there are, the harder it's to keep track of each fork’s security. Also, a user can easily fork a copy of a repository to their own private account.
