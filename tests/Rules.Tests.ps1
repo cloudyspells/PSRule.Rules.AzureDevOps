@@ -30,9 +30,9 @@ BeforeAll {
 
 Describe 'AzureDevOps ' {
     Context 'Base rules ' {
-        It 'Should contain 40 rules' {
+        It 'Should contain 41 rules' {
             $rules = Get-PSRule -Module PSRule.Rules.AzureDevOps;
-            $rules.Count | Should -Be 40;
+            $rules.Count | Should -Be 41;
         }
     }
 
@@ -638,6 +638,25 @@ Describe 'AzureDevOps ' {
 
         It 'Should have a markdown help file' {
             $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.InheritedPermissions.md');
+            $fileExists | Should -Be $true;
+        }
+    }
+
+    Context 'Azure.DevOps.Repos.BranchPolicyRequireBuild' {
+        It 'Should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyRequireBuild' -and $_.TargetName -match 'fail' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyRequireBuild' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have a markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.BranchPolicyRequireBuild.md');
             $fileExists | Should -Be $true;
         }
     }

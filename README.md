@@ -11,7 +11,9 @@ This powershell module is built to be used with
 [Bernie White's](https://github.com/BernieWhite) excellent
 [PSRule](https://github.com/microsoft/PSRule) module to check
 an Azure DevOps project for best practices for a
-secure development environment.
+secure development environment. The module takes best practices from the official
+[Azure DevOps Security best practices](https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops) documentation. It can
+function as a periodic security scan and check for your Azure DevOps project.
 
 This module is very much in early stage of development and
 should not be considered stable. Any input on the direction
@@ -21,11 +23,6 @@ Please consider opening an
 with your ideas.
 
 ![Screenshot of version 0.0.11 Sarif output in Azure DevOps](assets/media/sarif-0.0.11.png)
-
-This [annotated version of the official security best practices](docs/security-best-practices.md)
-provides a reference for how the rules in this module are related to the
-best practices recommended by Microsoft. It is the main guiding document
-in building the ruleset for this module.
 
 ## Usage
 
@@ -94,6 +91,11 @@ Assert-PSRule `
 Documentation for the implemented rules can be found in the
 [en](src/PSRule.Rules.AzureDevOps/en/) folder in the module folder.
 
+This [annotated version of the official security best practices](docs/security-best-practices.md)
+provides a reference for how the rules in this module are related to the
+best practices recommended by Microsoft. It is the main guiding document
+in building the ruleset for this module.
+
 - [Azure.DevOps.Pipelines.Core.UseYamlDefinition](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.UseYamlDefinition.md)
 - [Azure.DevOps.Pipelines.Core.InheritedPermissions](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.InheritedPermissions.md)
 - [Azure.DevOps.Pipelines.PipelineYaml.AgentPoolVersionNotLatest](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.PipelineYaml.AgentPoolVersionNotLatest.md)
@@ -116,6 +118,7 @@ Documentation for the implemented rules can be found in the
 - [Azure.DevOps.Repos.BranchPolicyIsEnabled](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyIsEnabled.md)
 - [Azure.DevOps.Repos.BranchPolicyMergeStrategy](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyMergeStrategy.md)
 - [Azure.DevOps.Repos.BranchPolicyMinimumReviewers](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyMinimumReviewers.md)
+- [Azure.DevOps.Repos.BranchPolicyRequireBuild](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyRequireBuild.md)
 - [Azure.DevOps.Repos.BranchPolicyResetVotes](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyResetVotes.md)
 - [Azure.DevOps.Repos.HasBranchPolicy](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.HasBranchPolicy.md)
 - [Azure.DevOps.Repos.License](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.License.md)
@@ -156,3 +159,4 @@ This project is [licensed under the MIT License](LICENSE).
 - [PSRule](https://microsoft.github.io/PSRule/V2)
 - [Auditing an Azure DevOps project configuration with PSRule](https://medium.com/@webtonize/auditing-an-azure-devops-project-configuration-with-psrule-73cf17753827)
 - [Audit Azure DevOps configuration with Sarif scan reports from the pipeline](https://medium.com/@webtonize/audit-azure-devops-configuration-with-sarif-scan-reports-from-the-pipeline-4ced6fc47988)
+- [Azure DevOps Security best practices](https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops)
