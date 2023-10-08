@@ -180,3 +180,16 @@ Rule 'Azure.DevOps.Repos.InheritedPermissions' `
             $Assert.HasFieldValue($TargetObject, "Acls.inheritPermissions", $false)
         }
 }
+
+# Synopsis: The branch policy should require a build/pipeline to pass
+Rule 'Azure.DevOps.Repos.BranchPolicyRequireBuild' `
+    -Ref 'ADO-RP-013' `
+    -Type 'Azure.DevOps.Repo' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'The branch policy should require a build/pipeline to pass'
+        Reason 'The branch policy does not require a build/pipeline to pass'
+        Recommend 'Consider requiring a build/pipeline to pass'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops'
+        $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq '0609b952-1397-4640-95ec-e00a01b2c241'}), "type.displayName", "Build")
+}

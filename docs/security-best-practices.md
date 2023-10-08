@@ -222,7 +222,7 @@ If possible, we recommended to always use identity services for authentication i
 
 - Require CI build to pass. This requirement is useful for establishing baseline code quality, through code linting, unit tests, and security checks, like virus and credential scans. 
 
-  > :o: **WIP**
+  > :o: [**Azure.DevOps.Repos.BranchPolicyRequireBuild**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyRequireBuild.md)
 
 - Ensure that the original pull requester can’t approve the change.
 
