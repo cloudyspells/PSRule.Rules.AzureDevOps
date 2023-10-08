@@ -275,6 +275,8 @@ If possible, we recommended to always use identity services for authentication i
 
   > :o: [**Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets.md)
   > [**Azure.DevOps.Tasks.VariableGroup.NoPlainTextSecrets**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoPlainTextSecrets.md)
+  > [**Azure.DevOps.Pipelines.Core.NoPlainTextSecrets**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.NoPlainTextSecrets.md)
+  > [**Azure.DevOps.Pipelines.Releases.Definition.NoPlainTextSecrets**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Releases.Definition.NoPlainTextSecrets.md)
 
 - Don’t let users run builds against arbitrary branches or tags on security-critical pipelines.
 - Disable inheritance on the pipeline, as inherited permissions are broad and don’t accurately reflect your needs for permissions.
