@@ -270,12 +270,12 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context "When running Get-AzDevOpsArmServiceConnections" {
+    Context "When running Get-AzDevOpsServiceConnections" {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
             $Project = $env:ADO_PROJECT
-            $serviceConnections = Get-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $Project
+            $serviceConnections = Get-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $Project
         }
 
         It 'Should return a list of service connections' {
@@ -297,18 +297,18 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
 
         It 'Should throw an error' {
-            { Get-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
+            { Get-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $FaultyProject -ErrorAction Stop } | Should -Throw
         }
     }
 
-    Context "When running Get-AzDevOpsArmServiceConnectionChecks on a protected service connection" {
+    Context "When running Get-AzDevOpsServiceConnectionChecks on a protected service connection" {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
             $Project = $env:ADO_PROJECT
-            $serviceConnections = Get-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $Project
+            $serviceConnections = Get-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $Project
             $serviceConnectionId = $serviceConnections[1].id
-            $serviceConnectionChecks = Get-AzDevOpsArmServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $serviceConnectionId
+            $serviceConnectionChecks = Get-AzDevOpsServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $serviceConnectionId
         }
 
         It 'Should return a list of service connection checks' {
@@ -317,15 +317,15 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context 'When running Get-AzDevOpsArmServiceConnectionChecks on an unprotected service connection' {
+    Context 'When running Get-AzDevOpsServiceConnectionChecks on an unprotected service connection' {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
             $Project = $env:ADO_PROJECT
 
-            $serviceConnections = Get-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $Project
+            $serviceConnections = Get-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $Project
             $serviceConnectionId = $serviceConnections[0].id
-            $serviceConnectionChecks = Get-AzDevOpsArmServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $serviceConnectionId
+            $serviceConnectionChecks = Get-AzDevOpsServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $serviceConnectionId
         }
 
         It 'Should return null or empty' {
@@ -333,23 +333,23 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context 'When running Get-AzDevOpsArmServiceConnectionChecks with wrong parameters' {
+    Context 'When running Get-AzDevOpsServiceConnectionChecks with wrong parameters' {
         It 'Should throw an 404 error when all parameters are wrong' {
-            { Get-AzDevOpsArmServiceConnectionChecks -PAT 'FaultyPAT' -Organization 'faulty-org' -Project 'FaultyProject' -ServiceConnectionId 'FaultyServiceConnectionId' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+            { Get-AzDevOpsServiceConnectionChecks -PAT 'FaultyPAT' -Organization 'faulty-org' -Project 'FaultyProject' -ServiceConnectionId 'FaultyServiceConnectionId' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
         }
 
         It 'Should throw a authentication error when the PAT is wrong' {
-            { Get-AzDevOpsArmServiceConnectionChecks -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -Project $env:ADO_PROJECT -ServiceConnectionId 'FaultyServiceConnectionId' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+            { Get-AzDevOpsServiceConnectionChecks -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -Project $env:ADO_PROJECT -ServiceConnectionId 'FaultyServiceConnectionId' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
         }
     }
 
-    Context "When running Export-AzDevOpsArmServiceConnections" {
+    Context "When running Export-AzDevOpsServiceConnections" {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
             $Project = $env:ADO_PROJECT
             $OutputPath = $env:ADO_EXPORT_DIR
-            Export-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
+            Export-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
         }
 
         It 'Should export all JSON files' {

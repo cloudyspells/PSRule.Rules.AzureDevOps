@@ -155,7 +155,8 @@ You can change the configuration of your organization or project if you have [Pr
   > :o: [**Azure.DevOps.ServiceConnections.Scope**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.Scope.md)
 
 - Don’t give users generic or broad contributor rights on the Azure subscription. 
-- Don’t use Azure Classic service connections, as there’s no way to scope the permissions. 
+- Don’t use Azure Classic service connections, as there’s no way to scope the permissions.
+  > :o: [**Azure.DevOps.ServiceConnections.ClassicAzure**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.ClassicAzure.md)
 - Make sure the resource group only contains Virtual Machines (VMs) or resources that the build needs access to.
 - Use a purpose-specific team service account to authenticate a service connection. 
 - For more information, see [Common service connection types](../../pipelines/library/service-endpoints.md).
@@ -324,6 +325,7 @@ If possible, we recommended to always use identity services for authentication i
 ## Secure GitHub Integrations
 
 - Disable Personal Access Token (PAT)-based authentication, so the OAuth flow gets used with the GitHub service connection. 
+  > :o: [**Azure.DevOps.ServiceConnections.GitHubPAT**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.GitHubPAT.md)
 - Never authenticate GitHub service connections as an identity that's an administrator or owner of any repositories.
 - Never use a full-scope GitHub PAT (Personal Access Token) to authenticate GitHub service connections. 
 - Don't use a personal GitHub account as a service connection with Azure DevOps. 

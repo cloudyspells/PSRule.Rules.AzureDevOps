@@ -15,9 +15,9 @@
     Project name for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $Project
+    Get-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $Project
 #>
-function Get-AzDevOpsArmServiceConnections {
+function Get-AzDevOpsServiceConnections {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -44,10 +44,10 @@ function Get-AzDevOpsArmServiceConnections {
     }
 
     $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
-    return $response.value | Where-Object { $_.type -eq 'azurerm' }
+    return $response.value
 }
-Export-ModuleMember -Function Get-AzDevOpsArmServiceConnections
-# End of Function Get-AzDevOpsArmServiceConnections
+Export-ModuleMember -Function Get-AzDevOpsServiceConnections
+# End of Function Get-AzDevOpsServiceConnections
 
 <#
     .SYNOPSIS
@@ -69,12 +69,12 @@ Export-ModuleMember -Function Get-AzDevOpsArmServiceConnections
     Service connection id for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsArmServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $ServiceConnectionId
+    Get-AzDevOpsServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $ServiceConnectionId
 
     .LINK
     https://learn.microsoft.com/en-us/rest/api/azure/devops/approvalsandchecks/check-configurations/list?view=azure-devops-rest-7.2&tabs=HTTP
 #>
-function Get-AzDevOpsArmServiceConnectionChecks {
+function Get-AzDevOpsServiceConnectionChecks {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -104,8 +104,8 @@ function Get-AzDevOpsArmServiceConnectionChecks {
     }
     return $response.value
 }
-Export-ModuleMember -Function Get-AzDevOpsArmServiceConnectionChecks
-# End of Function Get-AzDevOpsArmServiceConnectionChecks
+Export-ModuleMember -Function Get-AzDevOpsServiceConnectionChecks
+# End of Function Get-AzDevOpsServiceConnectionChecks
 
 <#
     .SYNOPSIS
@@ -127,12 +127,12 @@ Export-ModuleMember -Function Get-AzDevOpsArmServiceConnectionChecks
     Output path for JSON files
 
     .EXAMPLE
-    Export-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
 
     .LINK
     https://learn.microsoft.com/en-us/rest/api/azure/devops/approvalsandchecks/check-configurations/list?view=azure-devops-rest-7.2&tabs=HTTP
 #>
-function Export-AzDevOpsArmServiceConnections {
+function Export-AzDevOpsServiceConnections {
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -149,17 +149,17 @@ function Export-AzDevOpsArmServiceConnections {
         $OutputPath
     )
     # Get all service connections
-    $serviceConnections = Get-AzDevOpsArmServiceConnections -PAT $PAT -Organization $Organization -Project $Project
+    $serviceConnections = Get-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $Project
     $serviceConnections | ForEach-Object {
         $serviceConnection = $_
         # Set JSON ObjectType field to Azure.DevOps.ServiceConnection
         $serviceConnection | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.ServiceConnection'
         # Get checks for service connection
-        $serviceConnectionChecks = @(Get-AzDevOpsArmServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $serviceConnection.id)
+        $serviceConnectionChecks = @(Get-AzDevOpsServiceConnectionChecks -PAT $PAT -Organization $Organization -Project $Project -ServiceConnectionId $serviceConnection.id)
         $serviceConnection | Add-Member -MemberType NoteProperty -Name Checks -Value $serviceConnectionChecks
         Write-Verbose "Exporting service connection $($serviceConnection.name) as file $($serviceConnection.name).ado.sc.json"
         $serviceConnection | ConvertTo-Json -Depth 100 | Out-File "$OutputPath/$($serviceConnection.name).ado.sc.json"
     }
 }
-Export-ModuleMember -Function Export-AzDevOpsArmServiceConnections
-# End of Function Export-AzDevOpsArmServiceConnections
+Export-ModuleMember -Function Export-AzDevOpsServiceConnections
+# End of Function Export-AzDevOpsServiceConnections

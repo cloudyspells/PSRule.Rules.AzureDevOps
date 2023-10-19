@@ -46,7 +46,7 @@ Rule 'Azure.DevOps.ServiceConnections.Scope' `
     -Ref 'ADO-SC-004' `
     -Type 'Azure.DevOps.ServiceConnection' `
     -Tag @{ release = 'GA'} `
-    -If { $TargetObject.data.scopeLevel -eq 'Subscription' } `
+    -If { $TargetObject.data.scopeLevel -eq 'Subscription' -and $TargetObject.type -eq 'azurerm' } `
     -Level Information {
         # Description 'Service connection should have a scope that is not an entire subscription.'
         Reason 'The service connection is scoped to a subscription.'
@@ -64,7 +64,7 @@ Rule 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' `
     -Ref 'ADO-SC-005' `
     -Type 'Azure.DevOps.ServiceConnection' `
     -Tag @{ release = 'GA'} `
-    -If { $TargetObject.data.scopeLevel -eq 'Subscription' } `
+    -If { $TargetObject.data.scopeLevel -eq 'Subscription' -and $TargetObject.type -eq 'azurerm' } `
     -Level Warning {
         # Description 'Service connection should should use Workload Idenity Federation.'
         Reason 'The service connection does not use Workload Idenity Federation.'
@@ -88,4 +88,30 @@ Rule 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' `
         Recommend 'Limit the service connection to specific branches.'
         $Assert.HasField($TargetObject, "Checks[?@settings.displayName == 'Branch control'].settings.inputs.allowedBranches", $true)
         $Assert.HasFieldValue($TargetObject, "Checks[?@settings.displayName == 'Branch control'].settings.inputs.allowedBranches")
+}
+
+# Synopsis: Service Connection should not be of the classic azure type
+Rule 'Azure.DevOps.ServiceConnections.ClassicAzure' `
+    -Ref 'ADO-SC-007' `
+    -Type 'Azure.DevOps.ServiceConnection' `
+    -Tag @{ release = 'GA'} `
+    -If { $TargetObject.type -match 'azure' } `
+    -Level Warning {
+        # Description 'Service Connection should not be of the classic azure type.'
+        Reason 'The service connection is of the classic azure type.'
+        Recommend 'Use the Azure Resource Manager service connection type.'
+        $Assert.NotIn($TargetObject, "type", "azure")
+}
+
+# Synposis: Service Connections of the GitHub type should not use a PAT
+Rule 'Azure.DevOps.ServiceConnections.GitHubPAT' `
+    -Ref 'ADO-SC-008' `
+    -Type 'Azure.DevOps.ServiceConnection' `
+    -If { $TargetObject.type -match 'github' } `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'Service Connections of the GitHub type should not use a PAT.'
+        Reason 'The service connection uses a PAT.'
+        Recommend 'Use a GitHub App instead of a PAT.'
+        $Assert.NotIn($TargetObject, "authorization.scheme", "Token")
 }
