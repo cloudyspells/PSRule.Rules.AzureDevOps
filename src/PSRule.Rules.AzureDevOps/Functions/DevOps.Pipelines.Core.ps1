@@ -9,6 +9,9 @@
 
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
+    
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
 
     .PARAMETER Organization
     Organization name for Azure DevOps
@@ -20,15 +23,19 @@
     Get-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $Project
 #>
 function Get-AzDevOpsPipelines {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory,ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project
     )
@@ -76,6 +83,9 @@ Export-ModuleMember -Function Get-AzDevOpsPipelines
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -89,36 +99,46 @@ Export-ModuleMember -Function Get-AzDevOpsPipelines
     Get-AzDevOpsPipelineAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -PipelineId $PipelineId
 #>
 function Get-AzDevOpsPipelineAcls {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $ProjectId,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PipelineId
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
-    $uri = "https://dev.azure.com/$Organization/_apis/accesscontrollists/33344d9c-fc72-4d6f-aba5-fa317101a7e9?api-version=6.0&token=$($ProjectId)/$($PipelineId)"
-    Write-Verbose "Getting pipeline ACLs from $uri"
-    Write-Verbose "PROJECTID: $ProjectId"
-    try {
-        $response = (Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json") #| Where-Object { $_.token -eq "$($ProjectId)/$($PipelineId)" }
-        # if the response is not an object but a string, the authentication failed
-        if ($response -is [string]) {
-            throw "Authentication failed or project not found"
+    # If Token Type is ReadOnly, write a warning and exit the function returning null
+    if ($TokenType -eq 'ReadOnly') {
+        Write-Warning "Token Type is set to ReadOnly, no pipeline ACLs will be returned"
+        return $null
+    } else {
+        $header = Get-AzDevOpsHeader -PAT $PAT
+        $uri = "https://dev.azure.com/$Organization/_apis/accesscontrollists/33344d9c-fc72-4d6f-aba5-fa317101a7e9?api-version=6.0&token=$($ProjectId)/$($PipelineId)"
+        Write-Verbose "Getting pipeline ACLs from $uri"
+        Write-Verbose "PROJECTID: $ProjectId"
+        try {
+            $response = (Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json") #| Where-Object { $_.token -eq "$($ProjectId)/$($PipelineId)" }
+            # if the response is not an object but a string, the authentication failed
+            if ($response -is [string]) {
+                throw "Authentication failed or project not found"
+            }
         }
+        catch {
+            throw $_.Exception.Message
+        }
+        return $response.value
     }
-    catch {
-        throw $_.Exception.Message
-    }
-    return $response.value
 }
 Export-ModuleMember -Function Get-AzDevOpsPipelineAcls
 # End of Function Get-AzDevOpsPipelineAcls
@@ -134,6 +154,9 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineAcls
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -147,18 +170,22 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineAcls
     Get-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $PipelineId
 #>
 function Get-AzDevOpsPipelineYaml {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PipelineId
     )
@@ -212,6 +239,9 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineYaml
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -228,24 +258,28 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineYaml
     Export-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $PipelineId -OutputPath $OutputPath
 #>
 function Export-AzDevOpsPipelineYaml {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PipelineId,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PipelineName,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $OutputPath
     )
@@ -269,6 +303,9 @@ Export-ModuleMember -Function Export-AzDevOpsPipelineYaml
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -282,44 +319,52 @@ Export-ModuleMember -Function Export-AzDevOpsPipelineYaml
     Export-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
 #>
 function Export-AzDevOpsPipelines {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $OutputPath
     )
     Write-Verbose "Getting pipelines from Azure DevOps"
-    $pipelines = Get-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $Project
+    # If invoking parameter set is PAT, get all pipelines from Azure DevOps
+    if ($PSCmdlet.ParameterSetName -eq 'PAT') {
+        $pipelines = Get-AzDevOpsPipelines -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project
+    }
     foreach ($pipeline in $pipelines) {
         # Add ObjectType Azure.DevOps.Pipeline to the pipeline object
         $pipeline | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Pipeline"
         # Get the project ID from the pipeline object web.href property
         $ProjectId = $pipeline._links.web.href.Split('/')[4]
-        # Add the pipeline ACLs to the pipeline object
-        $pipeline | Add-Member -MemberType NoteProperty -Name Acls -Value (Get-AzDevOpsPipelineAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -PipelineId $pipeline.id)
 
+        # Add the pipeline ACLs to the pipeline object if the token type is not ReadOnly
+        if ($TokenType -ne 'ReadOnly') {
+            Write-Verbose "Getting pipeline ACLs for pipeline $($pipeline.name)"
+            $pipeline | Add-Member -MemberType NoteProperty -Name Acls -Value (Get-AzDevOpsPipelineAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -PipelineId $pipeline.id)
+        } else {
+            Write-Verbose "Token Type is set to ReadOnly, no pipeline ACLs will be returned"
+        }
         Write-Verbose "Exporting pipeline $($pipeline.name) to JSON file"
         Write-Verbose "Exporting pipeline as JSON file to $OutputPath\$($pipeline.name).ado.pl.json"
         $pipeline | ConvertTo-Json -Depth 100 | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
         if ($pipeline.configuration.type -eq 'yaml' -and $pipeline.configuration.repository.type -eq 'azureReposGit') {
             Write-Verbose "Pipeline $($pipeline.name) is a YAML pipeline"
-            Write-Verbose "Getting YAML definition for pipeline $($pipeline.name)"
-            $yaml = "ObjectType: Azure.DevOps.Pipelines.PipelineYaml`n"
-            $yaml += "PipelineName: $($pipeline.name)`n"
-            $yaml += Get-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $pipeline.id
-            Write-Verbose "Exporting YAML definition to $OutputPath\$($pipeline.name).yaml"
-            $yaml | Out-File "$OutputPath\$($pipeline.name).yaml"
-            Write-Verbose "Exporting pipeline YAML definition to $OutputPath\$($pipeline.name).yaml"
-            Export-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $pipeline.id -PipelineName $pipeline.name -OutputPath $OutputPath
+            # If invoking parameter set is PAT, get pipeline yaml from Azure DevOps
+            if ($PSCmdlet.ParameterSetName -eq 'PAT') {
+                Export-AzDevOpsPipelineYaml -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -PipelineId $pipeline.id -PipelineName $pipeline.name -OutputPath $OutputPath
+            }
         }
         
     }

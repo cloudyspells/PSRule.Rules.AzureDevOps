@@ -51,10 +51,16 @@ function Get-AzDevOpsProjects {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+
+        [Parameter(ParameterSetName = 'PAT')]
         [string]
         $Organization
     )
