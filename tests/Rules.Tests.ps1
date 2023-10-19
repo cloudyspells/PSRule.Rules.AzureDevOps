@@ -30,9 +30,9 @@ BeforeAll {
 
 Describe 'AzureDevOps ' {
     Context 'Base rules ' {
-        It 'Should contain 43 rules' {
+        It 'Should contain 45 rules' {
             $rules = Get-PSRule -Module PSRule.Rules.AzureDevOps;
-            $rules.Count | Should -Be 43;
+            $rules.Count | Should -Be 45;
         }
     }
 
@@ -696,7 +696,7 @@ Describe 'AzureDevOps ' {
         It 'Should fail for targets named fail' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.Description' -and $_.TargetName -like '*fail*' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
-            $ruleHits.Count | Should -Be 1;
+            $ruleHits.Count | Should -Be 3;
         }
 
         It 'Should pass for targets named success' {
@@ -763,6 +763,38 @@ Describe 'AzureDevOps ' {
 
         It 'Should have a markdown help file' {
             $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.ProductionBranchLimit.md');
+            $fileExists | Should -Be $true;
+        }
+    }
+
+    Context 'Azure.DevOps.ServiceConnections.ClassicAzure' {
+        It 'Should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ClassicAzure' -and $_.TargetName -like '*Classic*fail*' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should pass for all other service connections' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ClassicAzure' -and $_.TargetName -notlike '*Classic*' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 2;
+        }
+
+        It 'Should have a markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.ClassicAzure.md');
+            $fileExists | Should -Be $true;
+        }
+    }
+
+    Context 'Azure.DevOps.ServiceConnections.GitHubPAT' {
+        It 'Should fail for connections named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.GitHubPAT' -and $_.TargetName -like '*GitHub*PAT*fail*' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It 'Should have an english markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.GitHubPAT.md');
             $fileExists | Should -Be $true;
         }
     }
