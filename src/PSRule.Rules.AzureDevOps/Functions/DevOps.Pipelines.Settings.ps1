@@ -31,27 +31,10 @@ Function Get-AzDevOpsPipelinesSettings {
         $Project
     )
     $header = Get-AzDevOpsHeader -PAT $PAT
-    $uri = "https://dev.azure.com/$Organization/_apis/Contribution/HierarchyQuery?api-version=5.0-preview.1"
+    $uri = "https://dev.azure.com/$Organization/$Project/_apis/build/generalsettings?api-version=7.1-preview.1"
     Write-Verbose "URI: $uri"
-    $postObject = @{
-        contributionIds = @('ms.vss-build-web.pipelines-general-settings-data-provider')
-        dataProviderContext = @{
-            properties = @{
-                sourcePage = @{
-                    routeId = "ms.vss-admin-web.project-admin-hub-route"
-                    url = "https://dev.azure.com/$Organization/$Project/_settings/settings"
-                    routeValues = @{
-                        project = $Project
-                        action = "Execute"
-                        adminPivot = "settings"
-                        controller = "ContributedPage"
-                    }
-                }
-            }
-        }
-    }
     try {
-        $pipelinesSettings = Invoke-RestMethod -Uri $uri -Method Post -Headers $header -Body ($postObject | ConvertTo-Json -Depth 100) -ContentType 'application/json'
+        $pipelinesSettings = Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType 'application/json'
         # if the response is not an object but a string, the authentication failed or the pipeline was not found
         if ($pipelinesSettings -is [string]) {
             throw "Authentication failed or pipeline not found"
@@ -60,7 +43,7 @@ Function Get-AzDevOpsPipelinesSettings {
     catch {
         throw $_.Exception.Message
     }
-    return $pipelinesSettings.dataProviders.'ms.vss-build-web.pipelines-general-settings-data-provider'
+    return $pipelinesSettings
 }
 Export-ModuleMember -Function Get-AzDevOpsPipelinesSettings
 # End of Function Get-AzDevOpsPipelinesSettings
