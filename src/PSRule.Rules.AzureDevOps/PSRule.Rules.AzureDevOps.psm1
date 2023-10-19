@@ -20,6 +20,9 @@ Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
