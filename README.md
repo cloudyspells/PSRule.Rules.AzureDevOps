@@ -50,12 +50,28 @@ with the `-TokenType` parameter. The fine-grained permissions expect
 read access to all scopes and read & manage for scope that do not
 have read-only access.
 
+#### Example: Run with full access token
+
 ```powershell
 Export-AzDevOpsRuleData `
     -Organization "MyOrg" `
     -Project "MyProject" `
     -PAT $MyPAT `
     -OutputPath "C:\Temp\MyProject"
+Assert-PSRule `
+    -InputPath "C:\Temp\MyProject\" `
+    -Module PSRule.Rules.AzureDevOps
+```
+
+#### Example: Run with read-only access token
+
+```powershell
+Export-AzDevOpsRuleData `
+    -Organization "MyOrg" `
+    -Project "MyProject" `
+    -PAT $MyPAT `
+    -OutputPath "C:\Temp\MyProject" `
+    -TokenType ReadOnly
 Assert-PSRule `
     -InputPath "C:\Temp\MyProject\" `
     -Module PSRule.Rules.AzureDevOps
