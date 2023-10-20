@@ -1,3 +1,3 @@
-tests/out
+tests/out*
 coverage.xml
 myenv.ps1
