@@ -21,6 +21,7 @@ Rule 'Azure.DevOps.Pipelines.Core.InheritedPermissions' `
     -Ref 'ADO-PL-002' `
     -Type 'Azure.DevOps.Pipeline' `
     -Tag @{ release = 'GA'} `
+    -If { "Acls" -in $TargetObject.psobject.Properties.Name } `
     -Level Warning {
         # Description "Pipelines should not have inherited permissions"
         Reason "The pipeline is using inherited permissions"
