@@ -16,6 +16,8 @@ Voordat een fork wordt gebouwd, moet een lid van het project de wijzigingen beki
 pull-aanvraag goedkeuren. Dit kan helpen voorkomen dat er kwaadaardige code in het project
 wordt geïntroduceerd.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een opmerking te vereisen voor pull-aanvragen van een fork in de

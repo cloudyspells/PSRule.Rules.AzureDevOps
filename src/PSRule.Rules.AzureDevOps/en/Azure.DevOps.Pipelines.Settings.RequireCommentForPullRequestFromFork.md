@@ -14,6 +14,8 @@ Project settings should require a comment for pull requests from a fork.
 
 Before building a fork, a member of the project should review the changes and approve the pull request. This can help prevent malicious code from being introduced into the project.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider requiring a comment for pull requests from a fork in the project settings.

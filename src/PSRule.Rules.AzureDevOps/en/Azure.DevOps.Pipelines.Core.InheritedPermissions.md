@@ -15,6 +15,8 @@ Pipeline permissions should not be inherited from the project.
 Pipeline permissions should not be inherited from the project. Inherited
 permissions can lead to unexpected access to resources.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Consider removing inherited permissions from the pipeline and setting

@@ -20,6 +20,8 @@ source software te delen.
 Om je project te licenseren, maak je een LICENSE bestand in de repository
 root.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een LICENSE bestand in de repository root te maken.

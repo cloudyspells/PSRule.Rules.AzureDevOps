@@ -23,6 +23,8 @@ GitHub Advanced Security adds the following features:
 - Secret scanning repo scanning
 - Dependency scanning
 
+Mininum TokenType: `FullAccess`
+
 ## RECOMMENDATION
 
 Consider enabling GitHub Advanced Security for the repository.

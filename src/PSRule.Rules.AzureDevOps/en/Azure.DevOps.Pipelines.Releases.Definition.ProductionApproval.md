@@ -21,6 +21,8 @@ You can configure the minimum number of approvers for this rule by setting the
 `releaseMinimumProductionApproverCount` configuration value in PSRule. The default
 value is `1`.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider protecting a release stage environment scoped to production with a human

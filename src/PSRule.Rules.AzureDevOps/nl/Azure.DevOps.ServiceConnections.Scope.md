@@ -22,6 +22,8 @@ aangebracht in de productie resources of daarbuiten. Normaal gesproken is
 het niet wenselijk om een service connection te hebben met toegang tot alle
 resource groups in een abonnement.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een service connection die is beperkt tot productie te beperken

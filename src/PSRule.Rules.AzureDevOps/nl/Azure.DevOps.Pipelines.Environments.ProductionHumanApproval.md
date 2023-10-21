@@ -20,6 +20,8 @@ te voorkomen dat er per ongeluk wijzigingen worden aangebracht in
 productiebronnen. Een goedkeuring kan worden gebruikt om te eisen dat een
 gebruiker een implementatie goedkeurt voordat deze kan worden uitgevoerd.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Overweeg om een menselijke goedkeuring toe te voegen aan de Azure DevOps

@@ -17,6 +17,8 @@ Adding a description to a service connection will help users understand the
 purpose of the service connection. This will help users understand how and when
 it should be used.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider adding a description to the service connection.

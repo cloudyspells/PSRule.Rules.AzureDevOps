@@ -15,6 +15,8 @@ Pipeline permissies mogen niet worden geërfd van het project.
 Pipeline permissies mogen niet worden geërfd van het project. Geërfde
 permissies kunnen leiden tot onverwachte toegang tot resources.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Overweeg om geërfde permissies uit de pipeline te verwijderen en expliciet

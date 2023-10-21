@@ -17,6 +17,8 @@ Adding a description to an environment will help users understand the purpose
 of the environment. This will help users understand how and when it should be
 used.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Consider adding a description to the environment.

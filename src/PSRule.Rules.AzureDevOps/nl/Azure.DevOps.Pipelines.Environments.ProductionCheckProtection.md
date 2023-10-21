@@ -21,6 +21,8 @@ kunnen worden gebruikt om te eisen dat een gebruiker een implementatie
 goedkeurt of dat er een succesvolle build moet zijn voordat een
 implementatie kan worden uitgevoerd.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Overweeg om een of meer controles toe te voegen aan de Azure DevOps

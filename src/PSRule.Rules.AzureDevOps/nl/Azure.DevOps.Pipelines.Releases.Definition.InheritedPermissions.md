@@ -15,6 +15,8 @@ Release Pipeline permissies mogen niet worden overgenomen van het project.
 Release Pipeline permissies mogen niet worden overgenomen van het project. Geërfde
 permissies kunnen leiden tot onverwachte toegang tot resources.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Overweeg om geërfde permissies uit de release pipeline te verwijderen en expliciete

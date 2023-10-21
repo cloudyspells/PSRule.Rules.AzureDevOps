@@ -16,6 +16,8 @@ The branch policy should not allow creators to approve their own changes.
 This will help ensure that the code in the default branch is of a high quality
 and that the team's Git workflow is followed.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider disabling the option to allow creators to approve their own changes.

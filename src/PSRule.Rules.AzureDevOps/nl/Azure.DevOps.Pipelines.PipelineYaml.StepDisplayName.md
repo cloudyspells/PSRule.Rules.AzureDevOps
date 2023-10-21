@@ -15,6 +15,8 @@ Pipeline stappen moeten een weergavenaam hebben.
 Pipeline stappen moeten een weergavenaam hebben. Dit zorgt ervoor dat de pipeline
 makkelijker te lezen en te begrijpen is.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een weergavenaam toe te voegen aan de stappen.

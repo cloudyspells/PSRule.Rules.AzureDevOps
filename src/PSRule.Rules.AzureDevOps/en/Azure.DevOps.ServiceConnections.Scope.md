@@ -21,6 +21,8 @@ or access is made to the production resources or beyond. Normally it is not
 desirable to have a service connection with access to all resource groups
 in a subscription.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider using a resource group scope for a service connection scoped to

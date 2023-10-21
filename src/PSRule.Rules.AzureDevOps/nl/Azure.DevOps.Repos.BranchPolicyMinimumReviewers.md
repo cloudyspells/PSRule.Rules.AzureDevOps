@@ -20,6 +20,8 @@ is en dat de Git workflow van het team wordt gevolgd.
 Je kunt het minimum aantal reviewers voor deze regel configureren door de
 `branchMinimumApproverCount` configuratiewaarde in PSRule in te stellen.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de optie om een minimum aantal reviewers voor een branch policy

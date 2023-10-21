@@ -17,6 +17,8 @@ pipeline. This can be useful for testing or debugging. However, this can also be
 used to override variables that are used to control the behavior of the pipeline
 and may result in unexpected behavior.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider disabling the ability to set variables at queue time in the project settings.

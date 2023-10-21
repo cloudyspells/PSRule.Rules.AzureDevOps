@@ -17,6 +17,8 @@ worden opgeslagen in Azure Key Vault en worden gerefereerd in de variabele groep
 voorkomen dat het geheim wordt blootgesteld in de build logs. Als het geheim in platte
 tekst wordt opgeslagen, wordt het blootgesteld in de build logs.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om geheimen op te slaan in Azure Key Vault en ze te refereren in de variabele

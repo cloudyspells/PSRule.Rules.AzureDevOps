@@ -15,6 +15,8 @@ Release Pipeline permissions should not be inherited from the project.
 Release Pipeline permissions should not be inherited from the project. Inherited
 permissions can lead to unexpected access to resources.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Consider removing inherited permissions from the release pipeline and setting

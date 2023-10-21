@@ -21,6 +21,7 @@ You can configure the minimum number of reviewers for this rule by setting the
 `branchMinimumApproverCount` configuration value in PSRule. The default
 value is `1`.
 
+Mininum TokenType: `ReadOnly`
 
 ## RECOMMENDATION
 

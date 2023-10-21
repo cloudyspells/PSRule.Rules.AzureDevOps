@@ -23,6 +23,8 @@ repository. Dit zal helpen om ervoor te zorgen dat de code in de standaard
 branch van hoge kwaliteit is en dat de Git workflow van het team wordt
 gevolgd.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Zorg ervoor dat de branch policy is ingeschakeld voor de standaard branch 

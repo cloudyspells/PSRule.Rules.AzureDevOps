@@ -14,6 +14,8 @@ Project settings should restrict access to secrets for pull requests from a fork
 
 Secrets can be used to store sensitive information such as passwords and access tokens. Secrets can be used in pipelines to access resources such as Azure Key Vault. Secrets can be configured to be available to all pipelines or only to specific pipelines. Secrets can also be configured to be available to pull requests from forks. This can be useful for open source projects that accept contributions from the community. However, this can also be a security risk. A malicious user could create a pull request from a fork and access the secrets in the pipeline. This could allow the malicious user to access sensitive information such as passwords and access tokens.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider restricting access to secrets for pull requests from a fork in the project settings.

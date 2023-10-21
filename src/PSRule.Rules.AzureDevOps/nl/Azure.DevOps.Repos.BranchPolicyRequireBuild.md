@@ -20,6 +20,8 @@ worden samengevoegd in de standaardbranch. Deze regel valideert niet dat de buil
 of CI-pijplijn correct is geconfigureerd. Het valideert alleen dat een build of
 CI-pijplijn is geconfigureerd.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de branch policy in te schakelen om een build of CI-pijplijn te vereisen.

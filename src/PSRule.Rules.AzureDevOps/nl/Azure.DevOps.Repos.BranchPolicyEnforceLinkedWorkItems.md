@@ -17,6 +17,8 @@ Het vereisen van gekoppelde work items voor pull requests helpt om
 wijzigingen bij te houden en ervoor te zorgen dat wijzigingen zijn gekoppeld
 aan een work item en dus op de een of andere manier zijn gedocumenteerd.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de optie om gekoppelde work items voor pull requests te

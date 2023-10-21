@@ -18,6 +18,8 @@ accidental changes to production resources. For example, a service connection
 scoped to production should be protected with a check that requires a minimum
 number of reviewers or a specific CI pipeline must pass.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider protecting a service connection scoped to production with one or

@@ -19,6 +19,8 @@ are validated before being merged into the default branch. This rule does not
 validate that the build or CI pipeline is configured correctly. It only validates
 that a build or CI pipeline is configured.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider enabling the branch policy to require a build or CI pipeline to pass

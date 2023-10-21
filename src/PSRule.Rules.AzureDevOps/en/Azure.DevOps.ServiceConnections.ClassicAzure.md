@@ -19,6 +19,8 @@ be scoped to a specific resource group or subscription. This means that any user
 access to the service connection can deploy to any resource group or subscription. Also
 the Classic Azure service connection type does not support modern ways of authentication.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider using a service connection type that can be scoped to a specific resource group

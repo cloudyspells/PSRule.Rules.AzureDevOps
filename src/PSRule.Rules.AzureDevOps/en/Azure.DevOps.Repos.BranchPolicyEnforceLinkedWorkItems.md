@@ -14,6 +14,8 @@ A policy should be configured to require linked work items for pull requests.
 
 Require linked work items for pull requests to ensure that changes are associated with a work item. This helps to track changes and ensure that changes are associated with a work item and thus documented in some way.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider enabling the policy to require linked work items for pull requests.

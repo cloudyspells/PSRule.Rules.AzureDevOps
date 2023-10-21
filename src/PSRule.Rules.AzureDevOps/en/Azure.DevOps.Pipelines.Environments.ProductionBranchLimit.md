@@ -16,6 +16,8 @@ A production environment should be limited to the branches it can be used in. Th
 the environment is not used in a non-production branch. This rule checks if the
 environment is limited to a production branch.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Consider limiting the environment to a production branch.

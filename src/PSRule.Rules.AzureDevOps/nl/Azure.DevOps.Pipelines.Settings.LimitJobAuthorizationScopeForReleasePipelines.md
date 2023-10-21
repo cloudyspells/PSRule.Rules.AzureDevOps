@@ -18,6 +18,8 @@ machtigingsomvang van de taak te beperken tot het huidige project, kan de taak g
 toegang krijgen tot resources in andere projecten. Dit kan helpen voorkomen dat er per
 ongeluk toegang wordt verkregen tot resources in andere projecten.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de machtigingsomvang van de taak voor release-pipelines te beperken tot het huidige project in de projectinstellingen.

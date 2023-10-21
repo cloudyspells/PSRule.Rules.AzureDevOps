@@ -17,6 +17,8 @@ Public repositories on Azure DevOps are often used to share open source software
 
 To license your project, create a LICENSE file in the repository root.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider creating a LICENSE file in the default branch to communicate how your

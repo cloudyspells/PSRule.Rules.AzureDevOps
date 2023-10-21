@@ -18,6 +18,8 @@ wijzigingen op een consistente manier worden samengevoegd. Dit helpt om
 ervoor te zorgen dat wijzigingen op een consistente manier worden
 samengevoegd en vermindert zo het risico op merge conflicten.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de optie om een merge strategie voor pull requests te definiëren

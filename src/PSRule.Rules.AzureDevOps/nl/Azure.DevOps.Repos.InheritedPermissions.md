@@ -15,6 +15,8 @@ Repository permissies mogen niet worden geërfd van het project.
 Repository permissies mogen niet worden geërfd van het project. Geërfde
 permissies kunnen leiden tot onverwachte toegang tot repositories en branches.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Overweeg om geërfde permissies uit de repository te verwijderen en expliciet

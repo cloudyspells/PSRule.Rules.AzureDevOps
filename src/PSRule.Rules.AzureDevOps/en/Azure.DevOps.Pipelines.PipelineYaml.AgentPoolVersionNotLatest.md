@@ -16,6 +16,8 @@ Microsoft Hosted agent pools should be pinned to a version. This ensures that
 the pipeline will not be impacted by changes to the agent pool and its
 operating system.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider pinning the agent pool to a specific version.

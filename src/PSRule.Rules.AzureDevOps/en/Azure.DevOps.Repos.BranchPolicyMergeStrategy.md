@@ -14,6 +14,8 @@ A policy should be configured to define a merge strategy for pull requests.
 
 Define a merge strategy for pull requests to ensure that changes are merged in a consistent way. This helps to ensure that changes are merged in a consistent way and thus reduces the risk of merge conflicts.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider enabling the policy to define a merge strategy for pull requests.

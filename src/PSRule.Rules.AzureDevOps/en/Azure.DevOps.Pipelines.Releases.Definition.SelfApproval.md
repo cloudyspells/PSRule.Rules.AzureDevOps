@@ -16,6 +16,8 @@ An environment scoped to production should not allow self approval. This
 rule checks if a release stage environment scoped to production has
 self approval enabled.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider disabling self approval for the environment.
