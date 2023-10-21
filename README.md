@@ -48,7 +48,8 @@ expects a PAT with full access permissions. Alternately, you can
 use a PAT with only read permissions or fine-grained permissions
 with the `-TokenType` parameter. The fine-grained permissions expect
 read access to all scopes and read & manage for scope that do not
-have read-only access.
+have read-only access. Documentation on how to create the PATs can
+be found in the [docs/token-permissions.md](docs/token-permissions.md).
 
 #### Example: Run with full access token
 
