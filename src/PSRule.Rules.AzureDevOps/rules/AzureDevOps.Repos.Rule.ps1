@@ -142,6 +142,7 @@ Rule 'Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled' `
     -Ref 'ADO-RP-010' `
     -Type 'Azure.DevOps.Repo' `
     -Tag @{ release = 'GA'} `
+    -If { "Ghas" -in $TargetObject.psobject.Properties.Name } `
     -Level Warning {
         # Description 'GitHub Advanced Security should be enabled'
         Reason 'GitHub Advanced Security is not enabled'
@@ -156,6 +157,7 @@ Rule 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' `
     -Ref 'ADO-RP-011' `
     -Type 'Azure.DevOps.Repo' `
     -Tag @{ release = 'GA'} `
+    -If { "Ghas" -in $TargetObject.psobject.Properties.Name } `
     -Level Warning {
         # Description 'GitHub Advanced Security should block pushes'
         Reason 'GitHub Advanced Security does not block pushes'
@@ -170,6 +172,7 @@ Rule 'Azure.DevOps.Repos.InheritedPermissions' `
     -Ref 'ADO-RP-012' `
     -Type 'Azure.DevOps.Repo' `
     -Tag @{ release = 'GA'} `
+    -If { "Acls" -in $TargetObject.psobject.Properties.Name } `
     -Level Warning {
         # Description 'Repository should not have inherited permissions'
         Reason 'Repository has inherited permissions'

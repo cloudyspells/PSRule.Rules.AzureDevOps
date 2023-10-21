@@ -8,6 +8,9 @@
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -18,16 +21,20 @@
     Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $Project
 #>
 Function Get-AzDevOpsRepos {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     [OutputType([System.Object[]])]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project
     )
@@ -60,6 +67,9 @@ Export-ModuleMember -Function Get-AzDevOpsRepos
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -79,22 +89,26 @@ Export-ModuleMember -Function Get-AzDevOpsRepos
     This function returns an empty object if no branch policy is found for the branch
 #>
 Function Get-AzDevOpsBranchPolicy {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     [OutputType([object[]])]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Repository,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Branch
     )
@@ -130,6 +144,9 @@ Export-ModuleMember -Function Get-AzDevOpsBranchPolicy
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -143,19 +160,23 @@ Export-ModuleMember -Function Get-AzDevOpsBranchPolicy
     Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId
 #>
 Function Get-AzDevOpsRepositoryPipelinePermissions {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     [OutputType([object[]])]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $ProjectId,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $RepositoryId
     )
@@ -186,6 +207,9 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryPipelinePermissions
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -199,36 +223,46 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryPipelinePermissions
     Get-AzDevOpsRepositoryAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId
 #>
 Function Get-AzDevOpsRepositoryAcls {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     [OutputType([object[]])]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $ProjectId,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $RepositoryId
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
-    $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/2e9eb7ed-3c0a-47d4-87c1-0ffdd275fd87?api-version=6.0" -f $Organization
-    try {
-        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json"
-        # If the response is a string and not an object, throw an exception for authentication failure or project not found
-        if ($response -is [string]) {
-            throw "Authentication failed or project not found"
+    # If the token type is ReadOnly, write a warning and return null
+    if ($TokenType -eq "ReadOnly") {
+        Write-Warning "The ReadOnly token type does not have access to the Repositories ACLs API, returning null"
+        return $null
+    } else {
+        $header = Get-AzDevOpsHeader -PAT $PAT
+        $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/2e9eb7ed-3c0a-47d4-87c1-0ffdd275fd87?api-version=6.0" -f $Organization
+        try {
+            $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json"
+            # If the response is a string and not an object, throw an exception for authentication failure or project not found
+            if ($response -is [string]) {
+                throw "Authentication failed or project not found"
+            }
+            $thisRepoPerms = $response.value | where-object {($_.token -eq "repoV2/$($ProjectId)/$($RepositoryId)")}
         }
-        $thisRepoPerms = $response.value | where-object {($_.token -eq "repoV2/$($ProjectId)/$($RepositoryId)")}
+        catch {
+            throw $_.Exception.Message
+        }
+        return $thisRepoPerms
     }
-    catch {
-        throw $_.Exception.Message
-    }
-    return $thisRepoPerms
 }
 Export-ModuleMember -Function Get-AzDevOpsRepositoryAcls
 # End of Function Get-AzDevOpsRepositoryAcls
@@ -242,6 +276,9 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryAcls
 
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
 
     .PARAMETER Organization
     Organization name for Azure DevOps
@@ -262,22 +299,26 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryAcls
     This function return $true if the file exists and $false if it does not
 #>
 function Test-AzDevOpsFileExists {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     [OutputType([bool])]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Repository,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Path
     )
@@ -306,6 +347,9 @@ Export-ModuleMember -Function Test-AzDevOpsFileExists
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -319,47 +363,57 @@ Export-ModuleMember -Function Test-AzDevOpsFileExists
     Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -Repository $Repository
 #>
 Function Get-AzDevOpsRepositoryGhas {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     [OutputType([object])]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $ProjectId,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $RepositoryId
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
-    $payload = @{
-        contributionIds = @(
-            "ms.vss-features.my-organizations-data-provider"
-            "ms.vss-advsec.advanced-security-enablement-data-provider"
-        )
-        dataProviderContext = @{
-            properties = @{
-                givenProjectId = $ProjectId
-                givenRepoId = $RepositoryId
+    # token is not FullAccess, write a warning and return null
+    if ($TokenType -ne "FullAccess") {
+        Write-Warning "The $TokenType token type does not have access to the Repositories API, returning null"
+        return $null
+    } else {
+        $header = Get-AzDevOpsHeader -PAT $PAT
+        $payload = @{
+            contributionIds = @(
+                "ms.vss-features.my-organizations-data-provider"
+                "ms.vss-advsec.advanced-security-enablement-data-provider"
+            )
+            dataProviderContext = @{
+                properties = @{
+                    givenProjectId = $ProjectId
+                    givenRepoId = $RepositoryId
+                }
             }
         }
-    }
-    $url = "https://dev.azure.com/$Organization/_apis/Contribution/HierarchyQuery?api-version=5.0-preview.1"
-    try {
-        $response = Invoke-RestMethod -Uri $url -Method Post -Headers $header -Body ($payload | ConvertTo-Json) -ContentType "application/json"
-        # If the response is a string and not an object, throw an exception for authentication failure or project not found
-        if ($response -is [string]) {
-            throw "Authentication failed or project not found"
+        $url = "https://dev.azure.com/$Organization/_apis/Contribution/HierarchyQuery?api-version=5.0-preview.1"
+        try {
+            $response = Invoke-RestMethod -Uri $url -Method Post -Headers $header -Body ($payload | ConvertTo-Json) -ContentType "application/json"
+            # If the response is a string and not an object, throw an exception for authentication failure or project not found
+            if ($response -is [string]) {
+                throw "Authentication failed or project not found"
+            }
         }
+        catch {
+            throw $_.Exception.Message
+        }
+        return $response.dataProviders.'ms.vss-advsec.advanced-security-enablement-data-provider'
     }
-    catch {
-        throw $_.Exception.Message
-    }
-    return $response.dataProviders.'ms.vss-advsec.advanced-security-enablement-data-provider'
 }
 Export-ModuleMember -Function Get-AzDevOpsRepositoryGhas
 # End of Function Get-AzDevOpsRepositoryGhas
@@ -373,6 +427,9 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryGhas
 
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
+
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
 
     .PARAMETER Organization
     Organization name for Azure DevOps
@@ -390,51 +447,65 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryGhas
     This function returns an empty object if no branch policy is found for the branch
 #>
 function Export-AzDevOpsReposAndBranchPolicies {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $OutputPath
     )
-    # Get all repos in project
-    $repos = Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $Project
+    # If the parameter set is PAT, get the repositories
+    if ($PSCmdlet.ParameterSetName -eq 'PAT') {
+        $repos = Get-AzDevOpsRepos -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project
+    }
     $repos | ForEach-Object {
         if ($null -ne $_) {
             $repo = $_
             # Add ObjectType Azure.DevOps.Repo to repo object
             $repo | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo"
             Write-Verbose "Getting branch policy for repo $($repo.name)"
-            $branchPolicy = Get-AzDevOpsBranchPolicy -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Branch $repo.defaultBranch
+            If($repo.defaultBranch) {
+                $branchPolicy = Get-AzDevOpsBranchPolicy -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -Repository $repo.id -Branch $repo.defaultBranch
+            }
             $repo | Add-Member -MemberType NoteProperty -Name MainBranchPolicy -Value $branchPolicy
             # Add a property indicating if a file named README.md or README exists in the repo
-            $readmeExists = ((Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "README.md") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "README"))
+            $readmeExists = ((Test-AzDevOpsFileExists -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -Repository $repo.id -Path "README.md") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "README"))
             $repo | Add-Member -MemberType NoteProperty -Name ReadmeExists -Value $readmeExists
 
             # Add a property indicating if a file named LICENSE or LICENSE.md exists in the repo
-            $licenseExists = ((Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE.md"))
+            $licenseExists = ((Test-AzDevOpsFileExists -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE.md"))
             $repo | Add-Member -MemberType NoteProperty -Name LicenseExists -Value $licenseExists
 
-            # Add a property for GitHub Advanced Security (GHAS) data
-            $ghas = Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
-            $repo | Add-Member -MemberType NoteProperty -Name Ghas -Value $ghas
-
+            # Add a property for GitHub Advanced Security (GHAS) data if the token type is FullAccess
+            if ($TokenType -eq "FullAccess") {
+                $ghas = Get-AzDevOpsRepositoryGhas -PAT $PAT -TokenType $TokenType -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
+                $repo | Add-Member -MemberType NoteProperty -Name Ghas -Value $ghas
+            } else {
+                Write-Warning "The $TokenType token type does not have access to the GHAS API, returning null"
+            }
+            
             # Add a property with pipeline permissions
-            $pipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
+            $pipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT -TokenType $TokenType -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
             $repo | Add-Member -MemberType NoteProperty -Name PipelinePermissions -Value $pipelinePermissions
 
-            # Add a property with repo ACLs
-            $repoAcls = Get-AzDevOpsRepositoryAcls -PAT $PAT -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
-            $repo | Add-Member -MemberType NoteProperty -Name Acls -Value $repoAcls
-
+            # Add a property with repo ACLs if the token type is not ReadOnly
+            if ($TokenType -ne "ReadOnly") {
+                $repoAcls = Get-AzDevOpsRepositoryAcls -PAT $PAT -TokenType $TokenType -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
+                $repo | Add-Member -MemberType NoteProperty -Name Acls -Value $repoAcls
+            }
+            
             # Export repo object to JSON file
             Write-Verbose "Exporting repo $($repo.name) to JSON as file $($repo.name).ado.repo.json"
             $repo | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($repo.name).ado.repo.json"

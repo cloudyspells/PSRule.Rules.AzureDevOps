@@ -15,6 +15,8 @@ Een release stage die is beperkt tot productie mag geen zelfgoedkeuring toestaan
 Een release stage die is beperkt tot productie mag geen zelfgoedkeuring toestaan. Deze
 regel controleert of een release stage die is beperkt tot productie zelfgoedkeuring heeft ingeschakeld.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om zelfgoedkeuring voor de omgeving uit te schakelen.

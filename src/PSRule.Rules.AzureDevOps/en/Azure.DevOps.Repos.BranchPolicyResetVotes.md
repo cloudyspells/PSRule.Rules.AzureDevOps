@@ -19,6 +19,8 @@ votes, the policy should be configured to reset votes when changes are updated.
 This will help ensure that the code in the default branch is of a high quality
 and that the team's Git workflow is followed.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider configuring the branch policy to reset votes when changes are updated.

@@ -8,6 +8,9 @@
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -18,15 +21,19 @@
     Get-AzDevOpsPipelinesSettings -PAT $PAT -Organization $Organization -ProjectId $ProjectId
 #>
 Function Get-AzDevOpsPipelinesSettings {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project
     )
@@ -58,6 +65,9 @@ Export-ModuleMember -Function Get-AzDevOpsPipelinesSettings
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -71,18 +81,22 @@ Export-ModuleMember -Function Get-AzDevOpsPipelinesSettings
     Export-AzDevOpsPipelinesSettings -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
 #>
 function Export-AzDevOpsPipelinesSettings {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $OutputPath
     )

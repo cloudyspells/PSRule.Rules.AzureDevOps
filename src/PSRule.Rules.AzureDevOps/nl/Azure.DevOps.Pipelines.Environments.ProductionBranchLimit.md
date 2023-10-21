@@ -16,6 +16,8 @@ Een productie environment moet beperkt zijn in de branches waarin deze kan worde
 niet-productiebranch. Deze regel controleert of de environment is beperkt tot een
 productiebranch.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Overweeg om de environment te beperken tot een productiebranch.

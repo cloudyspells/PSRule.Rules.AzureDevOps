@@ -17,6 +17,8 @@ team's Git workflow. Branch policies can enforce your team's code quality and
 change management standards. They can also help your team find and fix bugs
 earlier in the development cycle.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider adding a branch policy to the default branch of your repository.

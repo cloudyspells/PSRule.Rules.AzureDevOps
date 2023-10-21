@@ -17,6 +17,8 @@ stored in Azure Key Vault and referenced in the variable group. This will preven
 secret from being exposed in the build logs. If the secret is stored in plain text, it
 will be exposed in the build logs.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider storing secrets in Azure Key Vault and referencing them in the variable group.

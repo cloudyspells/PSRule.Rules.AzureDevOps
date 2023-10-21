@@ -16,6 +16,8 @@ Microsoft Hosted agent pools zouden vastgepind moeten worden op een versie. Dit
 zorgt ervoor dat de pipeline niet beïnvloed wordt door wijzigingen aan de agent
 pool en het besturingssysteem.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de agent pool vast te pinnen op een specifieke versie.

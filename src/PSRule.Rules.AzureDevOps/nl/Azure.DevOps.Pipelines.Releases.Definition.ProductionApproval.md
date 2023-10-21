@@ -23,6 +23,8 @@ U kunt het vereiste aantal goedkeurders voor deze regel configureren door de
 `releaseMinimumProductionApproverCount` configuratiewaarde in PSRule in te
 stellen. De standaardwaarde is `1`.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een menselijke goedkeuring toe te voegen aan de Azure DevOps

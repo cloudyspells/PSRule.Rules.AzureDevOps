@@ -14,19 +14,29 @@
     .PARAMETER PAT
     A personal access token (PAT) used to authenticate with Azure DevOps.
 
+    .PARAMETER TokenType
+    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
+
     .EXAMPLE
     Get-AzDevOpsVariableGroups -Organization 'myorganization' -Project 'myproject' -PAT $myPAT
 #>
 Function Get-AzDevOpsVariableGroups {
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]$Organization,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]$Project,
 
-        [Parameter(Mandatory = $true)]
-        [string]$PAT
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [string]
+        $PAT,
+
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess'
     )
     Write-Verbose "Getting variable groups for project $Project"
     $url = "https://dev.azure.com/$Organization/$Project/_apis/distributedtask/variablegroups?api-version=7.2-preview.2"
@@ -78,17 +88,26 @@ Export-ModuleMember -Function Get-AzDevOpsVariableGroups
 #>
 Function Export-AzDevOpsVariableGroups {
     param(
-        [Parameter(Mandatory = $true)]
-        [string]$Organization,
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [string]
+        $Organization,
 
-        [Parameter(Mandatory = $true)]
-        [string]$Project,
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [string]
+        $Project,
 
-        [Parameter(Mandatory = $true)]
-        [string]$PAT,
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [string]
+        $PAT,
 
-        [Parameter(Mandatory = $true)]
-        [string]$OutputPath
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [string]
+        $OutputPath
     )
     $variableGroups = Get-AzDevOpsVariableGroups -Organization $Organization -Project $Project -PAT $PAT
     $variableGroups | ForEach-Object {

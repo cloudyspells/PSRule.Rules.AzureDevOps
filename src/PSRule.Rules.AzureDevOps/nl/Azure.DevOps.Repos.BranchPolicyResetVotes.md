@@ -21,6 +21,8 @@ resetten wanneer wijzigingen worden bijgewerkt. Dit zal helpen om ervoor te
 zorgen dat de code in de standaard branch van hoge kwaliteit is en dat de
 Git workflow van het team wordt gevolgd.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de branch policy te configureren om stemmen te resetten wanneer

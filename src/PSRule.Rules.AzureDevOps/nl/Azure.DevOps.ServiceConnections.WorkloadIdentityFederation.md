@@ -18,6 +18,8 @@ naar Azure services in plaats van een service principal beheerd door
 Azure DevOps. Dit is veiliger omdat de service principal niet wordt
 opgeslagen in Azure DevOps.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om Workload Identity Federation te gebruiken voor je service connections.

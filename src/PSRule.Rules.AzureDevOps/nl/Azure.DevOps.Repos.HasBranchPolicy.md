@@ -17,6 +17,8 @@ workflow van het team bepalen. Branch policies kunnen de codekwaliteit en
 de normen voor wijzigingsbeheer van uw team afdwingen. Ze kunnen uw team ook
 helpen om bugs eerder in de ontwikkelingscyclus te vinden en op te lossen.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een branch policy toe te voegen aan de standaard branch van uw

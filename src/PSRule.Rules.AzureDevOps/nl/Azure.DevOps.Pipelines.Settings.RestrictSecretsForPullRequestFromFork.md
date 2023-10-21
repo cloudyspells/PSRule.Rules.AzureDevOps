@@ -24,6 +24,8 @@ pull-aanvraag van een fork maken en de geheimen in de pipeline openen. Dit kan d
 kwaadwillende gebruiker in staat stellen om gevoelige informatie zoals wachtwoorden en
 toegangstokens te openen.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de toegang tot geheimen voor pull-aanvragen van een fork te beperken in de

@@ -18,6 +18,8 @@ in. This ensures that the service connection is not used in a non-production
 branch. This rule checks that the service connection is limited to a production
 branch.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider limiting the service connection to a production branch.

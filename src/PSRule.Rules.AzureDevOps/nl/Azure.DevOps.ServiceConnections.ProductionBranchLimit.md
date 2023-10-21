@@ -16,6 +16,8 @@ Een productieserviceverbinding moet beperkt zijn in de branches waarin deze kan 
 niet-productiebranch. Deze regel controleert of de serviceverbinding is beperkt tot een
 productiebranch.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de serviceverbinding te beperken tot een productiebranch.

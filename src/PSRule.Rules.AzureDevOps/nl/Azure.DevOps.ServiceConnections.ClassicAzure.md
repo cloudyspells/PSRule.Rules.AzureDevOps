@@ -20,6 +20,8 @@ resourcegroep of abonnement. Dit betekent dat elke gebruiker met toegang tot de
 serviceverbinding kan implementeren naar elke resourcegroep of elk abonnement. Ook het
 klassieke Azure-serviceverbindingstype ondersteunt geen moderne manieren van authenticatie.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een serviceverbindingstype te gebruiken dat kan worden geschaald naar een

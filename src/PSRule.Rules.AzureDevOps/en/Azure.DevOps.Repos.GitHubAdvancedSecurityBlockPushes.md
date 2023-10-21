@@ -16,6 +16,8 @@ GitHub Advanced Security provides a suite of security features for Azure DevOps
 repositories. This rule checks if GitHub Advanced Security is configured to block
 pushes not meeting security requirements.
 
+Mininum TokenType: `FullAccess`
+
 ## RECOMMENDATION
 
 Consider configuring GitHub Advanced Security to block pushes not meeting security

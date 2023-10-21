@@ -19,6 +19,8 @@ Het gebruik van YAML pipeline-definities biedt een aantal voordelen ten opzichte
 - YAML pipeline-definities kunnen worden gecontroleerd op wijzigingen en
   worden goedgekeurd voordat ze worden geïmplementeerd.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om YAML pipeline-definities te gebruiken om build- en 

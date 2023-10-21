@@ -15,6 +15,8 @@ Een Azure DevOps Pipelines environment zou een beschrijving moeten hebben.
 Het toevoegen van een beschrijving aan een Azure DevOps Pipelines 
 environment kan helpen bij het begrijpen van de context van de environment.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Overweeg om een beschrijving toe te voegen aan de Azure DevOps Pipelines

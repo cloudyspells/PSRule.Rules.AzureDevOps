@@ -17,6 +17,8 @@ Adding a description to a variable group will help users understand the
 purpose of the variable group. This will help users understand how and when
 it should be used.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider adding a description to the variable group.

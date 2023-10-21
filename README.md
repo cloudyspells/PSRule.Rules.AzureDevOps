@@ -43,7 +43,15 @@ Install-Module -Name PSRule.Rules.AzureDevOps -Scope CurrentUser
 Once you have both modules installed, you can run an export of
 your Azure DevOps project and run the rules on the exported data.
 The `-PAT` value needs to be an Azure DevOps Personal Access Token
-with sufficient permissions to read the project data.
+with sufficient permissions to read the project data. The default
+expects a PAT with full access permissions. Alternately, you can
+use a PAT with only read permissions or fine-grained permissions
+with the `-TokenType` parameter. The fine-grained permissions expect
+read access to all scopes and read & manage for scope that do not
+have read-only access. Documentation on how to create the PATs can
+be found in the [docs/token-permissions.md](docs/token-permissions.md).
+
+#### Example: Run with full access token
 
 ```powershell
 Export-AzDevOpsRuleData `
@@ -51,6 +59,20 @@ Export-AzDevOpsRuleData `
     -Project "MyProject" `
     -PAT $MyPAT `
     -OutputPath "C:\Temp\MyProject"
+Assert-PSRule `
+    -InputPath "C:\Temp\MyProject\" `
+    -Module PSRule.Rules.AzureDevOps
+```
+
+#### Example: Run with read-only access token
+
+```powershell
+Export-AzDevOpsRuleData `
+    -Organization "MyOrg" `
+    -Project "MyProject" `
+    -PAT $MyPAT `
+    -OutputPath "C:\Temp\MyProject" `
+    -TokenType ReadOnly
 Assert-PSRule `
     -InputPath "C:\Temp\MyProject\" `
     -Module PSRule.Rules.AzureDevOps

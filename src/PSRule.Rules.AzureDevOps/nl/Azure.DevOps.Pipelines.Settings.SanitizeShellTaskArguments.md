@@ -17,6 +17,8 @@ Als de argumenten niet worden gesaneerd, is het mogelijk dat een kwaadwillende e
 opdrachten in de argumenten injecteert. Dit kan leiden tot de uitvoering van kwaadaardige
 code op de agent.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om het instellen van variabelen bij het wachtrijen uit te schakelen in de

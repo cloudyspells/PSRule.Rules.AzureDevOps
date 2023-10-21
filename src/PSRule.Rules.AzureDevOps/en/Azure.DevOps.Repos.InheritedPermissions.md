@@ -15,6 +15,8 @@ Repository permissions should not be inherited from the project.
 Repository permissions should not be inherited from the project. Inherited
 permissions can lead to unexpected access to repositories and branches.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Consider removing inherited permissions from the repository and setting

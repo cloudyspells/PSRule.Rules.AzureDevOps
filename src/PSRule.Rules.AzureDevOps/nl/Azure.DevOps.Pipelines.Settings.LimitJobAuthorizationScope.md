@@ -14,6 +14,8 @@ De projectinstellingen moeten de machtigingsomvang van de taak beperken tot de h
 
 Het beperken van de machtigingsomvang van de taak tot het huidige project voorkomt dat de taak toegang krijgt tot resources in andere projecten. Dit kan helpen voorkomen dat er per ongeluk toegang wordt verkregen tot resources in andere projecten.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de machtigingsomvang van de taak voor release-pipelines te beperken tot het huidige project in de projectinstellingen.

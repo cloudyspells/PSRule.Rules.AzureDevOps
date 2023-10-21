@@ -21,6 +21,8 @@ A branch policy can be enabled for the default branch of a repository. This
 will help ensure that the code in the default branch is of a high quality and
 that the team's Git workflow is followed.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Make sure that the branch policy is enabled for the default branch of your

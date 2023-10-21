@@ -18,6 +18,8 @@ gekoppeld aan een key vault. Dit komt omdat de geheimen in platte tekst
 worden opgeslagen in de variabele groep en kunnen worden bekeken door
 iedereen met toegang tot de variabele groep.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om alle geheimen uit de variabele groep te verwijderen of te

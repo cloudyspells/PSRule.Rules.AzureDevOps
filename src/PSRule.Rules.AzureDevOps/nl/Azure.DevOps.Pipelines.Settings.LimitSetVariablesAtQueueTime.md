@@ -17,6 +17,8 @@ pipeline zijn gedefinieerd te overschrijven. Dit kan handig zijn voor testen of 
 Dit kan echter ook worden gebruikt om variabelen te overschrijven die worden gebruikt om
 het gedrag van de pipeline te regelen en kan resulteren in onverwacht gedrag.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om het instellen van variabelen bij het wachtrijen uit te schakelen in de

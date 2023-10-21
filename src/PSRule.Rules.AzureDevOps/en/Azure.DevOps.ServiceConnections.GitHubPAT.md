@@ -19,6 +19,8 @@ linked to a personal account and cannot be traced back to the specific connectio
 Azure DevOps. This means any user with access to the service connection can impersonate
 the user who created the service connection.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider using an oauth-based service connection.

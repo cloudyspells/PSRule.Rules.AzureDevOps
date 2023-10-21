@@ -17,6 +17,8 @@ managed by Azure Active Directory to authenticate to Azure services
 instead of using a service principal managed by Azure DevOps. This is
 more secure as the service principal is not stored in Azure DevOps.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider using Workload Identity Federation for your service connections.

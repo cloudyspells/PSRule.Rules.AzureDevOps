@@ -18,6 +18,8 @@ checks to prevent accidental changes to production resources. Checks can
 be used to require a user to approve a deployment or require a successful
 build before a deployment can be made.
 
+Mininum TokenType: `FineGrained`
+
 ## RECOMMENDATION
 
 Consider adding one or more checks to the environment.

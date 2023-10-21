@@ -17,6 +17,8 @@ Als je een repository maakt, moet je een README.md bestand maken om het
 project uit te leggen en informatie te verstrekken. Het README.md bestand
 wordt automatisch weergegeven op de repository homepage.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een README.md bestand in de repository root te maken.

@@ -16,6 +16,8 @@ Limiting the job authorization scope to the current project will prevent the job
 being able to access resources in other projects. This can help prevent accidental
 access to resources in other projects.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider limiting the job authorization scope to the current project in the project settings.

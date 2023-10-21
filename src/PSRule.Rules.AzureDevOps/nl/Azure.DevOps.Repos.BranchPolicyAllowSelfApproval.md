@@ -18,6 +18,8 @@ eigen wijzigingen goedkeurt. Dit zal helpen om ervoor te zorgen dat de code
 in de standaard branch van hoge kwaliteit is en dat de Git workflow van het
 team wordt gevolgd.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de optie om makers hun eigen wijzigingen te laten goedkeuren

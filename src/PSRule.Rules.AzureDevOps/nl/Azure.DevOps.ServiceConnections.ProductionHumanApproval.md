@@ -20,6 +20,8 @@ deze wordt gebruikt voor het wijzigen van resources in andere omgevingen.
 Bijvoorbeeld, een service connection die is beperkt tot productie zou moeten
 worden beschermd met een check die een minimum aantal reviewers vereist.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een service connection die is beperkt tot productie te

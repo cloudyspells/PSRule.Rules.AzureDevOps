@@ -16,6 +16,8 @@ information.
 When someone visits the repository homepage the README.md in the default branch
 is automatically shown.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider creating a README.md file in repository default branch to provide

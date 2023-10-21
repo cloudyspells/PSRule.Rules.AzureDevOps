@@ -14,6 +14,8 @@ A policy should be configured to require comments for pull requests to be resolv
 
 Require comments for pull requests to be resolved to ensure that all comments are addressed. This helps to ensure that all comments are addressed and improves the quality of the pull request.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider enabling the policy to require comments for pull requests to be resolved.

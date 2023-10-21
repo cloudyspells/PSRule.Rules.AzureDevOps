@@ -17,6 +17,8 @@ can be configured to use a different set of resources. Limiting the job authoriz
 scope to the current project will prevent the job from being able to access resources
 in other projects. This can help prevent accidental access to resources in other projects.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider limiting the job authorization scope for release pipelines to the current project in the project settings.

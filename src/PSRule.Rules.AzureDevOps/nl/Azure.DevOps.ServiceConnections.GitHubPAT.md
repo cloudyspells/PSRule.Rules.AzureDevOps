@@ -20,6 +20,8 @@ getraceerd naar de specifieke verbinding vanuit Azure DevOps. Dit betekent dat e
 gebruiker met toegang tot de serviceverbinding zich kan voordoen als de gebruiker die de
 serviceverbinding heeft gemaakt.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg een oauth-gebaseerde serviceverbinding te gebruiken.

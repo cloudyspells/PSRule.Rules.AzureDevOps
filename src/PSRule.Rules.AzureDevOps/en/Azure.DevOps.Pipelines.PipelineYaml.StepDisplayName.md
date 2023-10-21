@@ -15,6 +15,8 @@ Pipeline steps should have a display name.
 Pipeline steps should have a display name. This ensures that the pipeline is
 easier to read and understand.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider adding a display name to all steps.

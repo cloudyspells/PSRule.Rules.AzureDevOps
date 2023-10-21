@@ -14,6 +14,8 @@ Project settings should enforce sanitization of shell task arguments to prevent 
 
 Shell tasks can be used to run arbitrary commands on the agent. If the arguments are not sanitized, it is possible for a malicious actor to inject additional commands into the arguments. This can lead to the execution of malicious code on the agent.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider enforcing sanitization of shell task arguments in the project settings.

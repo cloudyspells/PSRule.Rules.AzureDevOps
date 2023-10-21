@@ -17,6 +17,8 @@ Het toevoegen van een beschrijving aan een service connection zal gebruikers
 helpen het doel van de service connection te begrijpen. Dit zal gebruikers
 helpen te begrijpen hoe en wanneer het moet worden gebruikt.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om een beschrijving toe te voegen aan de service connection.

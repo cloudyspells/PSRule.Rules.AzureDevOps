@@ -24,6 +24,7 @@ GitHub Advanced Security voegt de volgende functies toe:
 - Secret scannen repo scannen
 - Afhankelijkheid scannen
 
+Mininum TokenType: `FullAccess`
 
 ## RECOMMENDATION
 

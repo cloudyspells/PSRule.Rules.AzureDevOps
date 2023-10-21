@@ -53,6 +53,42 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context "When running Get-AzDevOpsProjects with a ReadOnly PAT" {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_READONLY
+            $Organization = $env:ADO_ORGANIZATION
+            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $Organization -TokenType ReadOnly
+        }
+
+        It 'Should return a list of projects' {
+            $projects | Should -Not -BeNullOrEmpty
+            $projects[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It 'Should return a list of projects with a name' {
+            $projects[0].name | Should -Not -BeNullOrEmpty
+            $projects[0].name | Should -BeOfType [System.String]
+        }
+    }
+
+    Context "When running Get-AzDevOpsProjects with a FineGrained PAT" {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_FINEGRAINED
+            $Organization = $env:ADO_ORGANIZATION
+            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $Organization -TokenType FineGrained
+        }
+
+        It 'Should return a list of projects' {
+            $projects | Should -Not -BeNullOrEmpty
+            $projects[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It 'Should return a list of projects with a name' {
+            $projects[0].name | Should -Not -BeNullOrEmpty
+            $projects[0].name | Should -BeOfType [System.String]
+        }
+    }
+
     Context "When running Get-AzDevOpsRepos" {
         BeforeAll {
             $PAT = $env:ADO_PAT
@@ -151,11 +187,31 @@ Describe 'PSRule.Rules.AzureDevOps' {
 
     Context 'When running Get-AzDevOpsRepositoryAcls with wrong parameters' {
         It 'Should throw an 404 error when all parameters are wrong' {
-            { Get-AzDevOpsRepositoryAcls -PAT 'FaultyPAT' -Organization 'faulty-org' -RepositoryId 'FaultyRepositoryId' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+            { Get-AzDevOpsRepositoryAcls -PAT 'FaultyPAT' -ProjectId 'wrongId' -Organization 'faulty-org' -RepositoryId 'FaultyRepositoryId' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
         }
 
         It 'Should throw a authentication error when the PAT is wrong' {
-            { Get-AzDevOpsRepositoryAcls -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -RepositoryId 'FaultyRepositoryId' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+            { Get-AzDevOpsRepositoryAcls -PAT 'FaultyPAT' -ProjectId "1fa185aa-ce58-4732-8700-8964802ea538" -Organization $env:ADO_ORGANIZATION -RepositoryId 'FaultyRepositoryId' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+        }
+    }
+
+    Context 'When running Get-AzDevOpsRepositoryAcls with a ReadOnly PAT' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_READONLY
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
+            $repos = Get-AzDevOpsRepos -PAT $PAT -TokenType ReadOnly -Organization $Organization -Project $Project
+            $RepositoryId = ($repos | Where-Object { $_.name -eq 'repository-success'})[0].id
+            $repositoryAcls = Get-AzDevOpsRepositoryAcls -PAT $PAT -TokenType ReadOnly -Organization $Organization -RepositoryId $RepositoryId -ProjectId $ProjectId -WarningVariable warning
+        }
+
+        It "Should write a warning" {
+            $warning | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should return null or empty' {
+            $repositoryAcls | Should -BeNullOrEmpty
         }
     }
 
@@ -207,6 +263,29 @@ Describe 'PSRule.Rules.AzureDevOps' {
                 $RepositoryId = 'non-existent'
                 Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId
             } | Should -Throw "Authentication failed or project not found"
+        }
+    }
+
+    Context 'When running Get-AzDevOpsRepositoryGhas with a FineGrained PAT' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_FINEGRAINED
+            $Organization = $env:ADO_ORGANIZATION
+            $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
+            $repositoryName = 'repository-success'
+            $repoId = "befaaf13-3966-45c0-b481-6387e860d915"
+            $repoGhas = Get-AzDevOpsRepositoryGhas -PAT $PAT -TokenType FineGrained `
+                -Organization $Organization `
+                -ProjectId $ProjectId `
+                -RepositoryId "befaaf13-3966-45c0-b481-6387e860d915" `
+                -WarningVariable warning
+        }
+
+        It "Should write a warning" {
+            $warning | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should return null or empty' {
+            $repoGhas | Should -BeNullOrEmpty
         }
     }
 
@@ -490,11 +569,29 @@ Describe 'PSRule.Rules.AzureDevOps' {
 
     Context 'When running Get-AzDevOpsPipelineAcls with wrong parameters' {
         It 'Should throw an 404 error when all parameters are wrong' {
-            { Get-AzDevOpsPipelineAcls -PAT 'FaultyPAT' -Organization 'faulty-org' -PipelineId 'FaultyPipelineId' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
+            { Get-AzDevOpsPipelineAcls -PAT 'FaultyPAT' -Organization 'faulty-org' -ProjectId 'faulty-prj-id' -PipelineId 'FaultyPipelineId' -ErrorAction Stop } | Should -Throw "Response status code does not indicate success: 404 (Not Found)."
         }
 
         It 'Should throw a authentication error when the PAT is wrong' {
-            { Get-AzDevOpsPipelineAcls -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -PipelineId 'FaultyPipelineId' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+            { Get-AzDevOpsPipelineAcls -PAT 'FaultyPAT' -Organization $env:ADO_ORGANIZATION -ProjectId "1fa185aa-ce58-4732-8700-8964802ea538" -PipelineId 'FaultyPipelineId' -ErrorAction Stop } | Should -Throw "Authentication failed or project not found"
+        }
+    }
+
+    Context 'When running Get-AzDevOpsPipelineAcls with a ReadOnly PAT' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_READONLY
+            $Organization = $env:ADO_ORGANIZATION
+            $pipelineId = 7
+            $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
+            $pipelineAcls = Get-AzDevOpsPipelineAcls -PAT $PAT -TokenType ReadOnly -Organization $Organization -PipelineId $PipelineId -ProjectId $ProjectId -WarningVariable warning
+        }
+
+        It "Should write a warning" {
+            $warning | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should return null or empty' {
+            $pipelineAcls | Should -BeNullOrEmpty
         }
     }
 
@@ -662,6 +759,24 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context "When running Get-AzDevOpsReleaseDefinitionAcls with a ReadOnly PAT" {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_READONLY
+            $Organization = $env:ADO_ORGANIZATION
+            $releaseDefinitionId = 2
+            $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
+            $releaseDefinitionAcls = Get-AzDevOpsReleaseDefinitionAcls -PAT $PAT -TokenType ReadOnly -Organization $Organization -ReleaseDefinitionId $releaseDefinitionId -ProjectId $ProjectId -Folder '' -WarningVariable warning
+        }
+
+        It "Should write a warning" {
+            $warning | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should return null or empty' {
+            $releaseDefinitionAcls | Should -BeNullOrEmpty
+        }
+    }
+
     Context "When running Export-AzDevOpsReleaseDefinitions" {
         It 'Should export all JSON files with an ObjectType property set as Azure.DevOps.Releases.Definition' {
             $PAT = $env:ADO_PAT
@@ -720,6 +835,23 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsEnvironments with a ReadOnly PAT' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_READONLY
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $environments = Get-AzDevOpsEnvironments -PAT $PAT -TokenType ReadOnly -Organization $Organization -Project $Project -WarningVariable warning
+        }
+
+        It "Should write a warning" {
+            $warning | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should return null or empty' {
+            $environments | Should -BeNullOrEmpty
+        }
+    }
+
     Context "When running Get-AzDevOpsEnvironmentChecks on a protected environment" {
         BeforeAll {
             $PAT = $env:ADO_PAT
@@ -763,6 +895,25 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
+    Context 'When running Get-AzDevOpsEnvironmentChecks with a ReadOnly PAT' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_READONLY
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $environments = Get-AzDevOpsEnvironments -PAT $PAT -TokenType ReadOnly -Organization $Organization -Project $Project
+            $environmentId = 7
+            $environmentChecks = Get-AzDevOpsEnvironmentChecks -PAT $PAT -TokenType ReadOnly -Organization $Organization -Project $Project -Environment $environmentId -WarningVariable warning
+        }
+
+        It "Should write a warning" {
+            $warning | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should return null or empty' {
+            $environmentChecks | Should -BeNullOrEmpty
+        }
+    }
+
     Context "When running Export-AzDevOpsEnvironmentChecks" {
         It 'Should export all JSON files with an ObjectType property set as Azure.DevOps.Pipelines.Environment' {
             $PAT = $env:ADO_PAT
@@ -778,7 +929,7 @@ Describe 'PSRule.Rules.AzureDevOps' {
         }
     }
 
-    Context 'When running Export-AzDevOpsRuleData' {
+    Context 'When running Export-AzDevOpsRuleData with a Full Access PAT' {
         It 'Should export all JSON files' {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
@@ -787,6 +938,34 @@ Describe 'PSRule.Rules.AzureDevOps' {
             Export-AzDevOpsRuleData -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
             $files = Get-ChildItem -Path $OutputPath -Recurse -File
             $files | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context 'When running Export-AzDevOpsRuleData with a ReadOnly PAT' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_READONLY
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $OutputPath = $env:ADO_EXPORT_DIR
+            Export-AzDevOpsRuleData -PAT $PAT -TokenType ReadOnly -Organization $Organization -Project $Project -OutputPath $OutputPath -WarningVariable warning
+        }
+
+        It "Should write warnings" {
+            $warning | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context 'When running Export-AzDevOpsRuleData with a FineGrained PAT' {
+        BeforeAll {
+            $PAT = $env:ADO_PAT_FINEGRAINED
+            $Organization = $env:ADO_ORGANIZATION
+            $Project = $env:ADO_PROJECT
+            $OutputPath = $env:ADO_EXPORT_DIR
+            Export-AzDevOpsRuleData -PAT $PAT -TokenType FineGrained -Organization $Organization -Project $Project -OutputPath $OutputPath -WarningVariable warning
+        }
+
+        It "Should write a warning" {
+            $warning | Should -Not -BeNullOrEmpty
         }
     }
 

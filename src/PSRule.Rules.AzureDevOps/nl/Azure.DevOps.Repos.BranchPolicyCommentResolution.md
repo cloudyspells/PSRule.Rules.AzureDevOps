@@ -18,6 +18,8 @@ zorgen dat alle opmerkingen worden aangepakt. Dit helpt om ervoor te zorgen
 dat alle opmerkingen worden aangepakt en verbetert de kwaliteit van de pull
 request.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Overweeg om de optie om opmerkingen voor pull requests op te lossen in te

@@ -18,6 +18,8 @@ you manage changes to your application code. You can use source control to view
 changes to your pipelines, roll back to previous versions, and easily collaborate
 with other developers on your team.
 
+Mininum TokenType: `ReadOnly
+
 ## RECOMMENDATION
 
 Use YAML pipeline definitions to define build and release pipelines.

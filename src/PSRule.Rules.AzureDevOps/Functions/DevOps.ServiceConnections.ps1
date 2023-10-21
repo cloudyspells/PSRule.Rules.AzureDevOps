@@ -8,6 +8,9 @@
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -18,15 +21,19 @@
     Get-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $Project
 #>
 function Get-AzDevOpsServiceConnections {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project
     )
@@ -59,6 +66,9 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnections
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -75,18 +85,22 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnections
     https://learn.microsoft.com/en-us/rest/api/azure/devops/approvalsandchecks/check-configurations/list?view=azure-devops-rest-7.2&tabs=HTTP
 #>
 function Get-AzDevOpsServiceConnectionChecks {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $ServiceConnectionId
     )
@@ -117,6 +131,9 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnectionChecks
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -133,18 +150,22 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnectionChecks
     https://learn.microsoft.com/en-us/rest/api/azure/devops/approvalsandchecks/check-configurations/list?view=azure-devops-rest-7.2&tabs=HTTP
 #>
 function Export-AzDevOpsServiceConnections {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $OutputPath
     )

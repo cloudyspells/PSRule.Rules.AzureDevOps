@@ -14,6 +14,8 @@ A variable group should not contain any secrets when it is not linked to a key v
 
 A variable group should not contain any secrets when it is not linked to a key vault. This is because the secrets will be stored in plain text in the variable group and can be viewed by anyone with access to the variable group.
 
+Mininum TokenType: `ReadOnly`
+
 ## RECOMMENDATION
 
 Consider removing any secrets from the variable group or replacing them with variables that are linked to a key vault.

@@ -20,6 +20,9 @@ Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -33,28 +36,32 @@ Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
     Export-AzDevOpsRuleData -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
 #>
 Function Export-AzDevOpsRuleData {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Project,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $OutputPath
     )
-    Export-AzDevOpsReposAndBranchPolicies -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsEnvironmentChecks -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsServiceConnections -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsPipelinesSettings -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsVariableGroups -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsReleaseDefinitions -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsReposAndBranchPolicies -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsEnvironmentChecks -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsServiceConnections -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsPipelines -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsPipelinesSettings -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsVariableGroups -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsReleaseDefinitions -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
 }
 Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProjectRuleData
 # End of Function Export-AzDevOpsRuleData
@@ -69,6 +76,9 @@ Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProj
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER TokenType
+    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
+
     .PARAMETER Organization
     Organization name for Azure DevOps
 
@@ -79,19 +89,23 @@ Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProj
     Export-AzDevOpsOrganizationRuleData -PAT $PAT -Organization $Organization -OutputPath $OutputPath
 #>
 Function Export-AzDevOpsOrganizationRuleData {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'PAT')]
     param (
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $PAT,
-        [Parameter()]
+        [Parameter(ParameterSetName = 'PAT')]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess',
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $Organization,
-        [Parameter()]
+        [Parameter(Mandatory, ParameterSetName = 'PAT')]
         [string]
         $OutputPath
     )
-    $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $Organization
+    $projects = Get-AzDevOpsProjects -PAT $PAT -TokenType $TokenType -Organization $Organization
     $projects | ForEach-Object {
         $project = $_
         # Create a subfolder for each project
@@ -99,7 +113,7 @@ Function Export-AzDevOpsOrganizationRuleData {
         if(!(Test-Path -Path $subPath)) {
             New-Item -Path $subPath -ItemType Directory
         }
-        Export-AzDevOpsRuleData -PAT $PAT -Organization $Organization -Project $project.name -OutputPath $subPath
+        Export-AzDevOpsRuleData -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $project.name -OutputPath $subPath
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsOrganizationRuleData

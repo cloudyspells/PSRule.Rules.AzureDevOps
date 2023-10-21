@@ -17,6 +17,8 @@ GitHub Advanced Security biedt een reeks beveiligingsfuncties voor Azure DevOps
 repositories. Deze regel controleert of GitHub Advanced Security is geconfigureerd om
 pushes te blokkeren die niet voldoen aan de beveiligingseisen.
 
+Mininum TokenType: `FullAccess`
+
 ## RECOMMENDATION
 
 Overweeg om GitHub Advanced Security te configureren om pushes te blokkeren die niet
