@@ -12,7 +12,7 @@
 RootModule = 'PSRule.Rules.AzureDevOps.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.12'
+ModuleVersion = '0.2.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core','Desktop')
