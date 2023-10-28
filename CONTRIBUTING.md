@@ -20,16 +20,17 @@ All types of contributions are encouraged and valued. See the [Table of Contents
   - [Reporting Bugs](#reporting-bugs)
   - [Suggesting Enhancements](#suggesting-enhancements)
   - [Your First Code Contribution](#your-first-code-contribution)
+    - [Commit Messages](#commit-messages)
+    - [Styleguides](#styleguides)
+    - [Testing](#testing)
   - [Improving The Documentation](#improving-the-documentation)
-- [Styleguides](#styleguides)
-  - [Commit Messages](#commit-messages)
-- [Join The Project Team](#join-the-project-team)
+  - [Join the project team](#join-the-project-team)
 
 
 ## Code of Conduct
 
 This project and everyone participating in it is governed by the
-[PSRule.Rules.AzureDevOps Code of Conduct](https://github.com/cloudyspells/PSRule.Rules.AzureDevOpsblob/master/CODE_OF_CONDUCT.md).
+[PSRule.Rules.AzureDevOps Code of Conduct](https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior
 to <webtonize@gmail.com>.
 
@@ -77,7 +78,7 @@ A good bug report shouldn't leave others needing to chase you up for more inform
 
 - Make sure that you are using the latest version.
 - Determine if your bug is really a bug and not an error on your side e.g. using incompatible environment components/versions (Make sure that you have read the [documentation](https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/wiki). If you are looking for support, you might want to check [this section](#i-have-a-question)).
-- To see if other users have experienced (and potentially already solved) the same issue you are having, check if there is not already a bug report existing for your bug or error in the [bug tracker](https://github.com/cloudyspells/PSRule.Rules.AzureDevOpsissues?q=label%3Abug).
+- To see if other users have experienced (and potentially already solved) the same issue you are having, check if there is not already a bug report existing for your bug or error in the [bug tracker](https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/issues?q=label%3Abug).
 - Also make sure to search the internet (including Stack Overflow) to see if users outside of the GitHub community have discussed the issue.
 - Collect information about the bug:
   - Stack trace (Traceback)
@@ -144,6 +145,24 @@ need to fork the project, create a new branch and then create a Pull Request fro
 branch. The Pull Request will then be reviewed by the project team and merged if it is
 accepted.
 
+#### Commit Messages
+
+This project prefers commit messages in the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) format. This allows for automatic changelog generation and helps the project team to better understand the changes.
+
+#### Styleguides
+
+This project uses [PSScriptAnalyzer](https://powershellgallery.com/packages/PSScriptAnalyzer) to check the code for compliance with the PowerShell best practices. The project team will also check the code for compliance with the best practices before merging.
+
+Functions are to be defined in a file per object type handled by the function. Objects should be handled by separate functions for retrieval from the REST API and for writing
+the JSON output. All JSON output functions should be combined within the `Export-AzDevOpsRuleData` function.
+
+#### Testing
+
+All rules and functions should include Pester tests. This project aims for near 100% code
+coverage. All tests should be passing before a Pull Request is created. The project team
+will also check the code coverage and test results before merging. Make sure rule tests
+include both a positive and negative test.
+
 ### Improving The Documentation
 <!-- TODO
 Updating, improving and correcting the documentation
@@ -154,6 +173,13 @@ Everyone is invited to help improve the project's documentation and the built-in
 functions for rules. Suggestions for improvements can be made by creating an issue or
 directly by creating a Pull Request. The project team will then review the suggestions
 and merge them if they are accepted.
+
+### Join the project team
+
+If you are interested in joining the project team, please contact <webtonize@gmail.com>
+with a short introduction and a description of your motivation to join the team. The
+project team is still forming and we are looking for people who are interested in
+contributing to the project in the long term.
 
 <!-- omit in toc -->
 ## Attribution
