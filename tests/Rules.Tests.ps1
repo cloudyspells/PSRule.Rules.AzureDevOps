@@ -371,9 +371,9 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail-project' })
-            $ruleHits[1].Outcome | Should -Be 'Fail';
-            $ruleHits.Count | Should -Be 2;
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail-project-CI-gui' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
         }
 
         It 'Should pass for targets named success' {
@@ -383,9 +383,9 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same for ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail-project' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail-project-CI-gui' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
-            $ruleHits.Count | Should -Be 2;
+            $ruleHits.Count | Should -Be 1;
 
             $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
@@ -393,9 +393,9 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same for the FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail-project' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail-project-CI-gui' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
-            $ruleHits.Count | Should -Be 2;
+            $ruleHits.Count | Should -Be 1;
 
             $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
@@ -410,7 +410,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Pipelines.Core.InheritedPermissions' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.InheritedPermissions' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.InheritedPermissions' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 2;
         }
@@ -427,7 +427,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same for the FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.InheritedPermissions' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.InheritedPermissions' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 2;
 
