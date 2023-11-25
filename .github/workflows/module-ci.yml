@@ -35,10 +35,11 @@ jobs:
           Install-Module -Name PSRule -Force -SkipPublisherCheck
         shell: pwsh
 
-      - name: Run PSScriptAnalyzer
-        run: |
-          Invoke-ScriptAnalyzer -Path .\src -Recurse -Verbose
-        shell: pwsh
+      # Temporarily disabled until PSScriptAnalyzer is updated to support PowerShell 7
+      # - name: Run PSScriptAnalyzer
+      #   run: |
+      #     Invoke-ScriptAnalyzer -Path .\src -Recurse -Verbose
+      #   shell: pwsh
 
       - name: Run Pester Tests
         run: |
