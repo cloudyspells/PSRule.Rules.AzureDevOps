@@ -220,7 +220,14 @@ function Get-AzDevOpsPipelineYaml {
         $YamlPath = $response.configuration.path
         $uri = "https://dev.azure.com/$Organization/$Project/_apis/git/repositories/$RepositoryId/items?path=$YamlPath&api-version=6.0"
         Write-Verbose "Getting raw YAML definition from $uri"
-        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # Try to get the raw YAML definition from the repository
+        try {
+            $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        }
+        catch {
+            Write-Warning "Getting raw YAML definition from default branch failed, pipeline YAML definition will be empty"
+            $response = $null
+        }
         $yaml = $response
     }
     return $yaml
@@ -286,6 +293,11 @@ function Export-AzDevOpsPipelineYaml {
     Write-Verbose "Getting YAML definition for pipeline $PipelineId"
     $yaml = "ObjectType: Azure.DevOps.Pipelines.PipelineYaml`n"
     $yaml += Get-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $PipelineId
+    # Export the YAML definition to a file if it is not empty
+    if ($yaml -eq "ObjectType: Azure.DevOps.Pipelines.PipelineYaml`n" -or $null -eq $yaml) {
+        Write-Warning "YAML definition for pipeline $PipelineId is empty"
+        return $null
+    }
     Write-Verbose "Exporting YAML definition to $OutputPath\$PipelineName.yaml"
     $yaml | Out-File "$OutputPath\$PipelineName.yaml"
 }

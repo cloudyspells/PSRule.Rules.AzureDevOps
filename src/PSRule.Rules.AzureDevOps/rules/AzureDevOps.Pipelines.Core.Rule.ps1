@@ -53,7 +53,7 @@ Rule 'Azure.DevOps.Pipelines.Core.NoPlainTextSecrets' `
                         $Assert.HasFieldValue($_, "Value.value")
                         # $Assert.NotMatch($_, "value", "^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=(\w*\W|\w*))[0-9\Wa-zA-Z]{7,20}$")
                         $Assert.NotMatch($_, "Value.value", "((P|p)assword|pwd)\s*=\s*\w+;?")
-                        # SQL/MySQL conn strings
+                        # SQL conn strings
                         $Assert.NotMatch($_, "Value.value", "(?# To match SQL/MySQL conn strings.)^Data Source=[^;]+;Initial Catalog=[^;]+;User ID=[^;]+;Password=[^;]+;$")
                         $Assert.NotMatch($_, "Value.value", "(?# To match SQL/MySQL conn strings.)((U|u)ser(Id)?|uid)\s*=\s*\w+;?")
                         # Azure storage keys, connection strings, and SAS
@@ -70,6 +70,34 @@ Rule 'Azure.DevOps.Pipelines.Core.NoPlainTextSecrets' `
                         $Assert.NotMatch($_, "Value.value", "(?# To match Azure Service Bus connection strings.)Endpoint=sb://[^/]+\.servicebus\.windows\.net/;SharedAccessKeyName=[^;]+;SharedAccessKey=[A-Za-z0-9+/=]{44}==$")
                         # Azure Service Bus SAS
                         $Assert.NotMatch($_, "Value.value", "(?# To match Azure Service Bus SAS.)((S|s)hared(A|a)ccess(S|s)ignature|sas)\s*=\s*\w+;?")
+                        # Azure OpenAI API keys
+                        $Assert.NotMatch($_, "Value.value", "(?# To match Azure OpenAI API keys.)^sk-[a-zA-Z0-9]{32}$")
+                        # Azure Cognitive Services API keys
+                        $Assert.NotMatch($_, "Value.value", "(?# To match Azure Cognitive Services API keys.)^[a-zA-Z0-9]{32}$")
+
+                        # AWS access keys
+                        $Assert.NotMatch($_, "Value.value", "(?# To match AWS access keys.)^AKIA[0-9A-Z]{16}$")
+                        # AWS secret keys
+                        $Assert.NotMatch($_, "Value.value", "(?# To match AWS secret keys.)^[A-Za-z0-9/+=]{40}$")
+
+                        # MongoDB connection strings
+                        $Assert.NotMatch($_, "Value.value", "(?# To match MongoDB connection strings.)mongodb://[^:]+:[^@]+@[^/]+/[^?]+(\?[^&]+(&[^&]+)*)?$")
+                        # MongoDB SRV connection strings
+                        $Assert.NotMatch($_, "Value.value", "(?# To match MongoDB SRV connection strings.)mongodb\+srv://[^:]+:[^@]+@[^/]+/[^?]+(\?[^&]+(&[^&]+)*)?$")
+
+                        # Redis connection strings
+                        $Assert.NotMatch($_, "Value.value", "(?# To match Redis connection strings with password.)^redis://:[^@]+@[^:]+:\d+/?$")
+                        # Redis SSL connection strings
+                        $Assert.NotMatch($_, "Value.value", "(?# To match Redis SSL connection strings.)^rediss://[^:]+:[^@]+@[^:]+:\d+/?$")
+
+                        # MySQL connection strings
+                        $Assert.NotMatch($_, "Value.value", "(?# To match MySQL connection strings.)^Server=[^;]+;Port=\d+;Database=[^;]+;Uid=[^;]+;Pwd=[^;]+;$")
+
+                        # PostgreSQL connection strings
+                        $Assert.NotMatch($_, "Value.value", "(?# To match PostgreSQL connection strings.)^Server=[^;]+;Port=\d+;Database=[^;]+;User Id=[^;]+;Password=[^;]+;$")
+                        
+                        # PEM files
+                        $Assert.NotMatch($_, "Value.value", "(?# To match PEM files.)^-----BEGIN [A-Z ]+-----\r?\n([A-Za-z0-9+/=]{64}\r?\n)*-----END [A-Z ]+-----\r?\n?$")
                     }
                 } else {
                     $Assert.Null($_, "Value.value")

@@ -371,9 +371,9 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail-project-CI-gui' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
-            $ruleHits.Count | Should -Be 2;
+            $ruleHits.Count | Should -Be 1;
         }
 
         It 'Should pass for targets named success' {
@@ -383,9 +383,9 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same for ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail-project-CI-gui' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
-            $ruleHits.Count | Should -Be 2;
+            $ruleHits.Count | Should -Be 1;
 
             $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
@@ -393,9 +393,9 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same for the FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'fail-project-CI-gui' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
-            $ruleHits.Count | Should -Be 2;
+            $ruleHits.Count | Should -Be 1;
 
             $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.UseYamlDefinition' -and $_.TargetName -match 'success' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
@@ -410,7 +410,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Pipelines.Core.InheritedPermissions' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.InheritedPermissions' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.InheritedPermissions' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 2;
         }
@@ -427,7 +427,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same for the FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.InheritedPermissions' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Core.InheritedPermissions' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 2;
 
@@ -795,7 +795,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.HasBranchPolicy' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.HasBranchPolicy' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.HasBranchPolicy' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -807,7 +807,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.HasBranchPolicy' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.HasBranchPolicy' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -817,7 +817,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.HasBranchPolicy' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.HasBranchPolicy' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -834,7 +834,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.BranchPolicyIsEnabled' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyIsEnabled' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyIsEnabled' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -846,7 +846,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyIsEnabled' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyIsEnabled' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -856,7 +856,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyIsEnabled' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyIsEnabled' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -873,7 +873,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -885,7 +885,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -895,7 +895,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMinimumReviewers' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -912,7 +912,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -924,7 +924,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -934,7 +934,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyAllowSelfApproval' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -951,7 +951,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.BranchPolicyResetVotes' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyResetVotes' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyResetVotes' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -963,7 +963,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyResetVotes' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyResetVotes' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -973,7 +973,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyResetVotes' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyResetVotes' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -990,7 +990,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.Readme' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.Readme' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.Readme' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -1002,7 +1002,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.Readme' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.Readme' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1012,7 +1012,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.Readme' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.Readme' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1029,7 +1029,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.License' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.License' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.License' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -1041,7 +1041,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.License' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.License' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1051,7 +1051,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.License' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.License' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1068,7 +1068,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -1080,7 +1080,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1090,7 +1090,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1107,7 +1107,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.BranchPolicyCommentResolution' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyCommentResolution' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyCommentResolution' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -1119,7 +1119,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyCommentResolution' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyCommentResolution' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1129,7 +1129,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyCommentResolution' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyCommentResolution' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1146,7 +1146,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -1158,7 +1158,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1168,7 +1168,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyMergeStrategy' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1185,7 +1185,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.GitHubAdvancedSecurityEnabled' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -1219,7 +1219,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.GitHubAdvancedSecurityBlockPushes' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -1253,7 +1253,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.InheritedPermissions' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.InheritedPermissions' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.InheritedPermissions' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -1270,7 +1270,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same as default with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.InheritedPermissions' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.InheritedPermissions' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1287,7 +1287,7 @@ Describe 'AzureDevOps ' {
 
     Context 'Azure.DevOps.Repos.BranchPolicyRequireBuild' {
         It 'Should fail for targets named fail' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyRequireBuild' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyRequireBuild' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
         }
@@ -1299,7 +1299,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a ReadOnly TokenType' {
-            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyRequireBuild' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyRequireBuild' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
@@ -1309,7 +1309,7 @@ Describe 'AzureDevOps ' {
         }
 
         It 'Should be the same with a FineGrained TokenType' {
-            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyRequireBuild' -and $_.TargetName -match 'fail' })
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.BranchPolicyRequireBuild' -and $_.TargetName -match 'fail-project' })
             $ruleHits[0].Outcome | Should -Be 'Fail';
             $ruleHits.Count | Should -Be 1;
 
