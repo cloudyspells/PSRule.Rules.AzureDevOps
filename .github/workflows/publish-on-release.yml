@@ -26,7 +26,7 @@ jobs:
           # Update the module manifest with the version number in the release tag
           $version = $env:GITHUB_REF -replace 'refs/tags/v'
           $path = './src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psd1'
-          Update-ModuleManifest -Path $path -ModuleVersion $version
+          Update-ModuleManifest -Path $path -ModuleVersion $version -ReleaseNotes "${{ github.event.release.body }}"
 
       - name: Publish module
         shell: pwsh
