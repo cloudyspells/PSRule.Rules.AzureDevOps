@@ -30,12 +30,14 @@ jobs:
       - name: Copy wiki base sources
         shell: bash
         run: |
-          mkdir -p ./wiki
-          mkdir -p ./wiki/rules
+          rm -f ./wiki/*.md
+          rm -f ./wiki/rules/*.md
           # Copy wiki base page
           cp ./main/README.md ./wiki/Home.md
           # Copy wiki rules
           cp ./main/src/PSRule.Rules.AzureDevOps/en/*.md ./wiki/rules
+          # Copy docs
+          cp ./main/docs/*.md ./wiki
 
       - name: Generate Module docs
         shell: pwsh
