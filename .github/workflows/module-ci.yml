@@ -37,7 +37,7 @@ jobs:
 
       - name: Run PSScriptAnalyzer
         run: |
-          Invoke-ScriptAnalyzer -Path .\src -Recurse
+          Invoke-ScriptAnalyzer -Path .\src -Recurse -Verbose
         shell: pwsh
 
       - name: Run Pester Tests
