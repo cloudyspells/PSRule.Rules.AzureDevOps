@@ -23,7 +23,8 @@ Describe 'PSRule.Rules.AzureDevOps' {
         BeforeAll {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
-            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $Organization
+            Connect-AzDevOps -PAT $PAT -Organization $Organization
+            $projects = Get-AzDevOpsProjects
         }
 
         It 'Should return a list of projects' {
@@ -38,7 +39,10 @@ Describe 'PSRule.Rules.AzureDevOps' {
 
         It 'Should throw an error with a non-existing Organization' {
             $faultyOrganization = "faultyOrganization"
-            { Get-AzDevOpsProjects -PAT $PAT -Organization $faultyOrganization -ErrorAction SilentlyContinue } | Should -Throw
+            { 
+                Connect-AzDevOps -PAT $PAT -Organization $faultyOrganization -ErrorAction Stop
+                Get-AzDevOpsProjects -ErrorAction SilentlyContinue 
+            } | Should -Throw
         }
     }
 
@@ -46,10 +50,11 @@ Describe 'PSRule.Rules.AzureDevOps' {
         BeforeAll {
             $PAT = 'ThisIsAFaultyPAT'
             $Organization = $env:ADO_ORGANIZATION
+            Connect-AzDevOps -PAT $PAT -Organization $Organization
         }
 
         It 'Should throw an error' {
-            { Get-AzDevOpsProjects -PAT $PAT -Organization $Organization -ErrorAction Stop } | Should -Throw
+            { Get-AzDevOpsProjects -ErrorAction Stop } | Should -Throw
         }
     }
 
@@ -57,7 +62,8 @@ Describe 'PSRule.Rules.AzureDevOps' {
         BeforeAll {
             $PAT = $env:ADO_PAT_READONLY
             $Organization = $env:ADO_ORGANIZATION
-            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $Organization -TokenType ReadOnly
+            Connect-AzDevOps -PAT $PAT -Organization $Organization
+            $projects = Get-AzDevOpsProjects -TokenType ReadOnly
         }
 
         It 'Should return a list of projects' {
@@ -75,7 +81,8 @@ Describe 'PSRule.Rules.AzureDevOps' {
         BeforeAll {
             $PAT = $env:ADO_PAT_FINEGRAINED
             $Organization = $env:ADO_ORGANIZATION
-            $projects = Get-AzDevOpsProjects -PAT $PAT -Organization $Organization -TokenType FineGrained
+            Connect-AzDevOps -PAT $PAT -Organization $Organization
+            $projects = Get-AzDevOpsProjects -TokenType FineGrained
         }
 
         It 'Should return a list of projects' {
@@ -94,7 +101,8 @@ Describe 'PSRule.Rules.AzureDevOps' {
             $PAT = $env:ADO_PAT
             $Organization = $env:ADO_ORGANIZATION
             $Project = $env:ADO_PROJECT
-            $repos = Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $Project
+            Connect-AzDevOps -PAT $PAT -Organization $Organization
+            $repos = Get-AzDevOpsRepos -Project $Project
         }
 
         It 'Should return a list of repos' {
