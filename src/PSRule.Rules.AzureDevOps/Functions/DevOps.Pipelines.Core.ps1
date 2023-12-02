@@ -7,40 +7,32 @@
     .DESCRIPTION
     Get all Azure Pipelines definitions from Azure DevOps project using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-    
     .PARAMETER TokenType
     Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
 
     .PARAMETER Project
     Project name for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $Project
+    Get-AzDevOpsPipelines -Project $Project
 #>
 function Get-AzDevOpsPipelines {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
         [string]
         $TokenType = 'FullAccess',
-        [Parameter(Mandatory,ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory=$true)]
         [string]
         $Project
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
-
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $header = $script:connection.GetHeader()
+    $Organization = $script:connection.Organization
+    
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines?api-version=6.0-preview.1"
     Write-Verbose "Getting pipelines from $uri"
     try {
@@ -80,14 +72,8 @@ Export-ModuleMember -Function Get-AzDevOpsPipelines
     .DESCRIPTION
     Get Azure DevOps pipeline ACLs using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
     .PARAMETER TokenType
     Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
 
     .PARAMETER ProjectId
     Project ID for Azure DevOps
@@ -96,28 +82,27 @@ Export-ModuleMember -Function Get-AzDevOpsPipelines
     Pipeline ID for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsPipelineAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -PipelineId $PipelineId
+    Get-AzDevOpsPipelineAcls -ProjectId $ProjectId -PipelineId $PipelineId
 #>
 function Get-AzDevOpsPipelineAcls {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
         [string]
         $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory=$true)]
         [string]
         $ProjectId,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory=$true)]
         [string]
         $PipelineId
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $header = $script:connection.GetHeader()
+    $Organization = $script:connection.Organization
     # If Token Type is ReadOnly, write a warning and exit the function returning null
     if ($TokenType -eq 'ReadOnly') {
         Write-Warning "Token Type is set to ReadOnly, no pipeline ACLs will be returned"
@@ -151,14 +136,8 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineAcls
     .DESCRIPTION
     Get YAML definition for Pipeline using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
     .PARAMETER TokenType
     Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
 
     .PARAMETER Project
     Project name for Azure DevOps
@@ -167,29 +146,27 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineAcls
     Pipeline Id for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $PipelineId
+    Get-AzDevOpsPipelineYaml -Project $Project -PipelineId $PipelineId
 #>
 function Get-AzDevOpsPipelineYaml {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
         [string]
         $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory=$true)]
         [string]
         $Project,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory=$true)]
         [string]
         $PipelineId
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $header = $script:connection.GetHeader()
+    $Organization = $script:connection.Organization
     $yaml = ""
     # try to get parsed pipeline YAML definition, if that fails, retrieve the raw YAML definition via git
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/pipelines/$($PipelineId)/runs?api-version=5.1-preview"
@@ -243,14 +220,8 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineYaml
     .DESCRIPTION
     Export YAML definition for Pipeline using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
     .PARAMETER TokenType
     Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
 
     .PARAMETER Project
     Project name for Azure DevOps
@@ -262,37 +233,35 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineYaml
     Output path for YAML file
 
     .EXAMPLE
-    Export-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $PipelineId -OutputPath $OutputPath
+    Export-AzDevOpsPipelineYaml -Project $Project -PipelineId $PipelineId -OutputPath $OutputPath
 #>
 function Export-AzDevOpsPipelineYaml {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
         [string]
         $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $PipelineId,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $PipelineName,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $OutputPath
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    
     Write-Verbose "Getting YAML definition for pipeline $PipelineId"
     $yaml = "ObjectType: Azure.DevOps.Pipelines.PipelineYaml`n"
-    $yaml += Get-AzDevOpsPipelineYaml -PAT $PAT -Organization $Organization -Project $Project -PipelineId $PipelineId
+    $yaml += Get-AzDevOpsPipelineYaml -Project $Project -PipelineId $PipelineId
     # Export the YAML definition to a file if it is not empty
     if ($yaml -eq "ObjectType: Azure.DevOps.Pipelines.PipelineYaml`n" -or $null -eq $yaml) {
         Write-Warning "YAML definition for pipeline $PipelineId is empty"
@@ -312,14 +281,8 @@ Export-ModuleMember -Function Export-AzDevOpsPipelineYaml
     .DESCRIPTION
     Export all the pipelines to a separate JSON file per pipeline
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
     .PARAMETER TokenType
     Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
 
     .PARAMETER Project
     Project name for Azure DevOps
@@ -328,32 +291,29 @@ Export-ModuleMember -Function Export-AzDevOpsPipelineYaml
     Output path for JSON files
 
     .EXAMPLE
-    Export-AzDevOpsPipelines -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsPipelines -Project $Project -OutputPath $OutputPath
 #>
 function Export-AzDevOpsPipelines {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
         [string]
         $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $OutputPath
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
     Write-Verbose "Getting pipelines from Azure DevOps"
     # If invoking parameter set is PAT, get all pipelines from Azure DevOps
     if ($PSCmdlet.ParameterSetName -eq 'PAT') {
-        $pipelines = Get-AzDevOpsPipelines -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project
+        $pipelines = Get-AzDevOpsPipelines -TokenType $TokenType -Project $Project
     }
     foreach ($pipeline in $pipelines) {
         # Add ObjectType Azure.DevOps.Pipeline to the pipeline object
@@ -364,7 +324,7 @@ function Export-AzDevOpsPipelines {
         # Add the pipeline ACLs to the pipeline object if the token type is not ReadOnly
         if ($TokenType -ne 'ReadOnly') {
             Write-Verbose "Getting pipeline ACLs for pipeline $($pipeline.name)"
-            $pipeline | Add-Member -MemberType NoteProperty -Name Acls -Value (Get-AzDevOpsPipelineAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -PipelineId $pipeline.id)
+            $pipeline | Add-Member -MemberType NoteProperty -Name Acls -Value (Get-AzDevOpsPipelineAcls -ProjectId $ProjectId -PipelineId $pipeline.id)
         } else {
             Write-Verbose "Token Type is set to ReadOnly, no pipeline ACLs will be returned"
         }
@@ -373,10 +333,9 @@ function Export-AzDevOpsPipelines {
         $pipeline | ConvertTo-Json -Depth 100 | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
         if ($pipeline.configuration.type -eq 'yaml' -and $pipeline.configuration.repository.type -eq 'azureReposGit') {
             Write-Verbose "Pipeline $($pipeline.name) is a YAML pipeline"
-            # If invoking parameter set is PAT, get pipeline yaml from Azure DevOps
-            if ($PSCmdlet.ParameterSetName -eq 'PAT') {
-                Export-AzDevOpsPipelineYaml -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -PipelineId $pipeline.id -PipelineName $pipeline.name -OutputPath $OutputPath
-            }
+            Write-Verbose "Getting YAML definition for pipeline $($pipeline.name)"           
+            Export-AzDevOpsPipelineYaml -TokenType $TokenType -Project $Project -PipelineId $pipeline.id -PipelineName $pipeline.name -OutputPath $OutputPath
+
         }
         
     }

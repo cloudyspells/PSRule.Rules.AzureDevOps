@@ -1,12 +1,55 @@
 # PSRule.Rules.AzureDevOps.psm1
 # PSRule module for Azure DevOps
 
+# Azure DevOps Rest API connection object
+$script:connection = $null
+
+# Add all classes from src/Classes
+Get-ChildItem -Path "$PSScriptRoot/Classes/*.ps1" | ForEach-Object {
+    . $_.FullName
+}
+
 # Dot source all function scripts from src/Functions
 Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
     . $_.FullName
 }
 
-# Dot source all ps1 files from the modules Functions folder
+# Define the types to export with type accelerators.
+$ExportableTypes =@(
+    [AzureDevOpsConnection]
+)
+# Get the internal TypeAccelerators class to use its static methods.
+$TypeAcceleratorsClass = [psobject].Assembly.GetType(
+    'System.Management.Automation.TypeAccelerators'
+)
+# Ensure none of the types would clobber an existing type accelerator.
+# If a type accelerator with the same name exists, throw an exception.
+$ExistingTypeAccelerators = $TypeAcceleratorsClass::Get
+foreach ($Type in $ExportableTypes) {
+    if ($Type.FullName -in $ExistingTypeAccelerators.Keys) {
+        $Message = @(
+            "Unable to register type accelerator '$($Type.FullName)'"
+            'Accelerator already exists.'
+        ) -join ' - '
+
+        throw [System.Management.Automation.ErrorRecord]::new(
+            [System.InvalidOperationException]::new($Message),
+            'TypeAcceleratorAlreadyExists',
+            [System.Management.Automation.ErrorCategory]::InvalidOperation,
+            $Type.FullName
+        )
+    }
+}
+# Add type accelerators for every exportable type.
+foreach ($Type in $ExportableTypes) {
+    $TypeAcceleratorsClass::Add($Type.FullName, $Type) | Out-Null
+}
+# Remove type accelerators when the module is removed.
+$MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
+    foreach($Type in $ExportableTypes) {
+        $TypeAcceleratorsClass::Remove($Type.FullName) | Out-Null
+    }
+}.GetNewClosure()
 
 
 
@@ -17,14 +60,8 @@ Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
     .DESCRIPTION
     Run all JSON export functions for Azure DevOps using Azure DevOps Rest API and this modules functions for analysis by PSRule
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
     .PARAMETER TokenType
     Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
 
     .PARAMETER Project
     Project name for Azure DevOps
@@ -33,35 +70,29 @@ Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
     Output path for JSON files
 
     .EXAMPLE
-    Export-AzDevOpsRuleData -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsRuleData -Project $Project -OutputPath $OutputPath
 #>
 Function Export-AzDevOpsRuleData {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
         [string]
         $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $OutputPath
     )
-    Export-AzDevOpsReposAndBranchPolicies -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsEnvironmentChecks -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsServiceConnections -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsPipelines -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsPipelinesSettings -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsVariableGroups -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsReleaseDefinitions -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsReposAndBranchPolicies -TokenType $TokenType -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsEnvironmentChecks -TokenType $TokenType -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsServiceConnections -TokenType $TokenType -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsPipelines -TokenType $TokenType -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsPipelinesSettings -TokenType $TokenType -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsVariableGroups -TokenType $TokenType -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsReleaseDefinitions -TokenType $TokenType -Project $Project -OutputPath $OutputPath
 }
 Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProjectRuleData
 # End of Function Export-AzDevOpsRuleData
@@ -73,39 +104,27 @@ Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProj
     .DESCRIPTION
     Export rule data for all projects in the DevOps organization using Azure DevOps Rest API and this modules functions for analysis by PSRule
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
     .PARAMETER TokenType
     Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
 
     .PARAMETER OutputPath
     Output path for JSON files
 
     .EXAMPLE
-    Export-AzDevOpsOrganizationRuleData -PAT $PAT -Organization $Organization -OutputPath $OutputPath
+    Export-AzDevOpsOrganizationRuleData -OutputPath $OutputPath
 #>
 Function Export-AzDevOpsOrganizationRuleData {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
         [string]
         $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $OutputPath
     )
-    $projects = Get-AzDevOpsProjects -PAT $PAT -TokenType $TokenType -Organization $Organization
+    $projects = Get-AzDevOpsProjects -TokenType $TokenType
     $projects | ForEach-Object {
         $project = $_
         # Create a subfolder for each project
@@ -113,7 +132,7 @@ Function Export-AzDevOpsOrganizationRuleData {
         if(!(Test-Path -Path $subPath)) {
             New-Item -Path $subPath -ItemType Directory
         }
-        Export-AzDevOpsRuleData -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $project.name -OutputPath $subPath
+        Export-AzDevOpsRuleData -TokenType $TokenType -Project $project.name -OutputPath $subPath
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsOrganizationRuleData

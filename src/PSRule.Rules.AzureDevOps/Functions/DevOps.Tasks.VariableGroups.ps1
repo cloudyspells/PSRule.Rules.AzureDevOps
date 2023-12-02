@@ -5,43 +5,34 @@
     .DESCRIPTION
     Get all variable groups for a project from Azure DevOps using the REST API.
 
-    .PARAMETER Organization
-    The name of the Azure DevOps organization.
-
     .PARAMETER Project
     The name of the Azure DevOps project.
-
-    .PARAMETER PAT
-    A personal access token (PAT) used to authenticate with Azure DevOps.
 
     .PARAMETER TokenType
     Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
 
     .EXAMPLE
-    Get-AzDevOpsVariableGroups -Organization 'myorganization' -Project 'myproject' -PAT $myPAT
+    Get-AzDevOpsVariableGroups -Project 'myproject'
 #>
 Function Get-AzDevOpsVariableGroups {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param(
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]$Organization,
-
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]$Project,
 
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
         [string]
         $TokenType = 'FullAccess'
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
     Write-Verbose "Getting variable groups for project $Project"
     $url = "https://dev.azure.com/$Organization/$Project/_apis/distributedtask/variablegroups?api-version=7.2-preview.2"
     Write-Verbose "URI: $url"
-    $header = Get-AzDevOpsHeader -PAT $PAT
+    $header = $script:connection.GetHeader()
     # try to get the variable groups, throw a descriptive error if it fails for authentication or other reasons
     try {
         $response = Invoke-RestMethod -Uri $url -Method Get -Headers $header
@@ -65,20 +56,14 @@ Export-ModuleMember -Function Get-AzDevOpsVariableGroups
     .DESCRIPTION
     Export Azure DevOps variable groups for a project to JSON files.
 
-    .PARAMETER Organization
-    The name of the Azure DevOps organization.
-
     .PARAMETER Project
     The name of the Azure DevOps project.
-
-    .PARAMETER PAT
-    A personal access token (PAT) used to authenticate with Azure DevOps.
 
     .PARAMETER OutputPath
     The path to export variable groups to.
 
     .EXAMPLE
-    Export-AzDevOpsVariableGroups -Organization 'myorganization' -Project 'myproject' -PAT $myPAT -OutputPath 'C:\temp'
+    Export-AzDevOpsVariableGroups -Project 'myproject' -OutputPath 'C:\temp'
 
     .NOTES
     All variable group files will have a suffix of .ado.vg.json.
@@ -88,28 +73,24 @@ Export-ModuleMember -Function Get-AzDevOpsVariableGroups
 #>
 Function Export-AzDevOpsVariableGroups {
     param(
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project,
 
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
         [string]
         $TokenType = 'FullAccess',
 
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $OutputPath
     )
-    $variableGroups = Get-AzDevOpsVariableGroups -Organization $Organization -Project $Project -PAT $PAT
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $variableGroups = Get-AzDevOpsVariableGroups -Project $Project -TokenType $TokenType
     $variableGroups | ForEach-Object {
         $variableGroup = $_
         $variableGroup | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Tasks.VariableGroup'
