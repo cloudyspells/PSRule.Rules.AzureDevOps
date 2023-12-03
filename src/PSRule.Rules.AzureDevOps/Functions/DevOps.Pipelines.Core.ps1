@@ -101,14 +101,13 @@ function Get-AzDevOpsPipelineAcls {
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
-    $header = $script:connection.GetHeader()
     $Organization = $script:connection.Organization
     # If Token Type is ReadOnly, write a warning and exit the function returning null
     if ($TokenType -eq 'ReadOnly') {
         Write-Warning "Token Type is set to ReadOnly, no pipeline ACLs will be returned"
         return $null
     } else {
-        $header = Get-AzDevOpsHeader -PAT $PAT
+        $header = $script:connection.GetHeader()
         $uri = "https://dev.azure.com/$Organization/_apis/accesscontrollists/33344d9c-fc72-4d6f-aba5-fa317101a7e9?api-version=6.0&token=$($ProjectId)/$($PipelineId)"
         Write-Verbose "Getting pipeline ACLs from $uri"
         Write-Verbose "PROJECTID: $ProjectId"
@@ -311,10 +310,8 @@ function Export-AzDevOpsPipelines {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
     Write-Verbose "Getting pipelines from Azure DevOps"
-    # If invoking parameter set is PAT, get all pipelines from Azure DevOps
-    if ($PSCmdlet.ParameterSetName -eq 'PAT') {
-        $pipelines = Get-AzDevOpsPipelines -TokenType $TokenType -Project $Project
-    }
+    $pipelines = Get-AzDevOpsPipelines -TokenType $TokenType -Project $Project
+    # Loop through all pipelines
     foreach ($pipeline in $pipelines) {
         # Add ObjectType Azure.DevOps.Pipeline to the pipeline object
         $pipeline | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Pipeline"

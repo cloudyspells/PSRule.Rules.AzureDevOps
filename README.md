@@ -40,8 +40,9 @@ from the PowerShell Gallery:
 Install-Module -Name PSRule.Rules.AzureDevOps -Scope CurrentUser
 ```
 
-Once you have both modules installed, you can run an export of
-your Azure DevOps project and run the rules on the exported data.
+Once you have both modules installed, you can connect to your
+Azure DevOps organization and run an export of your Azure DevOps
+project and run the rules on the exported data.
 The `-PAT` value needs to be an Azure DevOps Personal Access Token
 with sufficient permissions to read the project data. The default
 expects a PAT with full access permissions. Alternately, you can
@@ -54,10 +55,11 @@ be found in the [docs/token-permissions.md](docs/token-permissions.md).
 #### Example: Run with full access token
 
 ```powershell
-Export-AzDevOpsRuleData `
+Connect-AzDevOps `
     -Organization "MyOrg" `
+    -PAT $MyPAT
+Export-AzDevOpsRuleData `
     -Project "MyProject" `
-    -PAT $MyPAT `
     -OutputPath "C:\Temp\MyProject"
 Assert-PSRule `
     -InputPath "C:\Temp\MyProject\" `
@@ -67,12 +69,30 @@ Assert-PSRule `
 #### Example: Run with read-only access token
 
 ```powershell
-Export-AzDevOpsRuleData `
+Connect-AzDevOps `
     -Organization "MyOrg" `
-    -Project "MyProject" `
     -PAT $MyPAT `
+Export-AzDevOpsRuleData `
+    -Project "MyProject" `
     -OutputPath "C:\Temp\MyProject" `
     -TokenType ReadOnly
+Assert-PSRule `
+    -InputPath "C:\Temp\MyProject\" `
+    -Module PSRule.Rules.AzureDevOps
+```
+
+#### Example: Run with a Service Principal
+
+```powershell
+Connect-AzDevOps `
+    -Organization "MyOrg" `
+    -AuthType ServicePrincipal `
+    -ClientId $MyAppId `
+    -ClientSecret $MyAppSecret `
+    -TenantId $MyTenantId
+Export-AzDevOpsRuleData `
+    -Project "MyProject" `
+    -OutputPath "C:\Temp\MyProject"
 Assert-PSRule `
     -InputPath "C:\Temp\MyProject\" `
     -Module PSRule.Rules.AzureDevOps

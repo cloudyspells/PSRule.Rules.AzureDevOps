@@ -84,7 +84,6 @@ class AzureDevOpsConnection {
         $header = @{
             'Content-Type' = 'application/x-www-form-urlencoded'
         }
-        Write-Host "SPN - Getting token from $($this.TokenEndpoint)"
         # POST as form url encoded body using the token endpoint 
         $response = Invoke-RestMethod -Uri $this.TokenEndpoint -Method Post -Body $body -ContentType 'application/x-www-form-urlencoded' -Headers $header
         $this.Token = "Bearer $($response.access_token)"
@@ -101,7 +100,6 @@ class AzureDevOpsConnection {
         $header = @{
             Metadata = 'true'
         }
-        Write-Host "MID - Getting token from $($this.TokenEndpoint)"
         $response = Invoke-RestMethod -Uri $this.TokenEndpoint -Method Get -Body $body -Headers $header
         $this.Token = "Bearer $($response.access_token)"
         $this.TokenExpires = [System.DateTime]::Now.AddSeconds($response.expires_in)

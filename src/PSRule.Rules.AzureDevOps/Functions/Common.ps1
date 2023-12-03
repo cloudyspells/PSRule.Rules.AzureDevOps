@@ -1,35 +1,112 @@
-﻿# Function to create Azure DevOps Rest API header from PAT
-# Usage: $header = Get-AzDevOpsHeader -PAT $PAT
-# --------------------------------------------------
-
-<#
+﻿<#
     .SYNOPSIS
-    Function to create Azure DevOps Rest API header from PAT
+    Connect to Azure DevOps for a session using a Service Principal, Managed Identity or Personal Access Token (PAT)
 
     .DESCRIPTION
-    Function to create Azure DevOps Rest API header from PAT
+    Connect to Azure DevOps for a session using a Service Principal, Managed Identity or Personal Access Token (PAT)
+
+    .PARAMETER Organization
+    Organization name for Azure DevOps
 
     .PARAMETER PAT
     Personal Access Token (PAT) for Azure DevOps
 
+    .PARAMETER ClientId
+    Client ID for Service Principal
+
+    .PARAMETER ClientSecret
+    Client Secret for Service Principal
+
+    .PARAMETER TenantId
+    Tenant ID for Service Principal
+
+    .PARAMETER AuthType
+    Authentication type for Azure DevOps (PAT, ServicePrincipal, ManagedIdentity)
+
     .EXAMPLE
-    $header = Get-AzDevOpsHeader -PAT $PAT
+    Connect-AzDevOps -Organization $Organization -PAT $PAT
+
+    .EXAMPLE
+    Connect-AzDevOps -Organization $Organization -ClientId $ClientId -ClientSecret $ClientSecret -TenantId $TenantId -AuthType ServicePrincipal
+
+    .EXAMPLE
+    Connect-AzDevOps -Organization $Organization -AuthType ManagedIdentity
+
+    .EXAMPLE
+    Connect-AzDevOps -Organization $Organization -PAT $PAT -AuthType PAT
+
 #>
-function Get-AzDevOpsHeader {
+Function Connect-AzDevOps {
     [CmdletBinding()]
-    [OutputType([System.Collections.Hashtable])]
+    [OutputType([AzureDevOpsConnection])]
     param (
-        [Parameter()]
+        [Parameter(Mandatory)]
         [string]
-        $PAT
+        $Organization,
+        [Parameter(ParameterSetName = 'PAT')]
+        [string]
+        $PAT,
+        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
+        [string]
+        $ClientId,
+        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
+        [string]
+        $ClientSecret,
+        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
+        [string]
+        $TenantId,
+        [Parameter(ParameterSetName = 'ManagedIdentity')]
+        [switch]
+        $ManagedIdentity,
+        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
+        [Parameter(ParameterSetName = 'ManagedIdentity', Mandatory=$true)]
+        [ValidateSet('PAT', 'ServicePrincipal', 'ManagedIdentity')]
+        [string]
+        $AuthType = 'PAT'
     )
-    $header = @{
-        Authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($PAT)"))
+    switch ($AuthType) {
+        'PAT' {
+            $connection = [AzureDevOpsConnection]::new($Organization, $PAT)
+        }
+        'ServicePrincipal' {
+            $connection = [AzureDevOpsConnection]::new($Organization, $ClientId, $ClientSecret, $TenantId)
+        }
+        'ManagedIdentity' {
+            $connection = [AzureDevOpsConnection]::new($Organization)
+        }
     }
-    return $header
+    $script:connection = $connection
 }
-Export-ModuleMember -Function Get-AzDevOpsHeader
-# End of Function Get-AzDevOpsHeader
+if($MyInvocation.PSCommandPath.EndsWith('.psm1') -or $MyInvocation.PSCommandPath.EndsWith('.psd1')) {
+    Export-ModuleMember -Function Connect-AzDevOps
+}
+
+
+
+# End of Function Connect-AzDevOps
+
+<#
+    .SYNOPSIS
+    Disconnect from Azure DevOps
+
+    .DESCRIPTION
+    Disconnect from Azure DevOps and remove the connection object
+
+    .EXAMPLE
+    Disconnect-AzDevOps
+#>
+Function Disconnect-AzDevOps {
+    [CmdletBinding()]
+    param ()
+    Clear-Variable connection -Scope Script -ErrorAction SilentlyContinue
+    $script:connection = ""
+    $script:connection = $null
+}
+if($MyInvocation.PSCommandPath.EndsWith('.psm1') -or $MyInvocation.PSCommandPath.EndsWith('.psd1')) {
+    Export-ModuleMember -Function Disconnect-AzDevOps
+}
+# End of Function Disconnect-AzDevOps
 
 <#
     .SYNOPSIS
@@ -75,88 +152,7 @@ function Get-AzDevOpsProjects {
     $projects = $response.value
     return @($projects)
 }
-Export-ModuleMember -Function Get-AzDevOpsProjects
-# End of Function Get-AzDevOpsProjects
-
-<#
-    .SYNOPSIS
-    Connect to Azure DevOps for a session using a Service Principal, Managed Identity or Personal Access Token (PAT)
-
-    .DESCRIPTION
-    Connect to Azure DevOps for a session using a Service Principal, Managed Identity or Personal Access Token (PAT)
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER ClientId
-    Client ID for Service Principal
-
-    .PARAMETER ClientSecret
-    Client Secret for Service Principal
-
-    .PARAMETER TenantId
-    Tenant ID for Service Principal
-
-    .PARAMETER AuthType
-    Authentication type for Azure DevOps (PAT, ServicePrincipal, ManagedIdentity)
-
-    .EXAMPLE
-    $connection = Connect-AzDevOps -Organization $Organization -PAT $PAT
-
-    .EXAMPLE
-    $connection = Connect-AzDevOps -Organization $Organization -ClientId $ClientId -ClientSecret $ClientSecret -TenantId $TenantId -AuthType ServicePrincipal
-
-    .EXAMPLE
-    $connection = Connect-AzDevOps -Organization $Organization -AuthType ManagedIdentity
-
-    .EXAMPLE
-    $connection = Connect-AzDevOps -Organization $Organization -PAT $PAT -AuthType PAT
-
-#>
-Function Connect-AzDevOps {
-    [CmdletBinding()]
-    [OutputType([AzureDevOpsConnection])]
-    param (
-        [Parameter(Mandatory)]
-        [string]
-        $Organization,
-        [Parameter(ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
-        [string]
-        $ClientId,
-        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
-        [string]
-        $ClientSecret,
-        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
-        [string]
-        $TenantId,
-        [Parameter(ParameterSetName = 'ManagedIdentity')]
-        [switch]
-        $ManagedIdentity,
-        [Parameter(ParameterSetName = 'PAT')]
-        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
-        [Parameter(ParameterSetName = 'ManagedIdentity', Mandatory=$true)]
-        [ValidateSet('PAT', 'ServicePrincipal', 'ManagedIdentity')]
-        [string]
-        $AuthType = 'PAT'
-    )
-    switch ($AuthType) {
-        'PAT' {
-            $connection = [AzureDevOpsConnection]::new($Organization, $PAT)
-        }
-        'ServicePrincipal' {
-            $connection = [AzureDevOpsConnection]::new($Organization, $ClientId, $ClientSecret, $TenantId)
-        }
-        'ManagedIdentity' {
-            $connection = [AzureDevOpsConnection]::new($Organization)
-        }
-    }
-    $script:connection = $connection
+if($MyInvocation.PSCommandPath.EndsWith('.psm1') -or $MyInvocation.PSCommandPath.EndsWith('.psd1')) {
+    Export-ModuleMember -Function Get-AzDevOpsProjects
 }
-Export-ModuleMember -Function Connect-AzDevOps
-# End of Function Connect-AzDevOps
+# End of Function Get-AzDevOpsProjects

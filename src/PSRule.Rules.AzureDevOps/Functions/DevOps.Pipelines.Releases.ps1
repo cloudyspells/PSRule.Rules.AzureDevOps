@@ -25,7 +25,7 @@ Function Get-AzDevOpsReleaseDefinitions {
         [Parameter(Mandatory)]
         [string]$Project
     )
-    if($null -eq $script:connection) {
+    if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
     Write-Verbose "URI: $uri"
@@ -89,7 +89,7 @@ Function Get-AzDevOpsReleaseDefinitionAcls {
         [Parameter()]
         [string]$Folder = ''
     )
-    if($null -eq $script:connection) {
+    if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
     $Organization = $script:connection.Organization
@@ -157,7 +157,7 @@ Function Export-AzDevOpsReleaseDefinitions {
         [Parameter(Mandatory)]
         [string]$OutputPath
     )
-    if($null -eq $script:connection) {
+    if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
     $Organization = $script:connection.Organization
