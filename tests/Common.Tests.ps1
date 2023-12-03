@@ -1,4 +1,6 @@
 BeforeAll {
+    # Dot source the AzureDevOpsConnection class
+    . "$PSScriptRoot/../src/PSRule.Rules.AzureDevOps/Classes/AzureDevOpsConnection.ps1"
     # Dot source the Common.ps1 script
     . "$PSScriptRoot/../src/PSRule.Rules.AzureDevOps/Functions/Common.ps1"
 }

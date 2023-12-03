@@ -68,6 +68,9 @@ jobs:
           ADO_PROJECT: ${{ secrets.ADO_PROJECT }}
           ADO_PAT_FINEGRAINED: ${{ secrets.ADO_PAT_FINEGRAINED }}
           ADO_PAT_READONLY: ${{ secrets.ADO_PAT_READONLY }}
+          ADO_CLIENT_ID: ${{ secrets.ADO_CLIENT_ID }}
+          ADO_CLIENT_SECRET: ${{ secrets.ADO_CLIENT_SECRET }}
+          ADO_TENANT_ID: ${{ secrets.ADO_TENANT_ID }}
 
       - name: Upload Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2.9.0
