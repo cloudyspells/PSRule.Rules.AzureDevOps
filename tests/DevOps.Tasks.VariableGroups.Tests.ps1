@@ -9,7 +9,7 @@ Describe "Functions: DevOps.Tasks.VariableGroups.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsVariableGroups -Project $env:ADO_PROJECT
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -63,7 +63,7 @@ Describe "Functions: DevOps.Tasks.VariableGroups.Tests" {
             { 
                 Disconnect-AzDevOps
                 Export-AzDevOpsVariableGroups -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 

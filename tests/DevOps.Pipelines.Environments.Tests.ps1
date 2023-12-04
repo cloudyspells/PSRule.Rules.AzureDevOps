@@ -9,7 +9,7 @@ Describe "Functions: Azure.DevOps.Pipelines.Environments.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsEnvironments -Project $env:ADO_PROJECT
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -88,7 +88,7 @@ Describe "Functions: Azure.DevOps.Pipelines.Environments.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsEnvironmentChecks -Project $env:ADO_PROJECT -Environment "test"
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -172,7 +172,7 @@ Describe "Functions: Azure.DevOps.Pipelines.Environments.Tests" {
             { 
                 Disconnect-AzDevOps
                 Export-AzDevOpsEnvironmentChecks -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 

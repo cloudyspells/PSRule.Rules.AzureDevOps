@@ -8,8 +8,8 @@ Describe "Functions: DevOps.Pipelines.Settings.Tests" {
         It " should throw an error" {
             { 
                 Disconnect-AzDevOps
-                Get-AzDevOpsPipelinesSettings -Project $env:ADO_PROJECT -PipelineId $env:ADO_PIPELINE_ID
-            } | Should -Throw
+                Get-AzDevOpsPipelinesSettings -Project $env:ADO_PROJECT
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
     Context " Get-AzDevOpsPipelinesSettings on a project with pipelines" {
@@ -44,7 +44,7 @@ Describe "Functions: DevOps.Pipelines.Settings.Tests" {
             { 
                 Disconnect-AzDevOps
                 Export-AzDevOpsPipelinesSettings -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 

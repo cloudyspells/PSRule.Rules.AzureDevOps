@@ -98,16 +98,7 @@ Describe "Functions: Common.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsProjects
-            } | Should -Throw
-        }
-    }
-
-    Context " Get-AzDevOpsProjects without a connection" {
-        It " should throw an error" {
-            { 
-                Disconnect-AzDevOps
-                Get-AzDevOpsProjects
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 

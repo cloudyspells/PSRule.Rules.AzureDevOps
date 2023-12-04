@@ -9,7 +9,7 @@ Describe "Functions: DevOps.ServiceConnections.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsServiceConnections -Project $env:ADO_PROJECT
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -50,7 +50,7 @@ Describe "Functions: DevOps.ServiceConnections.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsServiceConnectionChecks -Project $env:ADO_PROJECT -ServiceConnectionId 1
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -103,7 +103,7 @@ Describe "Functions: DevOps.ServiceConnections.Tests" {
             { 
                 Disconnect-AzDevOps
                 Export-AzDevOpsServiceConnections -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 

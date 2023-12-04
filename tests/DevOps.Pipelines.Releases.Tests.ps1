@@ -9,7 +9,7 @@ Describe "Functions: DevOps.Pipelines.Releases.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsReleaseDefinitions -Project $env:ADO_PROJECT
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -73,7 +73,7 @@ Describe "Functions: DevOps.Pipelines.Releases.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsReleaseDefinitionAcls -Project $env:ADO_PROJECT -ReleaseDefinitionId 2 -Folder ''
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -139,7 +139,7 @@ Describe "Functions: DevOps.Pipelines.Releases.Tests" {
             { 
                 Disconnect-AzDevOps
                 Export-AzDevOpsReleaseDefinitions -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 

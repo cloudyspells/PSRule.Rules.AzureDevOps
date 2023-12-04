@@ -9,7 +9,7 @@ Describe "Functions: DevOps.Repos.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsRepos -Project $env:ADO_PROJECT
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -87,13 +87,20 @@ Describe "Functions: DevOps.Repos.Tests" {
     }
 
     Context " Get-AzDevOpsBranchPolicy with wrong parameters" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
+            $repository = $repos[0].id
+            $Branch = $repos[0].defaultBranch
+            Disconnect-AzDevOps
+        }
         It " should throw an error with a wrong PAT" {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT "wrong-pat"
             { Get-AzDevOpsBranchPolicy -Project $env:ADO_PROJECT -Repository $repository -Branch $Branch -ErrorAction Stop } | Should -Throw
         }
 
-        It " should throw a 404 error with a wrong project and organization" {
-            Connect-AzDevOps -Organization 'wrong-org' -PAT $env:ADO_PAT
+        It " should throw a 404 error with a wrong project" {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
             { Get-AzDevOpsBranchPolicy -Project "wrong-project" -Repository $repository -Branch $Branch -ErrorAction Stop } | Should -Throw
         }
     }
@@ -103,7 +110,7 @@ Describe "Functions: DevOps.Repos.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsRepositoryAcls -RepositoryId 7 -ProjectId "1fa185aa-ce58-4732-8700-8964802ea538"
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -166,8 +173,8 @@ Describe "Functions: DevOps.Repos.Tests" {
         It " should throw an error" {
             { 
                 Disconnect-AzDevOps
-                Test-AzDevOpsFileExists -RepositoryId 7 -Project $env:ADO_PROJECT -Path "README.md"
-            } | Should -Throw
+                Test-AzDevOpsFileExists -Repository psrule-fail-project  -Project $env:ADO_PROJECT -Path "README.md"
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -190,7 +197,7 @@ Describe "Functions: DevOps.Repos.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsRepositoryGhas -RepositoryId 7 -ProjectId "1fa185aa-ce58-4732-8700-8964802ea538"
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -243,8 +250,8 @@ Describe "Functions: DevOps.Repos.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsRepositoryPipelinePermissions -RepositoryId "befaaf13-3966-45c0-b481-6387e860d915" -ProjectId "1fa185aa-ce58-4732-8700-8964802ea538"
-            } | Should -Throw
-        }
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+        } 
     }
 
     Context ' Get-AzDevOpsRepositoryPipelinePermissions' {
@@ -286,7 +293,7 @@ Describe "Functions: DevOps.Repos.Tests" {
             { 
                 Disconnect-AzDevOps
                 Export-AzDevOpsReposAndBranchPolicies -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 

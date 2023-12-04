@@ -9,7 +9,7 @@ Describe "Functions: DevOps.Pipelines.Core.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsPipelines -Project $env:ADO_PROJECT
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
     Context " Get-AzDevOpsPipelines on a project with pipelines" {
@@ -72,7 +72,7 @@ Describe "Functions: DevOps.Pipelines.Core.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsPipelineAcls -PipelineId 7 -ProjectId "1fa185aa-ce58-4732-8700-8964802ea538"
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -139,7 +139,7 @@ Describe "Functions: DevOps.Pipelines.Core.Tests" {
             { 
                 Disconnect-AzDevOps
                 Get-AzDevOpsPipelineYaml -PipelineId 7 -Project $env:ADO_PROJECT
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -206,7 +206,7 @@ Describe "Functions: DevOps.Pipelines.Core.Tests" {
             { 
                 Disconnect-AzDevOps
                 Export-AzDevOpsPipelineYaml -PipelineId 7 -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR -PipelineName "psrule-success-project"
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
@@ -233,7 +233,7 @@ Describe "Functions: DevOps.Pipelines.Core.Tests" {
             { 
                 Disconnect-AzDevOps
                 Export-AzDevOpsPipelines -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
-            } | Should -Throw
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
