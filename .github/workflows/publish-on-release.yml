@@ -1,5 +1,4 @@
 # File: .github/workflows/qa.yml
-
 on:
   release:
     types:
@@ -20,7 +19,20 @@ jobs:
         run: |
           Install-Module -Name PSRule -Force -Scope CurrentUser -Repository PSGallery
 
-      - name: Update the module manifest
+      # Update the module manifest for preview-release
+      - name: Update the module manifest for preview-release
+        if: github.event.release.prerelease == true
+        shell: pwsh
+        run: |
+          # Update the module manifest with the version number in the release tag
+          $version = ($env:GITHUB_REF -replace 'refs/tags/v') split '-' | Select-Object -First 1
+          $prerelease = "-" + (($env:GITHUB_REF -replace 'refs/tags/v') split '-' | Select-Object -Last 1)
+          $path = './src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psd1'
+          Update-ModuleManifest -Path $path -ModuleVersion $version -ReleaseNotes "${{ github.event.release.body }}" -Prerelease $prerelease
+
+      # Update the module manifest for full-release
+      - name: Update the module manifest for full-release
+        if: github.event.release.prerelease == false
         shell: pwsh
         run: |
           # Update the module manifest with the version number in the release tag
@@ -28,7 +40,17 @@ jobs:
           $path = './src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psd1'
           Update-ModuleManifest -Path $path -ModuleVersion $version -ReleaseNotes "${{ github.event.release.body }}"
 
+      # Publish to PowerShell Gallery on pre-release
+      - name: Publish preview module
+        if: github.event.release.prerelease == true
+        shell: pwsh
+        id: publish-module-preview
+        run: |
+          Publish-Module -Path ./src/PSRule.Rules.AzureDevOps -NuGetApiKey ${{ secrets.PS_GALLERY_KEY }} -Repository PSGallery -AllowPrerelease
+
+      # Publish to PowerShell Gallery on full-release
       - name: Publish module
+        if: github.event.release.prerelease == false
         shell: pwsh
         id: publish-module
         run: |
