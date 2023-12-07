@@ -45,7 +45,8 @@ class AzureDevOpsConnection {
     )
     {
         $this.Organization = $Organization
-        $this.TokenEndpoint = "http://$($env:MSI_ENDPOINT)?resource=https://management.core.windows.net/"
+        # Get the Managed Identity token endpoint for the Azure DevOps REST API
+        $this.TokenEndpoint = "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=499b84ac-1321-427f-aa17-267ca6975798"
         $this.Token = $null
         $this.TokenExpires = [System.DateTime]::MinValue
 
