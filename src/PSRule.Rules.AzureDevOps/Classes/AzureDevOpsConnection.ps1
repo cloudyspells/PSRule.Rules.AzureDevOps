@@ -50,9 +50,9 @@ class AzureDevOpsConnection {
             $env:IDENTITY_ENDPOINT = "http://169.254.169.254/metadata/identity/oauth2/token"
         }
         if($env:ADO_MSI_CLIENT_ID) {
-            $this.TokenEndpoint = "$($env:IDENTITY_ENDPOINT)?api-version=2019-08-01&resource=499b84ac-1321-427f-aa17-267ca6975798&client_id=$($env:ADO_MSI_CLIENT_ID)"
+            $this.TokenEndpoint = "$($env:IDENTITY_ENDPOINT)?api-version=2019-08-01&resource=https://499b84ac-1321-427f-aa17-267ca6975798/.default&client_id=$($env:ADO_MSI_CLIENT_ID)"
         } else {
-            $this.TokenEndpoint = "$($env:IDENTITY_ENDPOINT)?api-version=2019-08-01&resource=499b84ac-1321-427f-aa17-267ca6975798"
+            $this.TokenEndpoint = "$($env:IDENTITY_ENDPOINT)?api-version=2019-08-01&resource=https://499b84ac-1321-427f-aa17-267ca6975798/.default"
         }
         $this.Token = $null
         $this.TokenExpires = [System.DateTime]::MinValue
@@ -102,16 +102,13 @@ class AzureDevOpsConnection {
     # Get a token for the Azure DevOps REST API using a managed identity
     [void]GetManagedIdentityToken()
     {
-        $body = @{
-            scope = '499b84ac-1321-427f-aa17-267ca6975798/.default'
-        }
         $header = @{
             Metadata = 'true'
         }
         If($env:IDENTITY_HEADER) {
             $header.Add('X-IDENTITY-HEADER', $env:IDENTITY_HEADER)
         }
-        $response = Invoke-RestMethod -Uri $this.TokenEndpoint -Method Get -Body $body -Headers $header
+        $response = Invoke-RestMethod -Uri $this.TokenEndpoint -Method Get -Headers $header
         $this.Token = "Bearer $($response.access_token)"
         $this.TokenExpires = [System.DateTime]::Now.AddSeconds($response.expires_in)
         $this.AuthType = 'ManagedIdentity'
