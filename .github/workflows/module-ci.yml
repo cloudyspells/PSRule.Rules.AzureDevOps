@@ -26,9 +26,9 @@ permissions:
 
 jobs:
   run-pester:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install PSRule
         run: |
@@ -73,7 +73,7 @@ jobs:
           ADO_TENANT_ID: ${{ secrets.ADO_TENANT_ID }}
 
       - name: Upload Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2.9.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
         with:
           files: |
             **/testresults.xml
