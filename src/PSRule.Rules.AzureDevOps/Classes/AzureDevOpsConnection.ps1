@@ -108,6 +108,9 @@ class AzureDevOpsConnection {
         $header = @{
             Metadata = 'true'
         }
+        If($env:IDENTITY_HEADER) {
+            $header.Add('X-IDENTITY-HEADER', $env:IDENTITY_HEADER)
+        }
         $response = Invoke-RestMethod -Uri $this.TokenEndpoint -Method Get -Body $body -Headers $header
         $this.Token = "Bearer $($response.access_token)"
         $this.TokenExpires = [System.DateTime]::Now.AddSeconds($response.expires_in)
