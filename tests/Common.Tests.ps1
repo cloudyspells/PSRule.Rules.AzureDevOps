@@ -59,28 +59,25 @@ Describe "Functions: Common.Tests" {
         }
     }
 
-    # Context " Connect-AzDevOps with a Managed Identity" {
-    #     BeforeAll {
-    #         Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -AuthType ManagedIdentity
-    #         $connection = $script:connection
-    #     }
+    Context " Connect-AzDevOps with a Managed Identity" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -AuthType ManagedIdentity
+            $connection = $script:connection
+        }
 
-    #     It " The connection should not be null" {
-    #         $connection | Should -Not -BeNullOrEmpty
-    #     }
+        It " The connection should not be null" {
+            $connection | Should -Not -BeNullOrEmpty
+        }
 
-    #     It " The connection should be of type AzureDevOpsConnection" {
-    #         $connection | Should -BeOfType [AzureDevOpsConnection]
-    #     }
+        It " The connection should have a token" {
+            $connection.Token | Should -Not -BeNullOrEmpty
+        }
 
-    #     It " The connection should have a token" {
-    #         $connection.Token | Should -Not -BeNullOrEmpty
-    #     }
-
-    #     It " The connection should have a token that expires in the future" {
-    #         $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
-    #     }
-    # }
+        It " The connection should have a token that expires in the future" {
+            $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
+        }
+    }
+    
     Context " Disconnect-AzDevOps" {
         BeforeAll {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
