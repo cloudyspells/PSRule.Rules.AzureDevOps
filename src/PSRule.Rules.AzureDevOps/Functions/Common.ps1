@@ -55,9 +55,6 @@ Function Connect-AzDevOps {
         [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
         [string]
         $TenantId,
-        [Parameter(ParameterSetName = 'ManagedIdentity')]
-        [switch]
-        $ManagedIdentity,
         [Parameter(ParameterSetName = 'PAT')]
         [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
         [Parameter(ParameterSetName = 'ManagedIdentity', Mandatory=$true)]
