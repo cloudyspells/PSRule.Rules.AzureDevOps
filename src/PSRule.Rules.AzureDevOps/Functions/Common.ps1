@@ -40,7 +40,9 @@ Function Connect-AzDevOps {
     [CmdletBinding()]
     [OutputType([AzureDevOpsConnection])]
     param (
-        [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'PAT', Mandatory=$true)]
+        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
+        [Parameter(ParameterSetName = 'ManagedIdentity', Mandatory=$true)]
         [string]
         $Organization,
         [Parameter(ParameterSetName = 'PAT')]
