@@ -51,9 +51,9 @@ class AzureDevOpsConnection {
         }
         Write-Host $env:IDENTITY_ENDPOINT
         if($env:ADO_MSI_CLIENT_ID) {
-            $this.TokenEndpoint = "$($env:IDENTITY_ENDPOINT)?resource=499b84ac-1321-427f-aa17-267ca6975798&api-version=2019-08-01" # &client_id=$($env:ADO_MSI_CLIENT_ID)"
+            $this.TokenEndpoint = "$($env:IDENTITY_ENDPOINT)?resource=https://499b84ac-1321-427f-aa17-267ca6975798/.default&api-version=2019-08-01" # &client_id=$($env:ADO_MSI_CLIENT_ID)"
         } else {
-            $this.TokenEndpoint = "$($env:IDENTITY_ENDPOINT)?resource=499b84ac-1321-427f-aa17-267ca6975798&api-version=2019-08-01"
+            $this.TokenEndpoint = "$($env:IDENTITY_ENDPOINT)?resource=https://499b84ac-1321-427f-aa17-267ca6975798/.default&api-version=2019-08-01"
         }
         $this.Token = $null
         $this.TokenExpires = [System.DateTime]::MinValue
