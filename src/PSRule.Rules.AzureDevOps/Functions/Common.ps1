@@ -40,9 +40,7 @@ Function Connect-AzDevOps {
     [CmdletBinding()]
     [OutputType([AzureDevOpsConnection])]
     param (
-        [Parameter(ParameterSetName = 'PAT', Mandatory=$true)]
-        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
-        [Parameter(ParameterSetName = 'ManagedIdentity', Mandatory=$true)]
+        [Parameter(Mandatory=$true)]
         [string]
         $Organization,
         [Parameter(ParameterSetName = 'PAT')]
@@ -57,9 +55,6 @@ Function Connect-AzDevOps {
         [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
         [string]
         $TenantId,
-        [Parameter(ParameterSetName = 'PAT')]
-        [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
-        [Parameter(ParameterSetName = 'ManagedIdentity', Mandatory=$true)]
         [ValidateSet('PAT', 'ServicePrincipal', 'ManagedIdentity')]
         [string]
         $AuthType = 'PAT'
