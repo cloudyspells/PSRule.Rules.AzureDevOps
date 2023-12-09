@@ -69,7 +69,7 @@ Describe "Functions: Common.Tests" {
         }
     }
 
-    Context " Connect-AzDevOps with a Managed Identity" {
+    Context " Connect-AzDevOps with a User Assigned Managed Identity" {
         BeforeAll {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -AuthType ManagedIdentity
             $connection = $script:connection
@@ -90,6 +90,26 @@ Describe "Functions: Common.Tests" {
         It " should run Get-AzDevOpsProjects" {
             $projects = Get-AzDevOpsProjects
             $projects | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context " Connect-AzDevOps with a System Assigned Managed Identity" {
+        BeforeAll {
+            Remove-Item Env:\ADO_MSI_CLIENT_ID
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -AuthType ManagedIdentity
+            $connection = $script:connection
+        }
+
+        It " The connection should not be null" {
+            $connection | Should -Not -BeNullOrEmpty
+        }
+
+        It " The connection should have a token" {
+            $connection.Token | Should -Not -BeNullOrEmpty
+        }
+
+        It " The connection should have a token that expires in the future" {
+            $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
         }
     }
     

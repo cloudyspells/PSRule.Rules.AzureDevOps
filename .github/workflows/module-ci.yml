@@ -53,7 +53,7 @@ jobs:
           $config.CodeCoverage.Enabled = $true
           $config.CodeCoverage.OutputPath = "$($env:GITHUB_WORKSPACE)\coverage.xml"
           $config.CodeCoverage.OutputFormat = 'JaCoCo'
-          $config.CodeCoverage.Path = "$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Functions"
+          $config.CodeCoverage.Path = "$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Functions","$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Classes"
           $config.Output.Verbosity = 'Detailed'
           $config.TestResult.Enabled = $true
           $config.TestResult.OutputFormat = 'NUnitXml'
@@ -72,9 +72,7 @@ jobs:
           ADO_CLIENT_ID: ${{ secrets.ADO_CLIENT_ID }}
           ADO_CLIENT_SECRET: ${{ secrets.ADO_CLIENT_SECRET }}
           ADO_TENANT_ID: ${{ secrets.ADO_TENANT_ID }}
-          # Uncomment the following line for User assigned MSI authentication
-          # otherwise the default system assigned MSI will be used
-          # ADO_MSI_CLIENT_ID: ${{ secrets.ADO_MSI_CLIENT_ID }}
+          ADO_MSI_CLIENT_ID: ${{ secrets.ADO_MSI_CLIENT_ID }}
 
       - name: Upload Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
