@@ -26,6 +26,11 @@ Describe "Functions: Common.Tests" {
         It " The connection should have a token that expires in the future" {
             $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
         }
+
+        It " should run Get-AzDevOpsProjects" {
+            $projects = Get-AzDevOpsProjects
+            $projects | Should -Not -BeNullOrEmpty
+        }
     }
 
     Context " Connect-AzDevOps with a Service Principal" {
@@ -48,6 +53,11 @@ Describe "Functions: Common.Tests" {
 
         It " The connection should have a token that expires in the future" {
             $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
+        }
+
+        It " should run Get-AzDevOpsProjects" {
+            $projects = Get-AzDevOpsProjects
+            $projects | Should -Not -BeNullOrEmpty
         }
     }
 
@@ -75,6 +85,11 @@ Describe "Functions: Common.Tests" {
 
         It " The connection should have a token that expires in the future" {
             $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
+        }
+
+        It " should run Get-AzDevOpsProjects" {
+            $projects = Get-AzDevOpsProjects
+            $projects | Should -Not -BeNullOrEmpty
         }
     }
     
