@@ -111,7 +111,7 @@ class AzureDevOpsConnection {
         Write-Host ($response | ConvertTo-Json -Depth 100)
         $this.Token = "Bearer $($response.access_token)"
         # Get token expiration time from the expires_on property and convert it from unix to a DateTime object
-        $this.TokenExpires = [System.DateTime]::FromFileTimeUtc($response.expires_on)
+        $this.TokenExpires = (Get-Date 01.01.1970).AddSeconds($response.expires_on)
         $this.AuthType = 'ManagedIdentity'
     }
 
