@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'src/PSRule.Rules.AzureDevOps/Functions/**'
+      - 'src/PSRule.Rules.AzureDevOps/Classes/**'
       - 'src/PSRule.Rules.AzureDevOps/rules/**'
       - 'src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psm1'
       - 'tests/**'

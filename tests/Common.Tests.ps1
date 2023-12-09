@@ -61,6 +61,31 @@ Describe "Functions: Common.Tests" {
         }
     }
 
+    Context " Connect-AzDevOps with a Service Principal and an expired token" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -ClientId $env:ADO_CLIENT_ID -ClientSecret $env:ADO_CLIENT_SECRET -TenantId $env:ADO_TENANT_ID -AuthType ServicePrincipal
+            $script:connection.TokenExpires = [System.DateTime]::MinValue
+            $projects = Get-AzDevOpsProjects
+            $connection = $script:connection
+        }
+
+        It " The connection should not be null" {
+            $connection | Should -Not -BeNullOrEmpty
+        }
+
+        It " The connection should have a token" {
+            $connection.Token | Should -Not -BeNullOrEmpty
+        }
+
+        It " The connection should have a token that expires in the future" {
+            $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
+        }
+
+        It " should run Get-AzDevOpsProjects" {
+            $projects | Should -Not -BeNullOrEmpty
+        }
+    }
+
     Context " Connect-AzDevOps with a Service Principal and a wrong secret" {
         It " The operation should fail with a wrong secret" {
             { 
@@ -89,6 +114,31 @@ Describe "Functions: Common.Tests" {
 
         It " should run Get-AzDevOpsProjects" {
             $projects = Get-AzDevOpsProjects
+            $projects | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context " Connect-AzDevOps with a User Assigned Managed Identity and an expired token" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -AuthType ManagedIdentity
+            $script:connection.TokenExpires = [System.DateTime]::MinValue
+            $projects = Get-AzDevOpsProjects
+            $connection = $script:connection
+        }
+
+        It " The connection should not be null" {
+            $connection | Should -Not -BeNullOrEmpty
+        }
+
+        It " The connection should have a token" {
+            $connection.Token | Should -Not -BeNullOrEmpty
+        }
+
+        It " The connection should have a token that expires in the future" {
+            $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
+        }
+
+        It " should run Get-AzDevOpsProjects" {
             $projects | Should -Not -BeNullOrEmpty
         }
     }
