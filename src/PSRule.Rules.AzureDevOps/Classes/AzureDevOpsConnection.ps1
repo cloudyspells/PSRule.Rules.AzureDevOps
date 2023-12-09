@@ -49,7 +49,6 @@ class AzureDevOpsConnection {
         if(-not $env:IDENTITY_ENDPOINT) {
             $env:IDENTITY_ENDPOINT = "http://169.254.169.254/metadata/identity/oauth2/token"
         }
-        Write-Host $env:IDENTITY_ENDPOINT
         if($env:ADO_MSI_CLIENT_ID) {
             $this.TokenEndpoint = "$($env:IDENTITY_ENDPOINT)?resource=499b84ac-1321-427f-aa17-267ca6975798&api-version=2019-08-01&client_id=$($env:ADO_MSI_CLIENT_ID)"
         } else {
@@ -108,7 +107,6 @@ class AzureDevOpsConnection {
             $header = @{ 'X-IDENTITY-HEADER' = "$env:IDENTITY_HEADER" }
         }
         $response = Invoke-RestMethod -Uri $this.TokenEndpoint -Method Get -Headers $header
-        Write-Host ($response | ConvertTo-Json -Depth 100)
         $this.Token = "Bearer $($response.access_token)"
         # Get token expiration time from the expires_on property and convert it from unix to a DateTime object
         $this.TokenExpires = (Get-Date 01.01.1970).AddSeconds($response.expires_on)
