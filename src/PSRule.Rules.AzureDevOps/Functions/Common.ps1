@@ -141,7 +141,6 @@ function Get-AzDevOpsProjects {
     }
     catch {
         Write-Error "Failed to get projects from Azure DevOps"
-        throw $_.Exception.Message
     }
     $projects = $response.value
     return @($projects)

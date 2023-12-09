@@ -98,6 +98,35 @@ Assert-PSRule `
     -Module PSRule.Rules.AzureDevOps
 ```
 
+#### Example: Run with a System Assigned Managed Identity
+
+```powershell
+Connect-AzDevOps `
+    -Organization "MyOrg" `
+    -AuthType ManagedIdentity
+Export-AzDevOpsRuleData `
+    -Project "MyProject" `
+    -OutputPath "C:\Temp\MyProject"
+Assert-PSRule `
+    -InputPath "C:\Temp\MyProject\" `
+    -Module PSRule.Rules.AzureDevOps
+```
+
+#### Example: Run with a User Assigned Managed Identity
+
+```powershell
+$env:ADO_MSI_CLIENT_ID = $MyClientId
+Connect-AzDevOps `
+    -Organization "MyOrg" `
+    -AuthType ManagedIdentity `
+Export-AzDevOpsRuleData `
+    -Project "MyProject" `
+    -OutputPath "C:\Temp\MyProject"
+Assert-PSRule `
+    -InputPath "C:\Temp\MyProject\" `
+    -Module PSRule.Rules.AzureDevOps
+```
+
 ![Screenshot of version 0.0.9 run](assets/media/run-0.0.9.png)
 
 ### Organization level export
@@ -108,8 +137,6 @@ in the organization the PAT has access to.
 
 ```powershell
 Export-AzDevOpsOrganizationRuleData `
-    -Organization "MyOrg" `
-    -PAT $MyPAT `
     -OutputPath "C:\Temp\MyOrg"
 ```
 
