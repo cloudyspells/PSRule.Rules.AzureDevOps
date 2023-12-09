@@ -50,6 +50,19 @@ Describe "Functions: DevOps.Repos.Tests" {
         }
     }
 
+    Context " Get-AzDevOpsBranchPolicy without a connection" {
+        It " should throw an error" {
+            { 
+                Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+                $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
+                $repository = $repos[1].id
+                $Branch = $repos[1].defaultBranch
+                Disconnect-AzDevOps
+                Get-AzDevOpsBranchPolicy -Project $env:ADO_PROJECT -Repository $repository -Branch $Branch
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+        }
+    }
+
     Context " Get-AzDevOpsBranchPolicy on a protected branch" {
         BeforeAll {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
