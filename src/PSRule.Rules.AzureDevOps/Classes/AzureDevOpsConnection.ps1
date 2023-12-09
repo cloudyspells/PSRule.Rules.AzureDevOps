@@ -95,6 +95,7 @@ class AzureDevOpsConnection {
         }
         # POST as form url encoded body using the token endpoint 
         $response = Invoke-RestMethod -Uri $this.TokenEndpoint -Method Post -Body $body -ContentType 'application/x-www-form-urlencoded' -Headers $header
+        Write-Host ($response | ConvertTo-Json -Depth 100)
         $this.Token = "Bearer $($response.access_token)"
         $this.TokenExpires = [System.DateTime]::Now.AddSeconds($response.expires_in)
         $this.AuthType = 'ServicePrincipal'
