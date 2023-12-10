@@ -137,6 +137,7 @@ Function Export-AzDevOpsReleaseDefinitions {
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
+    $TokenType = $script:connection.TokenType
     $Organization = $script:connection.Organization
     $definitions = Get-AzDevOpsReleaseDefinitions -Project $Project
     foreach ($definition in $definitions) {
