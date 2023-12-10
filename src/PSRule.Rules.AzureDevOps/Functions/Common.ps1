@@ -79,7 +79,7 @@ Function Connect-AzDevOps {
     }
     $script:connection = $connection
 }
-if($MyInvocation.PSCommandPath.EndsWith('.psm1') -or $MyInvocation.PSCommandPath.EndsWith('.psd1')) {
+if(($MyInvocation.PSCommandPath -match '.psm1$') -or ($MyInvocation.PSCommandPath -match '.psd1')) {
     Export-ModuleMember -Function Connect-AzDevOps
 }
 
@@ -104,7 +104,7 @@ Function Disconnect-AzDevOps {
     $script:connection = ""
     $script:connection = $null
 }
-if($MyInvocation.PSCommandPath.EndsWith('.psm1') -or $MyInvocation.PSCommandPath.EndsWith('.psd1')) {
+if(($MyInvocation.PSCommandPath -match '.psm1$') -or ($MyInvocation.PSCommandPath -match '.psd1')) {
     Export-ModuleMember -Function Disconnect-AzDevOps
 }
 # End of Function Disconnect-AzDevOps
@@ -144,7 +144,7 @@ function Get-AzDevOpsProjects {
     $projects = $response.value
     return @($projects)
 }
-if($MyInvocation.PSCommandPath.EndsWith('.psm1') -or $MyInvocation.PSCommandPath.EndsWith('.psd1')) {
+if(($MyInvocation.PSCommandPath -match '.psm1$') -or ($MyInvocation.PSCommandPath -match '.psd1')) {
     Export-ModuleMember -Function Get-AzDevOpsProjects
 }
 # End of Function Get-AzDevOpsProjects
