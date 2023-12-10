@@ -25,8 +25,8 @@ jobs:
         shell: pwsh
         run: |
           # Update the module manifest with the version number in the release tag
-          $version = ($env:GITHUB_REF -replace 'refs/tags/v') split '-' | Select-Object -First 1
-          $prerelease = "-" + (($env:GITHUB_REF -replace 'refs/tags/v') split '-' | Select-Object -Last 1)
+          $version = ($env:GITHUB_REF -replace 'refs/tags/v','') -split '-' | Select-Object -First 1
+          $prerelease = "-" + (($env:GITHUB_REF -replace 'refs/tags/v') -split '-' | Select-Object -Last 1)
           $path = './src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psd1'
           Update-ModuleManifest -Path $path -ModuleVersion $version -ReleaseNotes "${{ github.event.release.body }}" -Prerelease $prerelease
 
