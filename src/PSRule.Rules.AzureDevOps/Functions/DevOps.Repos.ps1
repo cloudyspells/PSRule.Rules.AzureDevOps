@@ -364,7 +364,7 @@ function Export-AzDevOpsReposAndBranchPolicies {
     }
     $Organization = $script:connection.Organization
     $TokenType = $script:connection.TokenType    
-    $repos = Get-AzDevOpsRepos -TokenType $TokenType -Project $Project
+    $repos = Get-AzDevOpsRepos -Project $Project
     $repos | ForEach-Object {
         if ($null -ne $_) {
             $repo = $_

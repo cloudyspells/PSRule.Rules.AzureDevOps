@@ -148,9 +148,11 @@ Describe "Functions: Azure.DevOps.Pipelines.Environments.Tests" {
 
     Context " Get-AzDevOpsEnvironmentChecks with a ReadOnly token" {
         BeforeAll {
-            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
             $environments = Get-AzDevOpsEnvironments -Project $env:ADO_PROJECT
             $environmentId = $environments[1].id
+            Disconnect-AzDevOps
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
             $environmentChecks = Get-AzDevOpsEnvironmentChecks -Project $env:ADO_PROJECT -Environment $environmentId -WarningVariable warning
         }
 
