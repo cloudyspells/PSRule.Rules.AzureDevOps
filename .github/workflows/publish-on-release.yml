@@ -46,7 +46,7 @@ jobs:
         shell: pwsh
         id: publish-module-preview
         run: |
-          Publish-Module -Path ./src/PSRule.Rules.AzureDevOps -NuGetApiKey ${{ secrets.PS_GALLERY_KEY }} -Repository PSGallery -AllowPrerelease
+          Publish-Module -Path ./src/PSRule.Rules.AzureDevOps -NuGetApiKey ${{ secrets.PS_GALLERY_KEY }} -Repository PSGallery
 
       # Publish to PowerShell Gallery on full-release
       - name: Publish module
