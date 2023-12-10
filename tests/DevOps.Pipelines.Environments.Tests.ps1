@@ -66,8 +66,8 @@ Describe "Functions: Azure.DevOps.Pipelines.Environments.Tests" {
 
     Context " Get-AzDevOpsEnvironments with a ReadOnly token" {
         BeforeAll {
-            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY
-            $environments = Get-AzDevOpsEnvironments -Project $env:ADO_PROJECT -TokenType ReadOnly -WarningVariable warning
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
+            $environments = Get-AzDevOpsEnvironments -Project $env:ADO_PROJECT -WarningVariable warning
         }
 
         It " should return null or empty list of environments" {
@@ -148,10 +148,10 @@ Describe "Functions: Azure.DevOps.Pipelines.Environments.Tests" {
 
     Context " Get-AzDevOpsEnvironmentChecks with a ReadOnly token" {
         BeforeAll {
-            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
             $environments = Get-AzDevOpsEnvironments -Project $env:ADO_PROJECT
             $environmentId = $environments[1].id
-            $environmentChecks = Get-AzDevOpsEnvironmentChecks -Project $env:ADO_PROJECT -Environment $environmentId -WarningVariable warning -TokenType ReadOnly
+            $environmentChecks = Get-AzDevOpsEnvironmentChecks -Project $env:ADO_PROJECT -Environment $environmentId -WarningVariable warning
         }
 
         It " should return null or empty list of environment checks" {

@@ -23,6 +23,9 @@
     .PARAMETER AuthType
     Authentication type for Azure DevOps (PAT, ServicePrincipal, ManagedIdentity)
 
+    .PARAMETER TokenType
+    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
+
     .EXAMPLE
     Connect-AzDevOps -Organization $Organization -PAT $PAT
 
@@ -57,17 +60,21 @@ Function Connect-AzDevOps {
         $TenantId,
         [ValidateSet('PAT', 'ServicePrincipal', 'ManagedIdentity')]
         [string]
-        $AuthType = 'PAT'
+        $AuthType = 'PAT',
+        [Parameter()]
+        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
+        [string]
+        $TokenType = 'FullAccess'
     )
     switch ($AuthType) {
         'PAT' {
-            $connection = [AzureDevOpsConnection]::new($Organization, $PAT)
+            $connection = [AzureDevOpsConnection]::new($Organization, $PAT, $TokenType)
         }
         'ServicePrincipal' {
-            $connection = [AzureDevOpsConnection]::new($Organization, $ClientId, $ClientSecret, $TenantId)
+            $connection = [AzureDevOpsConnection]::new($Organization, $ClientId, $ClientSecret, $TenantId, $TokenType)
         }
         'ManagedIdentity' {
-            $connection = [AzureDevOpsConnection]::new($Organization)
+            $connection = [AzureDevOpsConnection]::new($Organization, $TokenType)
         }
     }
     $script:connection = $connection
@@ -109,21 +116,13 @@ if($MyInvocation.PSCommandPath.EndsWith('.psm1') -or $MyInvocation.PSCommandPath
     .DESCRIPTION
     Get all Azure DevOps projects for an organization using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
-
     .EXAMPLE
-    Get-AzDevOpsProjects -TokenType FullAccess
+    Get-AzDevOpsProjects
 #>
 function Get-AzDevOpsProjects {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
-    param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess'
-    )
+    param ()
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }

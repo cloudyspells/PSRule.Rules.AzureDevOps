@@ -116,9 +116,9 @@ Describe "Functions: DevOps.Pipelines.Releases.Tests" {
 
     Context " Get-AzDevOpsReleaseDefinitionAcls with a ReadOnly Token" {
         BeforeAll {
-            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
             $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
-            $releaseDefinitionAcls = Get-AzDevOpsReleaseDefinitionAcls -ProjectId $ProjectId -ReleaseDefinitionId 2 -Folder '' -WarningVariable warning -TokenType ReadOnly
+            $releaseDefinitionAcls = Get-AzDevOpsReleaseDefinitionAcls -ProjectId $ProjectId -ReleaseDefinitionId 2 -Folder '' -WarningVariable warning
         }
 
         It " should return null or empty list of release definition acls" {

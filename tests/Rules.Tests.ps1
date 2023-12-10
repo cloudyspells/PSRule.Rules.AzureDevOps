@@ -33,8 +33,8 @@ BeforeAll {
     $outPathReadOnly = $outPathReadOnly.FullName;
 
     # Export all Azure DevOps rule data for project 'psrule-fail-project' to ReadOnly output folder
-    Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY
-    Export-AzDevOpsRuleData -TokenType ReadOnly -Project $env:ADO_PROJECT -OutputPath $outPathReadOnly
+    Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
+    Export-AzDevOpsRuleData -Project $env:ADO_PROJECT -OutputPath $outPathReadOnly
     $ruleResultReadOnly = Invoke-PSRule -InputPath "$($outPathReadOnly)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en
 
     # Create a temporary test output folder for tests with the FineGrained TokenType
@@ -42,8 +42,8 @@ BeforeAll {
     $outPathFineGrained = $outPathFineGrained.FullName;
 
     # Export all Azure DevOps rule data for project 'psrule-fail-project' to FineGrained output folder
-    Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_FINEGRAINED
-    Export-AzDevOpsRuleData -TokenType FineGrained -Project $env:ADO_PROJECT -OutputPath $outPathFineGrained
+    Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_FINEGRAINED -TokenType FineGrained
+    Export-AzDevOpsRuleData -Project $env:ADO_PROJECT -OutputPath $outPathFineGrained
     $ruleResultFineGrained = Invoke-PSRule -InputPath "$($outPathFineGrained)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en
 }
 

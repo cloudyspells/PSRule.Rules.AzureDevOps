@@ -60,9 +60,6 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
     .DESCRIPTION
     Run all JSON export functions for Azure DevOps using Azure DevOps Rest API and this modules functions for analysis by PSRule
 
-    .PARAMETER TokenType
-    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -75,10 +72,6 @@ $MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
 Function Export-AzDevOpsRuleData {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,
@@ -86,13 +79,13 @@ Function Export-AzDevOpsRuleData {
         [string]
         $OutputPath
     )
-    Export-AzDevOpsReposAndBranchPolicies -TokenType $TokenType -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsEnvironmentChecks -TokenType $TokenType -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsServiceConnections -TokenType $TokenType -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsPipelines -TokenType $TokenType -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsPipelinesSettings -TokenType $TokenType -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsVariableGroups -TokenType $TokenType -Project $Project -OutputPath $OutputPath
-    Export-AzDevOpsReleaseDefinitions -TokenType $TokenType -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsReposAndBranchPolicies -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsEnvironmentChecks -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsServiceConnections -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsPipelines -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsPipelinesSettings -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsVariableGroups -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsReleaseDefinitions -Project $Project -OutputPath $OutputPath
 }
 Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProjectRuleData
 # End of Function Export-AzDevOpsRuleData
@@ -104,9 +97,6 @@ Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProj
     .DESCRIPTION
     Export rule data for all projects in the DevOps organization using Azure DevOps Rest API and this modules functions for analysis by PSRule
 
-    .PARAMETER TokenType
-    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
-
     .PARAMETER OutputPath
     Output path for JSON files
 
@@ -116,15 +106,11 @@ Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProj
 Function Export-AzDevOpsOrganizationRuleData {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $OutputPath
     )
-    $projects = Get-AzDevOpsProjects -TokenType $TokenType
+    $projects = Get-AzDevOpsProjects
     $projects | ForEach-Object {
         $project = $_
         # Create a subfolder for each project
@@ -132,7 +118,7 @@ Function Export-AzDevOpsOrganizationRuleData {
         if(!(Test-Path -Path $subPath)) {
             New-Item -Path $subPath -ItemType Directory
         }
-        Export-AzDevOpsRuleData -TokenType $TokenType -Project $project.name -OutputPath $subPath
+        Export-AzDevOpsRuleData -Project $project.name -OutputPath $subPath
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsOrganizationRuleData

@@ -5,9 +5,6 @@
     .DESCRIPTION
     Get the projects's pipelines settings from Azure DevOps
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER ProjectId
     Project ID for Azure DevOps
 
@@ -17,10 +14,6 @@
 Function Get-AzDevOpsPipelinesSettings {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project
@@ -54,9 +47,6 @@ Export-ModuleMember -Function Get-AzDevOpsPipelinesSettings
     .DESCRIPTION
     Export the projects's pipelines settings from Azure DevOps to a JSON file with .ado.pls.json extension
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -69,10 +59,6 @@ Export-ModuleMember -Function Get-AzDevOpsPipelinesSettings
 function Export-AzDevOpsPipelinesSettings {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,

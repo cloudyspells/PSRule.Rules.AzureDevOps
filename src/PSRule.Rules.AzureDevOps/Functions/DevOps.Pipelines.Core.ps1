@@ -7,9 +7,6 @@
     .DESCRIPTION
     Get all Azure Pipelines definitions from Azure DevOps project using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -19,10 +16,6 @@
 function Get-AzDevOpsPipelines {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory=$true)]
         [string]
         $Project
@@ -67,9 +60,6 @@ Export-ModuleMember -Function Get-AzDevOpsPipelines
     .DESCRIPTION
     Get Azure DevOps pipeline ACLs using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER ProjectId
     Project ID for Azure DevOps
 
@@ -82,10 +72,6 @@ Export-ModuleMember -Function Get-AzDevOpsPipelines
 function Get-AzDevOpsPipelineAcls {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory=$true)]
         [string]
         $ProjectId,
@@ -96,6 +82,7 @@ function Get-AzDevOpsPipelineAcls {
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
+    $TokenType = $script:connection.TokenType
     $Organization = $script:connection.Organization
     # If Token Type is ReadOnly, write a warning and exit the function returning null
     if ($TokenType -eq 'ReadOnly') {
@@ -130,9 +117,6 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineAcls
     .DESCRIPTION
     Get YAML definition for Pipeline using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -145,10 +129,6 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineAcls
 function Get-AzDevOpsPipelineYaml {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory=$true)]
         [string]
         $Project,
@@ -214,9 +194,6 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineYaml
     .DESCRIPTION
     Export YAML definition for Pipeline using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -232,10 +209,6 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineYaml
 function Export-AzDevOpsPipelineYaml {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,
@@ -275,9 +248,6 @@ Export-ModuleMember -Function Export-AzDevOpsPipelineYaml
     .DESCRIPTION
     Export all the pipelines to a separate JSON file per pipeline
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -290,10 +260,6 @@ Export-ModuleMember -Function Export-AzDevOpsPipelineYaml
 function Export-AzDevOpsPipelines {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,
@@ -304,8 +270,9 @@ function Export-AzDevOpsPipelines {
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
+    $TokenType = $script:connection.TokenType
     Write-Verbose "Getting pipelines from Azure DevOps"
-    $pipelines = Get-AzDevOpsPipelines -TokenType $TokenType -Project $Project
+    $pipelines = Get-AzDevOpsPipelines -Project $Project
     # Loop through all pipelines
     foreach ($pipeline in $pipelines) {
         # Add ObjectType Azure.DevOps.Pipeline to the pipeline object
@@ -326,7 +293,7 @@ function Export-AzDevOpsPipelines {
         if ($pipeline.configuration.type -eq 'yaml' -and $pipeline.configuration.repository.type -eq 'azureReposGit') {
             Write-Verbose "Pipeline $($pipeline.name) is a YAML pipeline"
             Write-Verbose "Getting YAML definition for pipeline $($pipeline.name)"           
-            Export-AzDevOpsPipelineYaml -TokenType $TokenType -Project $Project -PipelineId $pipeline.id -PipelineName $pipeline.name -OutputPath $OutputPath
+            Export-AzDevOpsPipelineYaml -Project $Project -PipelineId $pipeline.id -PipelineName $pipeline.name -OutputPath $OutputPath
 
         }
         

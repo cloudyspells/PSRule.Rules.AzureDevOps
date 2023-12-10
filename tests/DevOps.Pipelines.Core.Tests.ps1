@@ -115,10 +115,10 @@ Describe "Functions: DevOps.Pipelines.Core.Tests" {
 
     Context " Get-AzDevOpsPipelineAcls with a ReadOnly PAT" {
         BeforeAll {
-            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
             $pipelineId = 7
             $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
-            $pipelineAcls = Get-AzDevOpsPipelineAcls -TokenType ReadOnly -PipelineId $PipelineId -ProjectId $ProjectId -WarningVariable warning
+            $pipelineAcls = Get-AzDevOpsPipelineAcls -PipelineId $PipelineId -ProjectId $ProjectId -WarningVariable warning
         }
 
         It " should return a warning" {

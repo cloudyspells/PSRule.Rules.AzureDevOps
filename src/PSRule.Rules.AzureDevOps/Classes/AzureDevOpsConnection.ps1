@@ -17,6 +17,7 @@ class AzureDevOpsConnection {
     [string]$Token
     [System.DateTime]$TokenExpires
     [string]$AuthType
+    [string]$TokenType
     
 
     # Constructor for Service Principal
@@ -24,7 +25,9 @@ class AzureDevOpsConnection {
         [string]$Organization,
         [string]$ClientId,
         [string]$ClientSecret,
-        [string]$TenantId
+        [string]$TenantId,
+        [string]$TokenType = 'FullAccess'
+
     )
     {
         $this.Organization = $Organization
@@ -34,6 +37,7 @@ class AzureDevOpsConnection {
         $this.TokenEndpoint = "https://login.microsoftonline.com/$($this.TenantId)/oauth2/v2.0/token"
         $this.Token = $null
         $this.TokenExpires = [System.DateTime]::MinValue
+        $this.TokenType = $TokenType
 
         # Get a token for the Azure DevOps REST API
         $this.GetServicePrincipalToken()
@@ -41,7 +45,8 @@ class AzureDevOpsConnection {
 
     # Constructor for Managed Identity
     AzureDevOpsConnection(
-        [string]$Organization
+        [string]$Organization,
+        [string]$TokenType = 'FullAccess'
     )
     {
         $this.Organization = $Organization
@@ -56,6 +61,7 @@ class AzureDevOpsConnection {
         }
         $this.Token = $null
         $this.TokenExpires = [System.DateTime]::MinValue
+        $this.TokenType = $TokenType
 
         # Get a token for the Azure DevOps REST API
         $this.GetManagedIdentityToken()
@@ -64,13 +70,15 @@ class AzureDevOpsConnection {
     # Constructor for Personal Access Token (PAT)
     AzureDevOpsConnection(
         [string]$Organization,
-        [string]$PAT
+        [string]$PAT,
+        [string]$TokenType = 'FullAccess'
     )
     {
         $this.Organization = $Organization
         $this.PAT = $PAT
         $this.Token = $null
         $this.TokenExpires = [System.DateTime]::MaxValue
+        $this.TokenType = $TokenType
 
         # Get a token for the Azure DevOps REST API
         $this.GetPATToken()

@@ -8,9 +8,6 @@
     .PARAMETER Project
     The name of the Azure DevOps project.
 
-    .PARAMETER TokenType
-    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
-
     .EXAMPLE
     Get-AzDevOpsVariableGroups -Project 'myproject'
 #>
@@ -18,12 +15,7 @@ Function Get-AzDevOpsVariableGroups {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)]
-        [string]$Project,
-
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess'
+        [string]$Project
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -77,11 +69,6 @@ Function Export-AzDevOpsVariableGroups {
         [string]
         $Project,
 
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-
         [Parameter(Mandatory)]
         [string]
         $OutputPath
@@ -90,7 +77,7 @@ Function Export-AzDevOpsVariableGroups {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
     $Organization = $script:connection.Organization
-    $variableGroups = Get-AzDevOpsVariableGroups -Project $Project -TokenType $TokenType
+    $variableGroups = Get-AzDevOpsVariableGroups -Project $Project
     $variableGroups | ForEach-Object {
         $variableGroup = $_
         $variableGroup | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Tasks.VariableGroup'

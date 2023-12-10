@@ -8,20 +8,12 @@
     .PARAMETER Project
     The name of the Azure DevOps project.
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .EXAMPLE
     Get-AzDevOpsReleaseDefinitions -Project 'myproject'
 #>
 Function Get-AzDevOpsReleaseDefinitions {
     [CmdletBinding()]
     Param(
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        
         [Parameter(Mandatory)]
         [string]$Project
     )
@@ -63,9 +55,6 @@ Export-ModuleMember -Function Get-AzDevOpsReleaseDefinitions
     .PARAMETER ReleaseDefinitionId
     The ID of the release definition.
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Folder
     The folder where the release definition is located.
 
@@ -75,11 +64,6 @@ Export-ModuleMember -Function Get-AzDevOpsReleaseDefinitions
 Function Get-AzDevOpsReleaseDefinitionAcls {
     [CmdletBinding()]
     Param(
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-    
         [Parameter(Mandatory)]
         [string]$ProjectId,
 
@@ -92,6 +76,7 @@ Function Get-AzDevOpsReleaseDefinitionAcls {
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
+    $TokenType = $script:connection.TokenType
     $Organization = $script:connection.Organization
     # IF token type is ReadOnly, write a warning and exit the function returing null
     if ($TokenType -eq 'ReadOnly') {
@@ -134,9 +119,6 @@ Export-ModuleMember -Function Get-AzDevOpsReleaseDefinitionAcls
     .PARAMETER Project
     The name of the Azure DevOps project.
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER OutputPath
     The path to the directory where the JSON files will be exported.
 
@@ -146,11 +128,6 @@ Export-ModuleMember -Function Get-AzDevOpsReleaseDefinitionAcls
 Function Export-AzDevOpsReleaseDefinitions {
     [CmdletBinding()]
     Param(
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-    
         [Parameter(Mandatory)]
         [string]$Project,
 
@@ -161,7 +138,7 @@ Function Export-AzDevOpsReleaseDefinitions {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
     $Organization = $script:connection.Organization
-    $definitions = Get-AzDevOpsReleaseDefinitions -Project $Project -TokenType $TokenType
+    $definitions = Get-AzDevOpsReleaseDefinitions -Project $Project
     foreach ($definition in $definitions) {
         if ($null -ne $definition.id) {
             $definitionId = $definition.id

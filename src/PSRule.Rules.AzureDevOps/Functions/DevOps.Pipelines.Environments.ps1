@@ -5,9 +5,6 @@
     .DESCRIPTION
     Get all Azure Pipelines environments named from Azure DevOps project using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -17,10 +14,6 @@
 function Get-AzDevOpsEnvironments {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project
@@ -28,6 +21,7 @@ function Get-AzDevOpsEnvironments {
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
+    $TokenType = $script:connection.TokenType
     # If token type is ReadOnly, write a warning and exit the function returing null
     if($TokenType -eq 'ReadOnly') {
         Write-Warning "Token type ReadOnly does not have access to Azure DevOps Pipelines Environments"
@@ -62,9 +56,6 @@ Export-ModuleMember -Function Get-AzDevOpsEnvironments
     .DESCRIPTION
     Get all checks for an Azure Pipelines environment using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-    
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -83,10 +74,6 @@ Export-ModuleMember -Function Get-AzDevOpsEnvironments
 function Get-AzDevOpsEnvironmentChecks {
     [CmdletBinding()]
     param (
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,
@@ -97,6 +84,7 @@ function Get-AzDevOpsEnvironmentChecks {
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
+    $TokenType = $script:connection.TokenType
     # If token type is ReadOnly, write a warning and exit the function returing null
     if($TokenType -eq 'ReadOnly') {
         Write-Warning "Token type ReadOnly does not have access to Azure DevOps Pipelines Environments"
@@ -135,9 +123,6 @@ Export-ModuleMember -Function Get-AzDevOpsEnvironmentChecks
     .DESCRIPTION
     Export all Azure Pipelines environments to JSON files with their checks as nested objects using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -148,10 +133,6 @@ function Export-AzDevOpsEnvironmentChecks {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,
@@ -160,18 +141,22 @@ function Export-AzDevOpsEnvironmentChecks {
         $OutputPath
 
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $TokenType = $script:connection.TokenType
     # If token type is ReadOnly, write a warning and exit the function returing null
     if($TokenType -eq 'ReadOnly') {
         Write-Warning "Token type ReadOnly does not have access to Azure DevOps Pipelines Environments"
         return $null
     } else {
-        $environments = Get-AzDevOpsEnvironments -TokenType $TokenType -Project $Project
+        $environments = Get-AzDevOpsEnvironments -Project $Project
         $environments | ForEach-Object {
             if($null -ne $_) {
                 $environment = $_
                 # Add a ObjectType indicator for Azure.DevOps.Pipelines.Environment
                 $environment | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Pipelines.Environment'
-                $checks = @(Get-AzDevOpsEnvironmentChecks -TokenType $TokenType -Project $Project -Environment $environment.id)
+                $checks = @(Get-AzDevOpsEnvironmentChecks -Project $Project -Environment $environment.id)
                 $environment | Add-Member -MemberType NoteProperty -Name checks -Value $checks
                 Write-Verbose "Exporting environment $($environment.name) to JSON"
                 Write-Verbose "Output file: $OutputPath\$($environment.name).ado.env.json"

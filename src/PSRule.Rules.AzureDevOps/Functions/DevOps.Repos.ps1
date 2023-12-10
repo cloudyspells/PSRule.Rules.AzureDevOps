@@ -5,9 +5,6 @@
     .DESCRIPTION
     Get all repos from Azure DevOps project using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -18,10 +15,6 @@ Function Get-AzDevOpsRepos {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project
@@ -56,9 +49,6 @@ Export-ModuleMember -Function Get-AzDevOpsRepos
     .DESCRIPTION
     Get Azure DevOps branch policy for a branch in a repo using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -78,10 +68,6 @@ Function Get-AzDevOpsBranchPolicy {
     [CmdletBinding()]
     [OutputType([object[]])]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,
@@ -125,9 +111,6 @@ Export-ModuleMember -Function Get-AzDevOpsBranchPolicy
     .DESCRIPTION
     Get Repository pipeline permissions for a repo using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER ProjectId
     Project ID for Azure DevOps project
 
@@ -141,10 +124,6 @@ Function Get-AzDevOpsRepositoryPipelinePermissions {
     [CmdletBinding()]
     [OutputType([object[]])]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $ProjectId,
@@ -180,9 +159,6 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryPipelinePermissions
     .DESCRIPTION
     Get Azure DevOps repos ACLs using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER ProjectId
     Project ID for Azure DevOps project
 
@@ -196,10 +172,6 @@ Function Get-AzDevOpsRepositoryAcls {
     [CmdletBinding()]
     [OutputType([object[]])]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $ProjectId,
@@ -211,7 +183,7 @@ Function Get-AzDevOpsRepositoryAcls {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
     $Organization = $script:connection.Organization
-
+    $TokenType = $script:connection.TokenType
     # If the token type is ReadOnly, write a warning and return null
     if ($TokenType -eq "ReadOnly") {
         Write-Warning "The ReadOnly token type does not have access to the Repositories ACLs API, returning null"
@@ -243,9 +215,6 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryAcls
     .DESCRIPTION
     Check the existance of a file in an Azure DevOps repo using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -265,10 +234,6 @@ function Test-AzDevOpsFileExists {
     [CmdletBinding()]
     [OutputType([bool])]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,
@@ -305,9 +270,6 @@ Export-ModuleMember -Function Test-AzDevOpsFileExists
     .DESCRIPTION
     Get GitHub Advanced Security (GHAS) data for a repository using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER ProjectId
     Project ID for Azure DevOps
 
@@ -321,10 +283,6 @@ Function Get-AzDevOpsRepositoryGhas {
     [CmdletBinding()]
     [OutputType([object])]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $ProjectId,
@@ -335,6 +293,7 @@ Function Get-AzDevOpsRepositoryGhas {
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
+    $TokenType = $script:connection.TokenType
     $Organization = $script:connection.Organization
     # token is not FullAccess, write a warning and return null
     if ($TokenType -ne "FullAccess") {
@@ -378,9 +337,6 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryGhas
     .DESCRIPTION
     Get and export all Azure DevOps repos in a project with default, main and master branches and branch policies and export to JSON using Azure DevOps Rest API and this modules functions
 
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -396,10 +352,6 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryGhas
 function Export-AzDevOpsReposAndBranchPolicies {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,
@@ -411,7 +363,7 @@ function Export-AzDevOpsReposAndBranchPolicies {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
     $Organization = $script:connection.Organization
-    
+    $TokenType = $script:connection.TokenType    
     $repos = Get-AzDevOpsRepos -TokenType $TokenType -Project $Project
     $repos | ForEach-Object {
         if ($null -ne $_) {
@@ -420,32 +372,32 @@ function Export-AzDevOpsReposAndBranchPolicies {
             $repo | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo"
             Write-Verbose "Getting branch policy for repo $($repo.name)"
             If($repo.defaultBranch) {
-                $branchPolicy = Get-AzDevOpsBranchPolicy -TokenType $TokenType -Project $Project -Repository $repo.id -Branch $repo.defaultBranch
+                $branchPolicy = Get-AzDevOpsBranchPolicy -Project $Project -Repository $repo.id -Branch $repo.defaultBranch
             }
             $repo | Add-Member -MemberType NoteProperty -Name MainBranchPolicy -Value $branchPolicy
             # Add a property indicating if a file named README.md or README exists in the repo
-            $readmeExists = ((Test-AzDevOpsFileExists -TokenType $TokenType -Project $Project -Repository $repo.id -Path "README.md") -or (Test-AzDevOpsFileExists -TokenType $TokenType -Project $Project -Repository $repo.id -Path "README"))
+            $readmeExists = ((Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "README.md") -or (Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "README"))
             $repo | Add-Member -MemberType NoteProperty -Name ReadmeExists -Value $readmeExists
 
             # Add a property indicating if a file named LICENSE or LICENSE.md exists in the repo
-            $licenseExists = ((Test-AzDevOpsFileExists -TokenType $TokenType -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -TokenType $TokenType -Project $Project -Repository $repo.id -Path "LICENSE.md"))
+            $licenseExists = ((Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "LICENSE.md"))
             $repo | Add-Member -MemberType NoteProperty -Name LicenseExists -Value $licenseExists
 
             # Add a property for GitHub Advanced Security (GHAS) data if the token type is FullAccess
             if ($TokenType -eq "FullAccess") {
-                $ghas = Get-AzDevOpsRepositoryGhas -TokenType $TokenType -ProjectId $repo.project.id -RepositoryId $repo.id
+                $ghas = Get-AzDevOpsRepositoryGhas -ProjectId $repo.project.id -RepositoryId $repo.id
                 $repo | Add-Member -MemberType NoteProperty -Name Ghas -Value $ghas
             } else {
                 Write-Warning "The $TokenType token type does not have access to the GHAS API, returning null"
             }
             
             # Add a property with pipeline permissions
-            $pipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -TokenType $TokenType -ProjectId $repo.project.id -RepositoryId $repo.id
+            $pipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -ProjectId $repo.project.id -RepositoryId $repo.id
             $repo | Add-Member -MemberType NoteProperty -Name PipelinePermissions -Value $pipelinePermissions
 
             # Add a property with repo ACLs if the token type is not ReadOnly
             if ($TokenType -ne "ReadOnly") {
-                $repoAcls = Get-AzDevOpsRepositoryAcls -TokenType $TokenType -ProjectId $repo.project.id -RepositoryId $repo.id
+                $repoAcls = Get-AzDevOpsRepositoryAcls -ProjectId $repo.project.id -RepositoryId $repo.id
                 $repo | Add-Member -MemberType NoteProperty -Name Acls -Value $repoAcls
             }
             

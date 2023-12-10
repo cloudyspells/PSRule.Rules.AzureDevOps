@@ -5,9 +5,6 @@
     .DESCRIPTION
     Get all Azure Resource Manager service connections from Azure DevOps project using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -17,10 +14,6 @@
 function Get-AzDevOpsServiceConnections {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project
@@ -55,9 +48,6 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnections
     .DESCRIPTION
     Get all Checks for service connections from Azure DevOps project using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -73,10 +63,6 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnections
 function Get-AzDevOpsServiceConnectionChecks {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,
@@ -112,9 +98,6 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnectionChecks
     .DESCRIPTION
     Export all Azure Resource Manager service connections from Azure DevOps project with checks as nested objects using Azure DevOps Rest API
 
-    .PARAMETER TokenType
-    Token type for Azure DevOps (FullAccess, FineGrained, ReadOnly)
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -130,10 +113,6 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnectionChecks
 function Export-AzDevOpsServiceConnections {
     [CmdletBinding()]
     param (
-        [Parameter()]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
         [Parameter(Mandatory)]
         [string]
         $Project,

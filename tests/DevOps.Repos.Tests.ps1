@@ -166,11 +166,11 @@ Describe "Functions: DevOps.Repos.Tests" {
 
     Context " Get-AzDevOpsRepositoryAcls with a ReadOnly TokenType" {
         BeforeAll {
-            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
             $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
             $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
             $RepositoryId = ($repos | Where-Object { $_.name -eq 'repository-success'})[0].id
-            $repositoryAcls = Get-AzDevOpsRepositoryAcls -RepositoryId $RepositoryId -ProjectId $ProjectId -WarningVariable warning -TokenType ReadOnly
+            $repositoryAcls = Get-AzDevOpsRepositoryAcls -RepositoryId $RepositoryId -ProjectId $ProjectId -WarningVariable warning
         }
 
         It " should return null or empty" {
@@ -243,10 +243,10 @@ Describe "Functions: DevOps.Repos.Tests" {
 
     Context " Get-AzDevOpsRepositoryGhas with a FineGrained TokenType" {
         BeforeAll {
-            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_FINEGRAINED
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_FINEGRAINED -TokenType FineGrained
             $ProjectId = "1fa185aa-ce58-4732-8700-8964802ea538"
             $repoId = "befaaf13-3966-45c0-b481-6387e860d915"
-            $repositoryGhas = Get-AzDevOpsRepositoryGhas -RepositoryId $repoId -ProjectId $ProjectId -TokenType FineGrained -WarningVariable warning
+            $repositoryGhas = Get-AzDevOpsRepositoryGhas -RepositoryId $repoId -ProjectId $ProjectId -WarningVariable warning
         }
 
         It " should return null or empty" {

@@ -40,6 +40,8 @@ from the PowerShell Gallery:
 Install-Module -Name PSRule.Rules.AzureDevOps -Scope CurrentUser
 ```
 
+### PAT Token
+
 Once you have both modules installed, you can connect to your
 Azure DevOps organization and run an export of your Azure DevOps
 project and run the rules on the exported data.
@@ -72,14 +74,25 @@ Assert-PSRule `
 Connect-AzDevOps `
     -Organization "MyOrg" `
     -PAT $MyPAT `
+    -TokenType ReadOnly
 Export-AzDevOpsRuleData `
     -Project "MyProject" `
-    -OutputPath "C:\Temp\MyProject" `
-    -TokenType ReadOnly
+    -OutputPath "C:\Temp\MyProject"
 Assert-PSRule `
     -InputPath "C:\Temp\MyProject\" `
     -Module PSRule.Rules.AzureDevOps
 ```
+
+### Service Principal or Managed Identity
+
+Since version 0.3.0 of this module, you can also connect to your
+Azure DevOps organization with a Service Principal or Managed Identity.
+The `-AuthType` parameter can be set to `ServicePrincipal` or `ManagedIdentity`.
+The Service Principal needs to have sufficient permissions to read the
+project data. The default expects a Service Principal with project
+administrator permissions. Alternately, you can use a Service Principal
+with only read permissions or fine-grained permissions with the `-TokenType`
+parameter.
 
 #### Example: Run with a Service Principal
 
