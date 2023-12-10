@@ -79,11 +79,6 @@ Function Connect-AzDevOps {
     }
     $script:connection = $connection
 }
-if(($MyInvocation.PSCommandPath -match '.psm1$') -or ($MyInvocation.PSCommandPath -match '.psd1')) {
-    Export-ModuleMember -Function Connect-AzDevOps
-}
-
-
 
 # End of Function Connect-AzDevOps
 
@@ -103,9 +98,6 @@ Function Disconnect-AzDevOps {
     Clear-Variable connection -Scope Script -ErrorAction SilentlyContinue
     $script:connection = ""
     $script:connection = $null
-}
-if(($MyInvocation.PSCommandPath -match '.psm1$') -or ($MyInvocation.PSCommandPath -match '.psd1')) {
-    Export-ModuleMember -Function Disconnect-AzDevOps
 }
 # End of Function Disconnect-AzDevOps
 
@@ -143,8 +135,5 @@ function Get-AzDevOpsProjects {
     }
     $projects = $response.value
     return @($projects)
-}
-if(($MyInvocation.PSCommandPath -match '.psm1$') -or ($MyInvocation.PSCommandPath -match '.psd1')) {
-    Export-ModuleMember -Function Get-AzDevOpsProjects
 }
 # End of Function Get-AzDevOpsProjects

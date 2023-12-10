@@ -123,3 +123,7 @@ Function Export-AzDevOpsOrganizationRuleData {
 }
 Export-ModuleMember -Function Export-AzDevOpsOrganizationRuleData
 # End of Function Export-AzDevOpsOrganizationRuleData
+
+Export-ModuleMember -Function Get-AzDevOpsProjects
+Export-ModuleMember -Function Connect-AzDevOps
+Export-ModuleMember -Function Disconnect-AzDevOps
