@@ -40,8 +40,11 @@ from the PowerShell Gallery:
 Install-Module -Name PSRule.Rules.AzureDevOps -Scope CurrentUser
 ```
 
-Once you have both modules installed, you can run an export of
-your Azure DevOps project and run the rules on the exported data.
+### PAT Token
+
+Once you have both modules installed, you can connect to your
+Azure DevOps organization and run an export of your Azure DevOps
+project and run the rules on the exported data.
 The `-PAT` value needs to be an Azure DevOps Personal Access Token
 with sufficient permissions to read the project data. The default
 expects a PAT with full access permissions. Alternately, you can
@@ -54,10 +57,11 @@ be found in the [docs/token-permissions.md](docs/token-permissions.md).
 #### Example: Run with full access token
 
 ```powershell
-Export-AzDevOpsRuleData `
+Connect-AzDevOps `
     -Organization "MyOrg" `
+    -PAT $MyPAT
+Export-AzDevOpsRuleData `
     -Project "MyProject" `
-    -PAT $MyPAT `
     -OutputPath "C:\Temp\MyProject"
 Assert-PSRule `
     -InputPath "C:\Temp\MyProject\" `
@@ -67,12 +71,70 @@ Assert-PSRule `
 #### Example: Run with read-only access token
 
 ```powershell
-Export-AzDevOpsRuleData `
+Connect-AzDevOps `
     -Organization "MyOrg" `
-    -Project "MyProject" `
     -PAT $MyPAT `
-    -OutputPath "C:\Temp\MyProject" `
     -TokenType ReadOnly
+Export-AzDevOpsRuleData `
+    -Project "MyProject" `
+    -OutputPath "C:\Temp\MyProject"
+Assert-PSRule `
+    -InputPath "C:\Temp\MyProject\" `
+    -Module PSRule.Rules.AzureDevOps
+```
+
+### Service Principal or Managed Identity
+
+Since version 0.3.0 of this module, you can also connect to your
+Azure DevOps organization with a Service Principal or Managed Identity.
+The `-AuthType` parameter can be set to `ServicePrincipal` or `ManagedIdentity`.
+The Service Principal needs to have sufficient permissions to read the
+project data. The default expects a Service Principal with project
+administrator permissions. Alternately, you can use a Service Principal
+with only read permissions or fine-grained permissions with the `-TokenType`
+parameter.
+
+#### Example: Run with a Service Principal
+
+```powershell
+Connect-AzDevOps `
+    -Organization "MyOrg" `
+    -AuthType ServicePrincipal `
+    -ClientId $MyAppId `
+    -ClientSecret $MyAppSecret `
+    -TenantId $MyTenantId
+Export-AzDevOpsRuleData `
+    -Project "MyProject" `
+    -OutputPath "C:\Temp\MyProject"
+Assert-PSRule `
+    -InputPath "C:\Temp\MyProject\" `
+    -Module PSRule.Rules.AzureDevOps
+```
+
+#### Example: Run with a System Assigned Managed Identity
+
+```powershell
+Connect-AzDevOps `
+    -Organization "MyOrg" `
+    -AuthType ManagedIdentity
+Export-AzDevOpsRuleData `
+    -Project "MyProject" `
+    -OutputPath "C:\Temp\MyProject"
+Assert-PSRule `
+    -InputPath "C:\Temp\MyProject\" `
+    -Module PSRule.Rules.AzureDevOps
+```
+
+#### Example: Run with a User Assigned Managed Identity
+
+```powershell
+$env:ADO_MSI_CLIENT_ID = $MyClientId
+Connect-AzDevOps `
+    -Organization "MyOrg" `
+    -AuthType ManagedIdentity `
+Export-AzDevOpsRuleData `
+    -Project "MyProject" `
+    -OutputPath "C:\Temp\MyProject"
 Assert-PSRule `
     -InputPath "C:\Temp\MyProject\" `
     -Module PSRule.Rules.AzureDevOps
@@ -88,8 +150,6 @@ in the organization the PAT has access to.
 
 ```powershell
 Export-AzDevOpsOrganizationRuleData `
-    -Organization "MyOrg" `
-    -PAT $MyPAT `
     -OutputPath "C:\Temp\MyOrg"
 ```
 

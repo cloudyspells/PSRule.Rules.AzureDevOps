@@ -23,7 +23,8 @@ BeforeAll {
     $outPath = $outPath.FullName;
 
     # Export all Azure DevOps rule data for project 'psrule-fail-project' to output folder
-    Export-AzDevOpsRuleData -PAT $env:ADO_PAT -Project $env:ADO_PROJECT -Organization $env:ADO_ORGANIZATION -OutputPath $outPath
+    Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+    Export-AzDevOpsRuleData -Project $env:ADO_PROJECT -OutputPath $outPath
     $ruleResult = Invoke-PSRule -InputPath "$($outPath)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en
     $noExtraLicenseBaselineResult = Invoke-PSRule -InputPath "$($outPath)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en -Baseline Baseline.NoExtraLicense
 
@@ -32,7 +33,8 @@ BeforeAll {
     $outPathReadOnly = $outPathReadOnly.FullName;
 
     # Export all Azure DevOps rule data for project 'psrule-fail-project' to ReadOnly output folder
-    Export-AzDevOpsRuleData -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly -Project $env:ADO_PROJECT -Organization $env:ADO_ORGANIZATION -OutputPath $outPathReadOnly
+    Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
+    Export-AzDevOpsRuleData -Project $env:ADO_PROJECT -OutputPath $outPathReadOnly
     $ruleResultReadOnly = Invoke-PSRule -InputPath "$($outPathReadOnly)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en
 
     # Create a temporary test output folder for tests with the FineGrained TokenType
@@ -40,7 +42,8 @@ BeforeAll {
     $outPathFineGrained = $outPathFineGrained.FullName;
 
     # Export all Azure DevOps rule data for project 'psrule-fail-project' to FineGrained output folder
-    Export-AzDevOpsRuleData -PAT $env:ADO_PAT_FINEGRAINED -TokenType FineGrained -Project $env:ADO_PROJECT -Organization $env:ADO_ORGANIZATION -OutputPath $outPathFineGrained
+    Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_FINEGRAINED -TokenType FineGrained
+    Export-AzDevOpsRuleData -Project $env:ADO_PROJECT -OutputPath $outPathFineGrained
     $ruleResultFineGrained = Invoke-PSRule -InputPath "$($outPathFineGrained)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en
 }
 

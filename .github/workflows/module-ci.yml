@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'src/PSRule.Rules.AzureDevOps/Functions/**'
+      - 'src/PSRule.Rules.AzureDevOps/Classes/**'
       - 'src/PSRule.Rules.AzureDevOps/rules/**'
       - 'src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psm1'
       - 'tests/**'
@@ -26,13 +27,14 @@ permissions:
 
 jobs:
   run-pester:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Install PSRule
+      - name: Install PSRule and Pester
         run: |
           Install-Module -Name PSRule -Force -SkipPublisherCheck
+          Install-Module -Name Pester -Force -SkipPublisherCheck
         shell: pwsh
 
       # Temporarily disabled until PSScriptAnalyzer is updated to support PowerShell 7
@@ -52,7 +54,7 @@ jobs:
           $config.CodeCoverage.Enabled = $true
           $config.CodeCoverage.OutputPath = "$($env:GITHUB_WORKSPACE)\coverage.xml"
           $config.CodeCoverage.OutputFormat = 'JaCoCo'
-          $config.CodeCoverage.Path = "$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Functions"
+          $config.CodeCoverage.Path = "$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Functions","$($env:GITHUB_WORKSPACE)\src\PSRule.Rules.AzureDevOps\Classes"
           $config.Output.Verbosity = 'Detailed'
           $config.TestResult.Enabled = $true
           $config.TestResult.OutputFormat = 'NUnitXml'
@@ -68,9 +70,13 @@ jobs:
           ADO_PROJECT: ${{ secrets.ADO_PROJECT }}
           ADO_PAT_FINEGRAINED: ${{ secrets.ADO_PAT_FINEGRAINED }}
           ADO_PAT_READONLY: ${{ secrets.ADO_PAT_READONLY }}
+          ADO_CLIENT_ID: ${{ secrets.ADO_CLIENT_ID }}
+          ADO_CLIENT_SECRET: ${{ secrets.ADO_CLIENT_SECRET }}
+          ADO_TENANT_ID: ${{ secrets.ADO_TENANT_ID }}
+          ADO_MSI_CLIENT_ID: ${{ secrets.ADO_MSI_CLIENT_ID }}
 
       - name: Upload Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2.9.0
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
         with:
           files: |
             **/testresults.xml

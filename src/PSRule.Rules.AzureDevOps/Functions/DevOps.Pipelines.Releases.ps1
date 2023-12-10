@@ -8,38 +8,24 @@
     .PARAMETER Project
     The name of the Azure DevOps project.
 
-    .PARAMETER Organization
-    The name of the Azure DevOps organization.
-
-    .PARAMETER PAT
-    A personal access token (PAT) used to authenticate with Azure DevOps.
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .EXAMPLE
-    Get-AzDevOpsReleaseDefinitions -Organization 'contoso' -Project 'myproject' -PAT $MyPAT
+    Get-AzDevOpsReleaseDefinitions -Project 'myproject'
 #>
 Function Get-AzDevOpsReleaseDefinitions {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     Param(
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]$Organization,
-
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]$Project
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    Write-Verbose "URI: $uri"
+    $header = $script:connection.GetHeader()
+    $Organization = $script:connection.Organization
     Write-Verbose "Getting release definitions for project $Project"
     $uri = "https://vsrm.dev.azure.com/$Organization/$Project/_apis/release/definitions?api-version=7.2-preview.4"
-    Write-Verbose "URI: $uri"
-    $header = Get-AzDevOpsHeader -PAT $PAT
+    
     # try to get the release definitions, throw a descriptive error if it fails for authentication or other reasons
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
@@ -69,44 +55,29 @@ Export-ModuleMember -Function Get-AzDevOpsReleaseDefinitions
     .PARAMETER ReleaseDefinitionId
     The ID of the release definition.
 
-    .PARAMETER Organization
-    The name of the Azure DevOps organization.
-
-    .PARAMETER PAT
-    A personal access token (PAT) used to authenticate with Azure DevOps.
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER Folder
     The folder where the release definition is located.
 
     .EXAMPLE
-    Get-AzDevOpsReleaseDefinitionAcls -Organization 'contoso' -ProjectId '12345678-1234-1234-1234-123456789012' -ReleaseDefinitionId 1 -PAT $MyPAT -Folder 'myfolder'
+    Get-AzDevOpsReleaseDefinitionAcls -ProjectId '12345678-1234-1234-1234-123456789012' -ReleaseDefinitionId 1 -Folder 'myfolder'
 #>
 Function Get-AzDevOpsReleaseDefinitionAcls {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     Param(
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-    
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]$Organization,
-
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]$ProjectId,
 
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [int]$ReleaseDefinitionId,
 
-        [Parameter(ParameterSetName = 'PAT')]
+        [Parameter()]
         [string]$Folder = ''
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $TokenType = $script:connection.TokenType
+    $Organization = $script:connection.Organization
     # IF token type is ReadOnly, write a warning and exit the function returing null
     if ($TokenType -eq 'ReadOnly') {
         Write-Warning "The ReadOnly token type is not supported for this function"
@@ -120,7 +91,7 @@ Function Get-AzDevOpsReleaseDefinitionAcls {
             $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/c788c23e-1b46-4162-8f5e-d7585343b5de?api-version=6.0&token={1}/{2}/{3}" -f $Organization, $ProjectId, $Folder, $ReleaseDefinitionId
         }
         Write-Verbose "URI: $uri"
-        $header = Get-AzDevOpsHeader -PAT $PAT
+        $header = $script:connection.GetHeader()
         # try to get the release definition ACLs, throw a descriptive error if it fails for authentication or other reasons
         try {
             $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
@@ -148,52 +119,34 @@ Export-ModuleMember -Function Get-AzDevOpsReleaseDefinitionAcls
     .PARAMETER Project
     The name of the Azure DevOps project.
 
-    .PARAMETER Organization
-    The name of the Azure DevOps organization.
-
-    .PARAMETER PAT
-    A personal access token (PAT) used to authenticate with Azure DevOps.
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
     .PARAMETER OutputPath
     The path to the directory where the JSON files will be exported.
 
     .EXAMPLE
-    Export-AzDevOpsReleaseDefinitions -Organization 'contoso' -Project 'myproject' -PAT $MyPAT -OutputPath 'C:\temp'
+    Export-AzDevOpsReleaseDefinitions -Project 'myproject' -OutputPath 'C:\temp'
 #>
 Function Export-AzDevOpsReleaseDefinitions {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     Param(
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-    
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]$Organization,
-
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]$Project,
 
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]$OutputPath
     )
-    # If ParameterSet is PAT, get all release definitions for the project
-    If ($PSCmdlet.ParameterSetName -eq 'PAT') {
-        $definitions = Get-AzDevOpsReleaseDefinitions -Organization $Organization -Project $Project -PAT $PAT -TokenType $TokenType
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
+    $TokenType = $script:connection.TokenType
+    $Organization = $script:connection.Organization
+    $definitions = Get-AzDevOpsReleaseDefinitions -Project $Project
     foreach ($definition in $definitions) {
         if ($null -ne $definition.id) {
             $definitionId = $definition.id
             Write-Verbose "Getting release definition with id $definitionId"
             $uri = "https://vsrm.dev.azure.com/$Organization/$Project/_apis/release/definitions/$($definitionId)?api-version=7.2-preview.4"
             Write-Verbose "URI: $uri"
-            $header = Get-AzDevOpsHeader -PAT $PAT
+            $header = $script:connection.GetHeader()
             # try to get the release definition, throw a descriptive error if it fails for authentication or other reasons
             try {
                 $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
@@ -218,7 +171,7 @@ Function Export-AzDevOpsReleaseDefinitions {
             # If the token type is not ReadOnly, get the release definitions ACLs
             if ($TokenType -ne 'ReadOnly') {
                 # Get the release definition ACLs
-                $acls = Get-AzDevOpsReleaseDefinitionAcls -Organization $Organization -ProjectId $projectId -ReleaseDefinitionId $definitionId -PAT $PAT -Folder $folder
+                $acls = Get-AzDevOpsReleaseDefinitionAcls -ProjectId $projectId -ReleaseDefinitionId $definitionId -Folder $folder
                 # Add the ACLs to the response
                 $response | Add-Member -MemberType NoteProperty -Name 'Acls' -Value $acls
             } else {

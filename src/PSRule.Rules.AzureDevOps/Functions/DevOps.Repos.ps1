@@ -5,40 +5,25 @@
     .DESCRIPTION
     Get all repos from Azure DevOps project using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
     .PARAMETER Project
     Project name for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsRepos -PAT $PAT -Organization $Organization -Project $Project
+    Get-AzDevOpsRepos -Project $Project
 #>
 Function Get-AzDevOpsRepos {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     [OutputType([System.Object[]])]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $header = $script:connection.GetHeader()
     Write-Verbose "Getting repos for project $Project"
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/git/repositories?api-version=6.0"
     Write-Verbose "URI: $uri"
@@ -64,15 +49,6 @@ Export-ModuleMember -Function Get-AzDevOpsRepos
     .DESCRIPTION
     Get Azure DevOps branch policy for a branch in a repo using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -83,36 +59,30 @@ Export-ModuleMember -Function Get-AzDevOpsRepos
     Branch name for Azure DevOps as a git ref. Example: refs/heads/main
 
     .EXAMPLE
-    Get-AzDevOpsBranchPolicy -PAT $PAT -Organization $Organization -Project $Project -Repository $Repository -Branch $Branch
+    Get-AzDevOpsBranchPolicy -Project $Project -Repository $Repository -Branch $Branch
 
     .NOTES
     This function returns an empty object if no branch policy is found for the branch
 #>
 Function Get-AzDevOpsBranchPolicy {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     [OutputType([object[]])]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Repository,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Branch
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $header = $script:connection.GetHeader()
     Write-Verbose "Getting branch policy for branch $Branch in repo $Repository in project $Project"
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/policy/configurations?api-version=6.0"
     Write-Verbose "URI: $uri"
@@ -141,15 +111,6 @@ Export-ModuleMember -Function Get-AzDevOpsBranchPolicy
     .DESCRIPTION
     Get Repository pipeline permissions for a repo using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
     .PARAMETER ProjectId
     Project ID for Azure DevOps project
 
@@ -157,30 +118,24 @@ Export-ModuleMember -Function Get-AzDevOpsBranchPolicy
     Repository ID for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId
+    Get-AzDevOpsRepositoryPipelinePermissions -ProjectId $ProjectId -RepositoryId $RepositoryId
 #>
 Function Get-AzDevOpsRepositoryPipelinePermissions {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     [OutputType([object[]])]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $ProjectId,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $RepositoryId
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $header = $script:connection.GetHeader()
     $uri = "https://dev.azure.com/{0}/{1}/_apis/pipelines/pipelinePermissions/repository/{2}.{3}" -f $Organization, $ProjectId, $ProjectId, $RepositoryId
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json"
@@ -204,15 +159,6 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryPipelinePermissions
     .DESCRIPTION
     Get Azure DevOps repos ACLs using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
     .PARAMETER ProjectId
     Project ID for Azure DevOps project
 
@@ -220,35 +166,30 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryPipelinePermissions
     Repository ID for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsRepositoryAcls -PAT $PAT -Organization $Organization -ProjectId $ProjectId -RepositoryId $RepositoryId
+    Get-AzDevOpsRepositoryAcls -ProjectId $ProjectId -RepositoryId $RepositoryId
 #>
 Function Get-AzDevOpsRepositoryAcls {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     [OutputType([object[]])]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $ProjectId,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $RepositoryId
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $TokenType = $script:connection.TokenType
     # If the token type is ReadOnly, write a warning and return null
     if ($TokenType -eq "ReadOnly") {
         Write-Warning "The ReadOnly token type does not have access to the Repositories ACLs API, returning null"
         return $null
     } else {
-        $header = Get-AzDevOpsHeader -PAT $PAT
+        $header = $script:connection.GetHeader()
         $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/2e9eb7ed-3c0a-47d4-87c1-0ffdd275fd87?api-version=6.0" -f $Organization
         try {
             $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json"
@@ -274,15 +215,6 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryAcls
     .DESCRIPTION
     Check the existance of a file in an Azure DevOps repo using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -293,36 +225,30 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryAcls
     Path to file in repo
 
     .EXAMPLE
-    Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $Repository -Path $Path
+    Test-AzDevOpsFileExists -Project $Project -Repository $Repository -Path $Path
 
     .NOTES
     This function return $true if the file exists and $false if it does not
 #>
 function Test-AzDevOpsFileExists {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     [OutputType([bool])]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Repository,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Path
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $header = $script:connection.GetHeader()
     Write-Verbose "Checking if file $Path exists in repo $Repository in project $Project"
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/git/repositories/$Repository/items?path=$Path&api-version=6.0"
     Write-Verbose "URI: $uri"
@@ -344,15 +270,6 @@ Export-ModuleMember -Function Test-AzDevOpsFileExists
     .DESCRIPTION
     Get GitHub Advanced Security (GHAS) data for a repository using Azure DevOps Rest API
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
     .PARAMETER ProjectId
     Project ID for Azure DevOps
 
@@ -360,35 +277,30 @@ Export-ModuleMember -Function Test-AzDevOpsFileExists
     Repository name for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsRepositoryGhas -PAT $PAT -Organization $Organization -Project $Project -Repository $Repository
+    Get-AzDevOpsRepositoryGhas -Project $Project -Repository $Repository
 #>
 Function Get-AzDevOpsRepositoryGhas {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     [OutputType([object])]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $ProjectId,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $RepositoryId
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $TokenType = $script:connection.TokenType
+    $Organization = $script:connection.Organization
     # token is not FullAccess, write a warning and return null
     if ($TokenType -ne "FullAccess") {
         Write-Warning "The $TokenType token type does not have access to the Repositories API, returning null"
         return $null
     } else {
-        $header = Get-AzDevOpsHeader -PAT $PAT
+        $header = $script:connection.GetHeader()
         $payload = @{
             contributionIds = @(
                 "ms.vss-features.my-organizations-data-provider"
@@ -425,15 +337,6 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryGhas
     .DESCRIPTION
     Get and export all Azure DevOps repos in a project with default, main and master branches and branch policies and export to JSON using Azure DevOps Rest API and this modules functions
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -441,35 +344,27 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryGhas
     Output path for JSON file
 
     .EXAMPLE
-    Export-AzDevOpsReposAndBranchPolicies -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsReposAndBranchPolicies -Project $Project -OutputPath $OutputPath
 
     .NOTES
     This function returns an empty object if no branch policy is found for the branch
 #>
 function Export-AzDevOpsReposAndBranchPolicies {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $OutputPath
     )
-    # If the parameter set is PAT, get the repositories
-    if ($PSCmdlet.ParameterSetName -eq 'PAT') {
-        $repos = Get-AzDevOpsRepos -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
+    $Organization = $script:connection.Organization
+    $TokenType = $script:connection.TokenType    
+    $repos = Get-AzDevOpsRepos -Project $Project
     $repos | ForEach-Object {
         if ($null -ne $_) {
             $repo = $_
@@ -477,32 +372,32 @@ function Export-AzDevOpsReposAndBranchPolicies {
             $repo | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo"
             Write-Verbose "Getting branch policy for repo $($repo.name)"
             If($repo.defaultBranch) {
-                $branchPolicy = Get-AzDevOpsBranchPolicy -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -Repository $repo.id -Branch $repo.defaultBranch
+                $branchPolicy = Get-AzDevOpsBranchPolicy -Project $Project -Repository $repo.id -Branch $repo.defaultBranch
             }
             $repo | Add-Member -MemberType NoteProperty -Name MainBranchPolicy -Value $branchPolicy
             # Add a property indicating if a file named README.md or README exists in the repo
-            $readmeExists = ((Test-AzDevOpsFileExists -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -Repository $repo.id -Path "README.md") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "README"))
+            $readmeExists = ((Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "README.md") -or (Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "README"))
             $repo | Add-Member -MemberType NoteProperty -Name ReadmeExists -Value $readmeExists
 
             # Add a property indicating if a file named LICENSE or LICENSE.md exists in the repo
-            $licenseExists = ((Test-AzDevOpsFileExists -PAT $PAT -TokenType $TokenType -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -PAT $PAT -Organization $Organization -Project $Project -Repository $repo.id -Path "LICENSE.md"))
+            $licenseExists = ((Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "LICENSE.md"))
             $repo | Add-Member -MemberType NoteProperty -Name LicenseExists -Value $licenseExists
 
             # Add a property for GitHub Advanced Security (GHAS) data if the token type is FullAccess
             if ($TokenType -eq "FullAccess") {
-                $ghas = Get-AzDevOpsRepositoryGhas -PAT $PAT -TokenType $TokenType -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
+                $ghas = Get-AzDevOpsRepositoryGhas -ProjectId $repo.project.id -RepositoryId $repo.id
                 $repo | Add-Member -MemberType NoteProperty -Name Ghas -Value $ghas
             } else {
                 Write-Warning "The $TokenType token type does not have access to the GHAS API, returning null"
             }
             
             # Add a property with pipeline permissions
-            $pipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -PAT $PAT -TokenType $TokenType -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
+            $pipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -ProjectId $repo.project.id -RepositoryId $repo.id
             $repo | Add-Member -MemberType NoteProperty -Name PipelinePermissions -Value $pipelinePermissions
 
             # Add a property with repo ACLs if the token type is not ReadOnly
             if ($TokenType -ne "ReadOnly") {
-                $repoAcls = Get-AzDevOpsRepositoryAcls -PAT $PAT -TokenType $TokenType -Organization $Organization -ProjectId $repo.project.id -RepositoryId $repo.id
+                $repoAcls = Get-AzDevOpsRepositoryAcls -ProjectId $repo.project.id -RepositoryId $repo.id
                 $repo | Add-Member -MemberType NoteProperty -Name Acls -Value $repoAcls
             }
             

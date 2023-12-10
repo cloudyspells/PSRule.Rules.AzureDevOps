@@ -5,39 +5,24 @@
     .DESCRIPTION
     Get the projects's pipelines settings from Azure DevOps
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
     .PARAMETER ProjectId
     Project ID for Azure DevOps
 
     .EXAMPLE
-    Get-AzDevOpsPipelinesSettings -PAT $PAT -Organization $Organization -ProjectId $ProjectId
+    Get-AzDevOpsPipelinesSettings -ProjectId $ProjectId
 #>
 Function Get-AzDevOpsPipelinesSettings {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project
     )
-    $header = Get-AzDevOpsHeader -PAT $PAT
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $header = $script:connection.GetHeader()
     $uri = "https://dev.azure.com/$Organization/$Project/_apis/build/generalsettings?api-version=7.1-preview.1"
     Write-Verbose "URI: $uri"
     try {
@@ -62,15 +47,6 @@ Export-ModuleMember -Function Get-AzDevOpsPipelinesSettings
     .DESCRIPTION
     Export the projects's pipelines settings from Azure DevOps to a JSON file with .ado.pls.json extension
 
-    .PARAMETER PAT
-    Personal Access Token (PAT) for Azure DevOps
-
-    .PARAMETER TokenType
-    Token Type for Azure DevOps, can be FullAccess, FineGrained or ReadOnly
-
-    .PARAMETER Organization
-    Organization name for Azure DevOps
-
     .PARAMETER Project
     Project name for Azure DevOps
 
@@ -78,30 +54,23 @@ Export-ModuleMember -Function Get-AzDevOpsPipelinesSettings
     Output path for JSON files
 
     .EXAMPLE
-    Export-AzDevOpsPipelinesSettings -PAT $PAT -Organization $Organization -Project $Project -OutputPath $OutputPath
+    Export-AzDevOpsPipelinesSettings -Project $Project -OutputPath $OutputPath
 #>
 function Export-AzDevOpsPipelinesSettings {
-    [CmdletBinding(DefaultParameterSetName = 'PAT')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $PAT,
-        [Parameter(ParameterSetName = 'PAT')]
-        [ValidateSet('FullAccess', 'FineGrained', 'ReadOnly')]
-        [string]
-        $TokenType = 'FullAccess',
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
-        [string]
-        $Organization,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory, ParameterSetName = 'PAT')]
+        [Parameter(Mandatory)]
         [string]
         $OutputPath
     )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
     Write-Verbose "Getting pipelines settings from Azure DevOps"
-    $pipelinesSettings = Get-AzDevOpsPipelinesSettings -PAT $PAT -Organization $Organization -Project $Project
+    $pipelinesSettings = Get-AzDevOpsPipelinesSettings -Project $Project
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Pipelines.Settings'
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name Name -Value $Project
     $pipelinesSettings | ConvertTo-Json -Depth 10 | Out-File (Join-Path -Path $OutputPath -ChildPath "$Project.ado.pls.json")
