@@ -15,19 +15,23 @@ jobs:
 
       - name: Install PSRule
         run: |
-          Install-Module -Name PSRule -Force -Scope CurrentUser -SkipPublisherCheck
+          # Install-Module -Name PSRule -Force -Scope CurrentUser -SkipPublisherCheck
           Install-Module -Name PSRule.Monitor -Force -Scope CurrentUser -SkipPublisherCheck
 
       - name: Run PSRule
         run: |
           Import-Module PSRule
+          Import-Module PSRule.Monitor
           Import-Module ./src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psd1 -Force
           Connect-AzDevOps -Organization ${{ secrets.ADO_ORGANIZATION }} -PAT ${{ secrets.ADO_PAT }}
           New-Item -Path ./data -ItemType Directory -Force
           Export-AzDevOpsRuleData -Project ${{ secrets.ADO_PROJECT }} -OutputPath ./data
-          Invoke_PSRule -InputPath ./data/ `
+          $result = Invoke-PSRule -InputPath ./data/ `
             -Module "PSRule.Rules.AzureDevOps","PSRule.Monitor" `
             -Format Detect -Culture en
+          $result |  Send-PSRuleMonitorRecord -WorkspaceId $Env:PSRULE_CONFIGURATION_MONITOR_WORKSPACE_ID `
+            -SharedKey $Env:PSRULE_CONFIGURATION_MONITOR_WORKSPACE_KEY -LogName RjbTest
         env:
           PSRULE_CONFIGURATION_MONITOR_WORKSPACE_ID: ${{ secrets.PSRULE_CONFIGURATION_MONITOR_WORKSPACE_ID }}
           PSRULE_CONFIGURATION_MONITOR_WORKSPACE_KEY: ${{ secrets.PSRULE_CONFIGURATION_MONITOR_WORKSPACE_KEY }}
+          PSRULE_CONVENTION_INCLUDE: "Monitor.LogAnalytics.Import"
