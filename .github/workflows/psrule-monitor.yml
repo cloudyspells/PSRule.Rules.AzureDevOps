@@ -17,6 +17,7 @@ jobs:
         run: |
           # Install-Module -Name PSRule -Force -Scope CurrentUser -SkipPublisherCheck
           Install-Module -Name PSRule.Monitor -Force -Scope CurrentUser -SkipPublisherCheck
+        shell: pwsh
 
       - name: Run PSRule
         run: |
@@ -31,6 +32,7 @@ jobs:
             -Format Detect -Culture en
           $result |  Send-PSRuleMonitorRecord -WorkspaceId $Env:PSRULE_CONFIGURATION_MONITOR_WORKSPACE_ID `
             -SharedKey $Env:PSRULE_CONFIGURATION_MONITOR_WORKSPACE_KEY -LogName RjbTest
+        shell: pwsh
         env:
           PSRULE_CONFIGURATION_MONITOR_WORKSPACE_ID: ${{ secrets.PSRULE_CONFIGURATION_MONITOR_WORKSPACE_ID }}
           PSRULE_CONFIGURATION_MONITOR_WORKSPACE_KEY: ${{ secrets.PSRULE_CONFIGURATION_MONITOR_WORKSPACE_KEY }}
