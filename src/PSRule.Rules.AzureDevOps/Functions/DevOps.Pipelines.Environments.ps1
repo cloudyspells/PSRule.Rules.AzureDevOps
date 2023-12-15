@@ -156,6 +156,7 @@ function Export-AzDevOpsEnvironmentChecks {
                 $environment = $_
                 # Add a ObjectType indicator for Azure.DevOps.Pipelines.Environment
                 $environment | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Pipelines.Environment'
+                $environment | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.{2}" -f $script:connection.Organization,$Project,$environment.name)
                 $checks = @(Get-AzDevOpsEnvironmentChecks -Project $Project -Environment $environment.id)
                 $environment | Add-Member -MemberType NoteProperty -Name checks -Value $checks
                 Write-Verbose "Exporting environment $($environment.name) to JSON"

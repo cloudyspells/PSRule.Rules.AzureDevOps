@@ -228,6 +228,7 @@ function Export-AzDevOpsPipelineYaml {
     
     Write-Verbose "Getting YAML definition for pipeline $PipelineId"
     $yaml = "ObjectType: Azure.DevOps.Pipelines.PipelineYaml`n"
+    $yaml += "ObjectName: '$($script:connection.Organization).$Project.$PipelineName.Yaml'`n"
     $yaml += Get-AzDevOpsPipelineYaml -Project $Project -PipelineId $PipelineId
     # Export the YAML definition to a file if it is not empty
     if ($yaml -eq "ObjectType: Azure.DevOps.Pipelines.PipelineYaml`n" -or $null -eq $yaml) {
@@ -277,6 +278,7 @@ function Export-AzDevOpsPipelines {
     foreach ($pipeline in $pipelines) {
         # Add ObjectType Azure.DevOps.Pipeline to the pipeline object
         $pipeline | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Pipeline"
+        $pipeline | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.{2}" -f $script:connection.Organization,$Project,$pipeline.name)
         # Get the project ID from the pipeline object web.href property
         $ProjectId = $pipeline._links.web.href.Split('/')[4]
 

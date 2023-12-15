@@ -370,6 +370,8 @@ function Export-AzDevOpsReposAndBranchPolicies {
             $repo = $_
             # Add ObjectType Azure.DevOps.Repo to repo object
             $repo | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo"
+            # Add ObjectName to repo object
+            $repo | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.{2}" -f $Organization,$Project,$repo.name)
             Write-Verbose "Getting branch policy for repo $($repo.name)"
             If($repo.defaultBranch) {
                 $branchPolicy = Get-AzDevOpsBranchPolicy -Project $Project -Repository $repo.id -Branch $repo.defaultBranch

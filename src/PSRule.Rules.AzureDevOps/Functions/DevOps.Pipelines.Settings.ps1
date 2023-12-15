@@ -72,6 +72,7 @@ function Export-AzDevOpsPipelinesSettings {
     Write-Verbose "Getting pipelines settings from Azure DevOps"
     $pipelinesSettings = Get-AzDevOpsPipelinesSettings -Project $Project
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Pipelines.Settings'
+    $pipelinesSettings | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.PipelineSettings" -f $script:connection.Organization,$Project)
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name Name -Value $Project
     $pipelinesSettings | ConvertTo-Json -Depth 10 | Out-File (Join-Path -Path $OutputPath -ChildPath "$Project.ado.pls.json")
 }

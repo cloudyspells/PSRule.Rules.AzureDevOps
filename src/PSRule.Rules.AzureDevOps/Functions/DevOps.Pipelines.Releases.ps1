@@ -159,6 +159,7 @@ Function Export-AzDevOpsReleaseDefinitions {
             $definitionPath = Join-Path -Path $OutputPath -ChildPath "$definitionName.ado.rd.json"
             # Add an ObjectType of Azure.DevOps.Pipelines.Releases.Definition to the response
             $response | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Pipelines.Releases.Definition'
+            $response | Add-Member -MemberType NoteProperty -Name 'ObjectName' -Value ("{0}.{1}.{2}" -f $script:connection.Organization,$Project,$definitionName)
             # Get the project ID from the url in the response
             $projectId = $response.url.Split('/')[4]
             # Get the folder from the path in the response
