@@ -81,6 +81,7 @@ Function Export-AzDevOpsVariableGroups {
     $variableGroups | ForEach-Object {
         $variableGroup = $_
         $variableGroup | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Tasks.VariableGroup'
+        $variableGroup | Add-Member -MemberType NoteProperty -Name 'ObjectName' -Value "$Organization.$Project.$($variableGroup.name)"
         $variableGroupName = $variableGroup.name
         $variableGroupPath = Join-Path -Path $OutputPath -ChildPath "$variableGroupName.ado.vg.json"
         Write-Verbose "Exporting variable group $variableGroupName as file $variableGroupName.ado.vg.json"

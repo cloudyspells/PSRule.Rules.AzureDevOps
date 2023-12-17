@@ -130,6 +130,8 @@ function Export-AzDevOpsServiceConnections {
         $serviceConnection = $_
         # Set JSON ObjectType field to Azure.DevOps.ServiceConnection
         $serviceConnection | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.ServiceConnection'
+        # Set JSON ObjectName field to organiztion.project.service connection name
+        $serviceConnection | Add-Member -MemberType NoteProperty -Name ObjectName -Value "$Organization.$Project.$($serviceConnection.name)"
         # Get checks for service connection
         $serviceConnectionChecks = @(Get-AzDevOpsServiceConnectionChecks -Project $Project -ServiceConnectionId $serviceConnection.id)
         $serviceConnection | Add-Member -MemberType NoteProperty -Name Checks -Value $serviceConnectionChecks

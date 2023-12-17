@@ -8,6 +8,7 @@ spec:
   binding:
     useQualifiedName: true
     targetName:
+    - ObjectName
     - name
     - displayName
     - id
