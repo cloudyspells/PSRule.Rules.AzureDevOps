@@ -1,6 +1,6 @@
 ---
 category: Microsoft Azure DevOps Service Connections
-severity: Severe
+severity: Important
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.WorkloadIdentityFederation.md
 ---
 

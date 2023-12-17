@@ -1,6 +1,6 @@
 ---
 category: Microsoft Azure DevOps Pipelines
-severity: Severe
+severity: Critical
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Settings.RestrictSecretsForPullRequestFromFork.md
 ---
 

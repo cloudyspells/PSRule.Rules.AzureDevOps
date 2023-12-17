@@ -1,6 +1,6 @@
 ---
 category: Microsoft Azure DevOps Service Connections
-severity: Severe
+severity: Critical
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/nl/Azure.DevOps.ServiceConnections.ClassicAzure.md
 ---
 

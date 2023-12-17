@@ -1,6 +1,6 @@
 ---
 category: Microsoft Azure DevOps Repos
-severity: Informational
+severity: Important
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/nl/Azure.DevOps.Repos.BranchPolicyCommentResolution.md
 ---
 

@@ -1,6 +1,6 @@
 ---
 category: Microsoft Azure DevOps Pipelines
-severity: Severe
+severity: Important
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/nl/Azure.DevOps.Pipelines.Settings.RequireCommentForPullRequestFromFork.md
 ---
 

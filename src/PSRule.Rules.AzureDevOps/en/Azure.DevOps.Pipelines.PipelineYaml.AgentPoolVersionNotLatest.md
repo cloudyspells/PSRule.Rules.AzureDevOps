@@ -1,6 +1,6 @@
 ---
 category: Repository
-severity: Informational
+severity: Important
 online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.PipelineYaml.AgentPoolVersionNotLatest.md
 ---
 
