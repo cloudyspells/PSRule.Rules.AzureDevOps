@@ -331,11 +331,19 @@ Describe "Functions: DevOps.Repos.Tests" {
             }
         }
 
-        It 'Should export all JSON files with an ObjectType property set to Azure.DevOps.Repo' {
+        It 'Should export all JSON files with an Azure.DevOps.Repo ObjectType object in it' {
             $files = Get-ChildItem -Path $OutputPath -Recurse -File | Where-Object { $_.Name -match "ado.repo.json" }
             $files | ForEach-Object {
                 $json = Get-Content -Path $_.FullName -Raw | ConvertFrom-Json
-                $json.ObjectType | Should -Be "Azure.DevOps.Repo"
+                $json | Where-Object { $_.ObjectType -eq "Azure.DevOps.Repo" } | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        It 'Should export all JSON files with an Azure.DevOps.Repo.Branch ObjectType object in it' {
+            $files = Get-ChildItem -Path $OutputPath -Recurse -File | Where-Object { $_.Name -match "ado.repo.json" }
+            $files | ForEach-Object {
+                $json = Get-Content -Path $_.FullName -Raw | ConvertFrom-Json
+                $json | Where-Object { $_.ObjectType -eq "Azure.DevOps.Repo.Branch" } | Should -Not -BeNullOrEmpty
             }
         }
     }
