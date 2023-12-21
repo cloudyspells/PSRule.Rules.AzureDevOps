@@ -50,6 +50,39 @@ Describe "Functions: DevOps.Repos.Tests" {
         }
     }
 
+    Context " Get-AzDevOpsBranches without a connection" {
+        It " should throw an error" {
+            { 
+                Disconnect-AzDevOps
+                Get-AzDevOpsBranches -Project $env:ADO_PROJECT
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+        }
+    }
+
+    Context " Get-AzDevOpsBranches on a project" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
+            $branches = Get-AzDevOpsBranches -Project $env:ADO_PROJECT -Repository $repos[0].id
+        }
+
+        It " should return a list of branches" {
+            $branches | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context " Get-AzDevOpsBranches with wrong parameters" {
+        It " should throw an error with a wrong PAT" {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT "wrong-pat"
+            { Get-AzDevOpsBranches -Project $env:ADO_PROJECT -ErrorAction Stop } | Should -Throw
+        }
+
+        It " should throw a 404 error with a wrong project and organization" {
+            Connect-AzDevOps -Organization 'wrong-org' -PAT $env:ADO_PAT
+            { Get-AzDevOpsBranches -Project "wrong-project" -ErrorAction Stop } | Should -Throw
+        }
+    }
+
     Context " Get-AzDevOpsBranchPolicy without a connection" {
         It " should throw an error" {
             { 

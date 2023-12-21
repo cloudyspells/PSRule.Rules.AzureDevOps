@@ -89,6 +89,7 @@ Function Get-AzDevOpsBranches {
     }
     return @($response.value)
 }
+Export-ModuleMember -Function Get-AzDevOpsBranches
 
 <#
     .SYNOPSIS
