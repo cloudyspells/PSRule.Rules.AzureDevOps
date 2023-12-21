@@ -53,8 +53,10 @@ Describe "Functions: DevOps.Repos.Tests" {
     Context " Get-AzDevOpsBranches without a connection" {
         It " should throw an error" {
             { 
+                Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+                $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
                 Disconnect-AzDevOps
-                Get-AzDevOpsBranches -Project $env:ADO_PROJECT
+                Get-AzDevOpsBranches -Project $env:ADO_PROJECT -Repository $repos[0].id
             } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
