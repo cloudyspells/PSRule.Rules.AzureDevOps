@@ -1,14 +1,14 @@
 ---
 category: Microsoft Azure DevOps Repos
 severity: Critical
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.HasBranchPolicy.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.Branch.HasBranchPolicy.md
 ---
 
-# AzureDevOps.Repos.HasBranchPolicy
+# Azure.DevOps.Repos.Branch.HasBranchPolicy
 
 ## SYNOPSIS
 
-The repository's default branch should have a branch policy
+The branch should have a branch policy
 
 ## DESCRIPTION
 

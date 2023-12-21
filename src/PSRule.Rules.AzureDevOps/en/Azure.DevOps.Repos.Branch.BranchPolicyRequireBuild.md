@@ -1,15 +1,15 @@
 ---
 category: Microsoft Azure DevOps Repos
 severity: Severe
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyRequireBuild.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.Branch.BranchPolicyRequireBuild.md
 ---
 
-# Azure.DevOps.Repos.BranchPolicyRequireBuild
+# Azure.DevOps.Repos.Branch.BranchPolicyRequireBuild
 
 ## SYNOPSIS
 
-The branch policy should be configured to require a build or CI pipeline to pass
-before changes can be merged into the default branch.
+The branch policy should be configured to require a build or CI pipeline to
+pass before changes can be merged into the default branch.
 
 ## DESCRIPTION
 

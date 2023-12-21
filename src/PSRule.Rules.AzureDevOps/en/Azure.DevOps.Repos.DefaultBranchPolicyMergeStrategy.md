@@ -1,10 +1,10 @@
 ---
 category: Microsoft Azure DevOps Repos
 severity: Important
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyMergeStrategy.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.DefaultBranchPolicyMergeStrategy.md
 ---
 
-# Azure.DevOps.Repos.BranchPolicyMergeStrategy
+# Azure.DevOps.Repos.DefaultBranchPolicyMergeStrategy
 
 ## SYNOPSIS
 

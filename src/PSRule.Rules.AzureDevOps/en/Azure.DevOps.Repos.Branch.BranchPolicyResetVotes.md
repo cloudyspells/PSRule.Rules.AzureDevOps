@@ -1,18 +1,21 @@
 ---
 category: Microsoft Azure DevOps Repos
-severity: Critical
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyAllowSelfApproval.md
+severity: Severe
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.Branch.BranchPolicyResetVotes.md
 ---
 
-# AzureDevOps.Repos.BranchPolicyAllowSelfApproval
+# Azure.DevOps.Repos.Branch.BranchPolicyResetVotes
 
 ## SYNOPSIS
 
-Change authors should not be allowed to approve their own changes.
+The branch policy should reset votes when changes are updated. This will help
+ensure that the code in the default branch is of a high quality and that the
+team's Git workflow is followed.
 
 ## DESCRIPTION
 
-The branch policy should not allow creators to approve their own changes.
+When a branch policy is configured to require a minimum number of reviewers and
+votes, the policy should be configured to reset votes when changes are updated.
 This will help ensure that the code in the default branch is of a high quality
 and that the team's Git workflow is followed.
 
@@ -20,7 +23,7 @@ Mininum TokenType: `ReadOnly`
 
 ## RECOMMENDATION
 
-Consider disabling the option to allow creators to approve their own changes.
+Consider configuring the branch policy to reset votes when changes are updated.
 
 ## LINKS
 

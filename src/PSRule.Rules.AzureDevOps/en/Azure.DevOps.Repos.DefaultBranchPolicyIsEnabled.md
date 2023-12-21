@@ -1,10 +1,10 @@
 ---
 category: Microsoft Azure DevOps Repos
 severity: Critical
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyIsEnabled.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.DefaultBranchPolicyIsEnabled.md
 ---
 
-# AzureDevOps.Repos.BranchPolicyIsEnabled
+# Azure.DevOps.Repos.DefaultBranchPolicyIsEnabled
 
 ## SYNOPSIS
 

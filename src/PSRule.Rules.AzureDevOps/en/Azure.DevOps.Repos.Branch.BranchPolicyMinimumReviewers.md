@@ -1,14 +1,14 @@
 ---
 category: Microsoft Azure DevOps Repos
 severity: Severe
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyMinimumReviewers.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.Branch.BranchPolicyMinimumReviewers.md
 ---
 
-# AzureDevOps.Repos.BranchPolicyMinimumReviewers
+# Azure.DevOps.Repos.Branch.BranchPolicyMinimumReviewers
 
 ## SYNOPSIS
 
-The repository's default branch should have a branch policy with a minimum
+The repository's branch should have a branch policy with a minimum
 number of reviewers.
 
 ## DESCRIPTION
