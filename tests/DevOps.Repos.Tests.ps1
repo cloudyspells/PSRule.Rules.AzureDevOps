@@ -75,13 +75,19 @@ Describe "Functions: DevOps.Repos.Tests" {
 
     Context " Get-AzDevOpsBranches with wrong parameters" {
         It " should throw an error with a wrong PAT" {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
+            Disconnect-AzDevOps
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT "wrong-pat"
-            { Get-AzDevOpsBranches -Project $env:ADO_PROJECT -ErrorAction Stop } | Should -Throw
+            { Get-AzDevOpsBranches -Project $env:ADO_PROJECT -Repository $repos[0].id -ErrorAction Stop } | Should -Throw
         }
 
         It " should throw a 404 error with a wrong project and organization" {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
+            Disconnect-AzDevOps
             Connect-AzDevOps -Organization 'wrong-org' -PAT $env:ADO_PAT
-            { Get-AzDevOpsBranches -Project "wrong-project" -ErrorAction Stop } | Should -Throw
+            { Get-AzDevOpsBranches -Project "wrong-project" -Repository $repos[0].id -ErrorAction Stop } | Should -Throw
         }
     }
 
