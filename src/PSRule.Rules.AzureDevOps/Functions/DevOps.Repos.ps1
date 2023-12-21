@@ -44,6 +44,55 @@ Export-ModuleMember -Function Get-AzDevOpsRepos
 
 <#
     .SYNOPSIS
+    Get Azure DevOps branches for a repo
+
+    .DESCRIPTION
+    Get Azure DevOps branches for a repo using Azure DevOps Rest API
+
+    .PARAMETER Project
+    Project name for Azure DevOps
+
+    .PARAMETER Repository
+    Repository name for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsBranches -Project $Project -Repository $Repository
+#>
+Function Get-AzDevOpsBranches {
+    [CmdletBinding()]
+    [OutputType([System.Object[]])]
+    param (
+        [Parameter(Mandatory)]
+        [string]
+        $Project,
+        [Parameter(Mandatory)]
+        [string]
+        $Repository
+    )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $header = $script:connection.GetHeader()
+    Write-Verbose "Getting branches for repo $Repository in project $Project"
+    $uri = "https://dev.azure.com/$Organization/_apis/git/repositories/$Repository/refs?filter=heads&api-version=7.2-preview.2"
+    Write-Verbose "URI: $uri"
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # If the response is a string and not an object, throw an exception for authentication failure or project not found
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"
+        }
+    }
+    catch {
+        throw $_.Exception.Message
+    }
+    return @($response.value)
+}
+Export-ModuleMember -Function Get-AzDevOpsBranches
+
+<#
+    .SYNOPSIS
     Get Azure DevOps branch policy for a branch in a repo
 
     .DESCRIPTION
@@ -381,6 +430,26 @@ function Export-AzDevOpsReposAndBranchPolicies {
             $readmeExists = ((Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "README.md") -or (Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "README"))
             $repo | Add-Member -MemberType NoteProperty -Name ReadmeExists -Value $readmeExists
 
+            # Get all branches for the repo
+            $branches = Get-AzDevOpsBranches -Project $Project -Repository $repo.id
+            # add branch policies for each branch to the branches object
+            $branches = $branches | ForEach-Object {
+                $branch = $_
+                $branchPolicy = @(Get-AzDevOpsBranchPolicy -Project $Project -Repository $repo.id -Branch $branch.name)
+                $branch | Add-Member -MemberType NoteProperty -Name BranchPolicy -Value $branchPolicy
+                $branch
+            }
+            # Add an ObjectType Azure.DevOps.Repo.Branch to each branch object
+            $branches = $branches | ForEach-Object {
+                $branch = $_
+                $branch | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo.Branch"
+                # Add ObjectName to branch object
+                $branch | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.{2}.{3}" -f $Organization,$Project,$repo.name,$branch.name)
+                $branch
+            }
+
+
+
             # Add a property indicating if a file named LICENSE or LICENSE.md exists in the repo
             $licenseExists = ((Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "LICENSE") -or (Test-AzDevOpsFileExists -Project $Project -Repository $repo.id -Path "LICENSE.md"))
             $repo | Add-Member -MemberType NoteProperty -Name LicenseExists -Value $licenseExists
@@ -404,8 +473,9 @@ function Export-AzDevOpsReposAndBranchPolicies {
             }
             
             # Export repo object to JSON file
-            Write-Verbose "Exporting repo $($repo.name) to JSON as file $($repo.name).ado.repo.json"
-            $repo | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($repo.name).ado.repo.json"
+            Write-Verbose "Exporting repo $($repo.name) and its branches to JSON as file $($repo.name).ado.repo.json"
+            $branches += $repo
+            $branches | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($repo.name).ado.repo.json"
         }
     }
 }

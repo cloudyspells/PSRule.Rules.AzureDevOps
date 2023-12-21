@@ -1,10 +1,10 @@
 ---
 category: Microsoft Azure DevOps Repos
 severity: Severe
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/AzureDevOps.Repos.BranchPolicyResetVotes.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.DefaultBranchPolicyResetVotes.md
 ---
 
-# AzureDevOps.Repos.BranchPolicyResetVotes
+# Azure.DevOps.Repos.DefaultBranchPolicyResetVotes
 
 ## SYNOPSIS
 

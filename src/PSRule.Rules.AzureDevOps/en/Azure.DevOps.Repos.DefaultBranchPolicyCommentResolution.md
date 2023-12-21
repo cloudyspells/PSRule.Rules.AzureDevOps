@@ -1,14 +1,15 @@
 ---
 category: Microsoft Azure DevOps Repos
 severity: Important
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyCommentResolution.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.DefaultBranchPolicyCommentResolution.md
 ---
 
-# Azure.DevOps.Repos.BranchPolicyCommentResolution
+# Azure.DevOps.Repos.DefaultBranchPolicyCommentResolution
 
 ## SYNOPSIS
 
-A policy should be configured to require comments for pull requests to be resolved.
+A policy should be configured on the default branch to require comments for
+pull requests to be resolved.
 
 ## DESCRIPTION
 

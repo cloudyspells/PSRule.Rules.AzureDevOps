@@ -50,6 +50,47 @@ Describe "Functions: DevOps.Repos.Tests" {
         }
     }
 
+    Context " Get-AzDevOpsBranches without a connection" {
+        It " should throw an error" {
+            { 
+                Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+                $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
+                Disconnect-AzDevOps
+                Get-AzDevOpsBranches -Project $env:ADO_PROJECT -Repository $repos[0].id
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+        }
+    }
+
+    Context " Get-AzDevOpsBranches on a project" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
+            $branches = Get-AzDevOpsBranches -Project $env:ADO_PROJECT -Repository $repos[0].id
+        }
+
+        It " should return a list of branches" {
+            $branches | Should -Not -BeNullOrEmpty
+        }
+    }
+
+    Context " Get-AzDevOpsBranches with wrong parameters" {
+        It " should throw an error with a wrong PAT" {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
+            Disconnect-AzDevOps
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT "wrong-pat"
+            { Get-AzDevOpsBranches -Project $env:ADO_PROJECT -Repository $repos[0].id -ErrorAction Stop } | Should -Throw
+        }
+
+        It " should throw a 404 error with a wrong project and organization" {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $repos = Get-AzDevOpsRepos -Project $env:ADO_PROJECT
+            Disconnect-AzDevOps
+            Connect-AzDevOps -Organization 'wrong-org' -PAT $env:ADO_PAT
+            { Get-AzDevOpsBranches -Project "wrong-project" -Repository $repos[0].id -ErrorAction Stop } | Should -Throw
+        }
+    }
+
     Context " Get-AzDevOpsBranchPolicy without a connection" {
         It " should throw an error" {
             { 
@@ -331,11 +372,19 @@ Describe "Functions: DevOps.Repos.Tests" {
             }
         }
 
-        It 'Should export all JSON files with an ObjectType property set to Azure.DevOps.Repo' {
+        It 'Should export all JSON files with an Azure.DevOps.Repo ObjectType object in it' {
             $files = Get-ChildItem -Path $OutputPath -Recurse -File | Where-Object { $_.Name -match "ado.repo.json" }
             $files | ForEach-Object {
                 $json = Get-Content -Path $_.FullName -Raw | ConvertFrom-Json
-                $json.ObjectType | Should -Be "Azure.DevOps.Repo"
+                $json | Where-Object { $_.ObjectType -eq "Azure.DevOps.Repo" } | Should -Not -BeNullOrEmpty
+            }
+        }
+
+        It 'Should export all JSON files with an Azure.DevOps.Repo.Branch ObjectType object in it' {
+            $files = Get-ChildItem -Path $OutputPath -Recurse -File | Where-Object { $_.Name -match "ado.repo.json" }
+            $files | ForEach-Object {
+                $json = Get-Content -Path $_.FullName -Raw | ConvertFrom-Json
+                $json | Where-Object { $_.ObjectType -eq "Azure.DevOps.Repo.Branch" } | Should -Not -BeNullOrEmpty
             }
         }
     }

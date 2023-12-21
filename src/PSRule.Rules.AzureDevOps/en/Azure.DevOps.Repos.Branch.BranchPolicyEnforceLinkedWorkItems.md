@@ -1,10 +1,10 @@
 ---
 category: Microsoft Azure DevOps Repos
 severity: Informational
-online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems.md
+online version: https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/blob/main/src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.Branch.BranchPolicyEnforceLinkedWorkItems.md
 ---
 
-# Azure.DevOps.Repos.BranchPolicyEnforceLinkedWorkItems
+# Azure.DevOps.Repos.Branch.BranchPolicyEnforceLinkedWorkItems
 
 ## SYNOPSIS
 
