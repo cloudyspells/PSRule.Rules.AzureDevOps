@@ -47,11 +47,10 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
+                Connect-AzDevOps -Organization $(devops_organization) -PAT "$(ADOPAT)"
                 Export-AzDevOpsRuleData `
-                  -Organization $(devops_organization) `
                   -Project $(devops_project) `
                   -OutputPath .\Temp `
-                  -PAT $(ADOPAT)
                 Assert-PSRule -Style AzurePipelines `
                   -Module PSRule.Rules.AzureDevOps `
                   -InputPath '$(Build.SourcesDirectory)/Temp/' `
