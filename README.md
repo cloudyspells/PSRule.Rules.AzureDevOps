@@ -24,6 +24,20 @@ with your ideas.
 
 ![Screenshot of version 0.0.11 Sarif output in Azure DevOps](assets/media/sarif-0.0.11.png)
 
+## Table of Contents
+
+1. [Quickstart Guide](## 1. Quickstart Guide)
+    1. [Prerequisites](### 1.1. Prerequisites)
+    2. [Connect using a Personal Access Token](### 1.2 Connect using a Personal Access Token)
+        1. [Example: Run with full access token](#### 1.2.1 Example: Run with full access token)
+        2. [Example: Run with read-only access token](#### 1.2.2 Example: Run with read-only access token)
+    3. [Connect using a Service Principal or Managed Identity](### 1.3 Connect using a Service Principal or Managed Identity)
+        1. [Example: Authenticate using a Service Principal](#### 1.3.1 Example: Authenticate using a Service Principal)
+        2. [Example: Authenticate using a System Assigned Managed Identity](#### 1.3.2 Example: Authenticate using a System Assigned Managed Identity)
+        3. [Example: Authenticate using a User Assigned Managed Identity](#### 1.3.3 Example: Authenticate using a User Assigned Managed Identity)
+2. [Rules](## 2. Rules)
+    1. [Implemented rules](### 2.1 Implemented rules)
+
 ## 1. Quickstart Guide
 
 ### 1.1. Prerequisites
@@ -251,7 +265,7 @@ This project is [licensed under the MIT License](LICENSE).
 - [Bernie White](https://github.com/BernieWhite) for creating
   [PSRule](https://microsoft.github.io/PSRule/V2).
 
-## 6. Maintainers
+## 6.Maintainers
 
 - [Roderick Bant](https://github.com/webtonize)
 
