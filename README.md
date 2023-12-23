@@ -24,7 +24,9 @@ with your ideas.
 
 ![Screenshot of version 0.0.11 Sarif output in Azure DevOps](assets/media/sarif-0.0.11.png)
 
-## Usage
+## 1. Quickstart Guide
+
+### 1.1. Prerequisites
 
 To use this module, you need to have _PSRule_ installed.
 You can install it from the PowerShell Gallery:
@@ -40,7 +42,7 @@ from the PowerShell Gallery:
 Install-Module -Name PSRule.Rules.AzureDevOps -Scope CurrentUser
 ```
 
-### PAT Token
+### 1.2 Connect using a Personal Access Token
 
 Once you have both modules installed, you can connect to your
 Azure DevOps organization and run an export of your Azure DevOps
@@ -54,7 +56,7 @@ read access to all scopes and read & manage for scope that do not
 have read-only access. Documentation on how to create the PATs can
 be found in the [docs/token-permissions.md](docs/token-permissions.md).
 
-#### Example: Run with full access token
+#### 1.2.1 Example: Run with full access token
 
 ```powershell
 Connect-AzDevOps `
@@ -68,7 +70,7 @@ Assert-PSRule `
     -Module PSRule.Rules.AzureDevOps
 ```
 
-#### Example: Run with read-only access token
+#### 1.2.2 Example: Run with read-only access token
 
 ```powershell
 Connect-AzDevOps `
@@ -83,7 +85,7 @@ Assert-PSRule `
     -Module PSRule.Rules.AzureDevOps
 ```
 
-### Service Principal or Managed Identity
+### 1.3 Connect using a Service Principal or Managed Identity
 
 Since version 0.3.0 of this module, you can also connect to your
 Azure DevOps organization with a Service Principal or Managed Identity.
@@ -94,7 +96,7 @@ administrator permissions. Alternately, you can use a Service Principal
 with only read permissions or fine-grained permissions with the `-TokenType`
 parameter.
 
-#### Example: Run with a Service Principal
+#### 1.3.1 Example: Authenticate using a Service Principal
 
 ```powershell
 Connect-AzDevOps `
@@ -111,7 +113,7 @@ Assert-PSRule `
     -Module PSRule.Rules.AzureDevOps
 ```
 
-#### Example: Run with a System Assigned Managed Identity
+#### 1.3.2 Example: Authenticate using a System Assigned Managed Identity
 
 ```powershell
 Connect-AzDevOps `
@@ -125,7 +127,7 @@ Assert-PSRule `
     -Module PSRule.Rules.AzureDevOps
 ```
 
-#### Example: Run with a User Assigned Managed Identity
+#### 1.3.3 Example: Authenticate using a User Assigned Managed Identity
 
 ```powershell
 $env:ADO_MSI_CLIENT_ID = $MyClientId
@@ -142,7 +144,7 @@ Assert-PSRule `
 
 ![Screenshot of version 0.0.9 run](assets/media/run-0.0.9.png)
 
-### Organization level export
+### 1.4 Export data at the Organization level
 
 Since version 0.0.8 of this module, you can also export the
 data at the organization level, looping through all projects
@@ -153,7 +155,7 @@ Export-AzDevOpsOrganizationRuleData `
     -OutputPath "C:\Temp\MyOrg"
 ```
 
-### Disable checks for Azure DevOps Features that require additional licenses
+### 1.5 Disable checks for Azure DevOps Features that require additional licenses
 
 Since version 0.0.12 of this module, you can disable rules that
 check for Azure DevOps features that require additional licenses.
@@ -168,7 +170,7 @@ Assert-PSRule `
     -Baseline Baseline.NoExtraLicense
 ```
 
-## Rules
+## 2. Rules
 
 Documentation for the implemented rules can be found in the
 [en](src/PSRule.Rules.AzureDevOps/en/) folder in the module folder.
@@ -178,7 +180,7 @@ provides a reference for how the rules in this module are related to the
 best practices recommended by Microsoft. It is the main guiding document
 in building the ruleset for this module.
 
-### Implemented rules
+### 2.1 Implemented rules
 
 - [Azure.DevOps.Pipelines.Core.InheritedPermissions](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.InheritedPermissions.md)
 - [Azure.DevOps.Pipelines.Core.NoPlainTextSecrets](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.NoPlainTextSecrets.md)
@@ -235,25 +237,25 @@ in building the ruleset for this module.
 - [Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoKeyVaultNoSecrets.md)
 - [Azure.DevOps.Tasks.VariableGroup.NoPlainTextSecrets](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.NoPlainTextSecrets.md)
 
-## Contributing
+## 3. Contributing
 
 This project welcomes contributions and suggestions. Please read
 [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute.
 
-## License
+## 4. License
 
 This project is [licensed under the MIT License](LICENSE).
 
-## Acknowledgements
+## 5. Acknowledgements
 
 - [Bernie White](https://github.com/BernieWhite) for creating
   [PSRule](https://microsoft.github.io/PSRule/V2).
 
-## Maintainer
+## 6. Maintainers
 
 - [Roderick Bant](https://github.com/webtonize)
 
-## References
+## 7. References
 
 - [PSRule](https://microsoft.github.io/PSRule/V2)
 - [Auditing an Azure DevOps project configuration with PSRule](https://medium.com/@webtonize/auditing-an-azure-devops-project-configuration-with-psrule-73cf17753827)
