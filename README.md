@@ -253,7 +253,7 @@ This project is [licensed under the MIT License](LICENSE).
 
 ## 6.Maintainers
 
-- [Roderick Bant](https://github.com/webtonize) (does the actual work)
+- [Roderick Bant](https://github.com/webtonize)
 - [Wouter van den Meulenhof](https://github.com/wouter-van-den-meulenhof)
 
 ## 7. References
