@@ -27,8 +27,8 @@ Describe "Functions: Common.Tests" {
             $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
         }
 
-        It " should run Get-AzDevOpsProjects" {
-            $projects = Get-AzDevOpsProjects
+        It " should run Get-AzDevOpsProject" {
+            $projects = Get-AzDevOpsProject
             $projects | Should -Not -BeNullOrEmpty
         }
     }
@@ -55,8 +55,8 @@ Describe "Functions: Common.Tests" {
             $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
         }
 
-        It " should run Get-AzDevOpsProjects" {
-            $projects = Get-AzDevOpsProjects
+        It " should run Get-AzDevOpsProject" {
+            $projects = Get-AzDevOpsProject
             $projects | Should -Not -BeNullOrEmpty
         }
     }
@@ -65,7 +65,7 @@ Describe "Functions: Common.Tests" {
         BeforeAll {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -ClientId $env:ADO_CLIENT_ID -ClientSecret $env:ADO_CLIENT_SECRET -TenantId $env:ADO_TENANT_ID -AuthType ServicePrincipal
             $script:connection.TokenExpires = [System.DateTime]::MinValue
-            $projects = Get-AzDevOpsProjects
+            $projects = Get-AzDevOpsProject
             $connection = $script:connection
         }
 
@@ -81,7 +81,7 @@ Describe "Functions: Common.Tests" {
             $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
         }
 
-        It " should run Get-AzDevOpsProjects" {
+        It " should run Get-AzDevOpsProject" {
             $projects | Should -Not -BeNullOrEmpty
         }
     }
@@ -112,8 +112,8 @@ Describe "Functions: Common.Tests" {
             $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
         }
 
-        It " should run Get-AzDevOpsProjects" {
-            $projects = Get-AzDevOpsProjects
+        It " should run Get-AzDevOpsProject" {
+            $projects = Get-AzDevOpsProject
             $projects | Should -Not -BeNullOrEmpty
         }
     }
@@ -122,7 +122,7 @@ Describe "Functions: Common.Tests" {
         BeforeAll {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -AuthType ManagedIdentity
             $script:connection.TokenExpires = [System.DateTime]::MinValue
-            $projects = Get-AzDevOpsProjects
+            $projects = Get-AzDevOpsProject
             $connection = $script:connection
         }
 
@@ -138,7 +138,7 @@ Describe "Functions: Common.Tests" {
             $connection.TokenExpires | Should -BeGreaterThan (Get-Date)
         }
 
-        It " should run Get-AzDevOpsProjects" {
+        It " should run Get-AzDevOpsProject" {
             $projects | Should -Not -BeNullOrEmpty
         }
     }
@@ -175,19 +175,19 @@ Describe "Functions: Common.Tests" {
         }
     }
 
-    Context " Get-AzDevOpsProjects without a connection" {
+    Context " Get-AzDevOpsProject without a connection" {
         It " should throw an error" {
             { 
                 Disconnect-AzDevOps
-                Get-AzDevOpsProjects
+                Get-AzDevOpsProject
             } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
         }
     }
 
-    Context " Get-AzDevOpsProjects" {
+    Context " Get-AzDevOpsProject" {
         BeforeAll {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
-            $projects = Get-AzDevOpsProjects
+            $projects = Get-AzDevOpsProject
         }
 
         It " The projects should not be null" {
@@ -209,14 +209,14 @@ Describe "Functions: Common.Tests" {
         It " The operation should fail with a wrong Organization" {
             { 
                 Connect-AzDevOps -Organization 'wrong' -PAT $env:ADO_PAT
-                Get-AzDevOpsProjects -ErrorAction Stop
+                Get-AzDevOpsProject -ErrorAction Stop
             } | Should -Throw 
         }
 
         It " The operation should fail with a wrong PAT" {
             { 
                 Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT 'wrong'
-                Get-AzDevOpsProjects -ErrorAction Stop
+                Get-AzDevOpsProject -ErrorAction Stop
             } | Should -Throw 
         }
     }
