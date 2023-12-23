@@ -24,20 +24,6 @@ with your ideas.
 
 ![Screenshot of version 0.0.11 Sarif output in Azure DevOps](assets/media/sarif-0.0.11.png)
 
-## Table of Contents
-
-1. [Quickstart Guide](## 1. Quickstart Guide)
-    1. [Prerequisites](### 1.1. Prerequisites)
-    2. [Connect using a Personal Access Token](### 1.2 Connect using a Personal Access Token)
-        1. [Example: Run with full access token](#### 1.2.1 Example: Run with full access token)
-        2. [Example: Run with read-only access token](#### 1.2.2 Example: Run with read-only access token)
-    3. [Connect using a Service Principal or Managed Identity](### 1.3 Connect using a Service Principal or Managed Identity)
-        1. [Example: Authenticate using a Service Principal](#### 1.3.1 Example: Authenticate using a Service Principal)
-        2. [Example: Authenticate using a System Assigned Managed Identity](#### 1.3.2 Example: Authenticate using a System Assigned Managed Identity)
-        3. [Example: Authenticate using a User Assigned Managed Identity](#### 1.3.3 Example: Authenticate using a User Assigned Managed Identity)
-2. [Rules](## 2. Rules)
-    1. [Implemented rules](### 2.1 Implemented rules)
-
 ## 1. Quickstart Guide
 
 ### 1.1. Prerequisites
@@ -56,7 +42,7 @@ from the PowerShell Gallery:
 Install-Module -Name PSRule.Rules.AzureDevOps -Scope CurrentUser
 ```
 
-### 1.2 Connect using a Personal Access Token
+### 1.2 Authenticate using a Personal Access Token
 
 Once you have both modules installed, you can connect to your
 Azure DevOps organization and run an export of your Azure DevOps
@@ -70,7 +56,7 @@ read access to all scopes and read & manage for scope that do not
 have read-only access. Documentation on how to create the PATs can
 be found in the [docs/token-permissions.md](docs/token-permissions.md).
 
-#### 1.2.1 Example: Run with full access token
+#### 1.2.1 Example: Authenticate using a full access PAT
 
 ```powershell
 Connect-AzDevOps `
@@ -84,7 +70,7 @@ Assert-PSRule `
     -Module PSRule.Rules.AzureDevOps
 ```
 
-#### 1.2.2 Example: Run with read-only access token
+#### 1.2.2 Example: Authenticate using a read-only PAT
 
 ```powershell
 Connect-AzDevOps `
@@ -99,7 +85,7 @@ Assert-PSRule `
     -Module PSRule.Rules.AzureDevOps
 ```
 
-### 1.3 Connect using a Service Principal or Managed Identity
+### 1.3 Authenticate using a Service Principal or Managed Identity
 
 Since version 0.3.0 of this module, you can also connect to your
 Azure DevOps organization with a Service Principal or Managed Identity.
