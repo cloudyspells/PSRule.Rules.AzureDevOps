@@ -254,9 +254,12 @@ This project is [licensed under the MIT License](LICENSE).
 ## 6.Maintainers
 
 - [Roderick Bant](https://github.com/webtonize)
+
+## 7. Contributors
+
 - [Wouter van den Meulenhof](https://github.com/wouter-van-den-meulenhof)
 
-## 7. References
+## 8. References
 
 - [PSRule](https://microsoft.github.io/PSRule/V2)
 - [Auditing an Azure DevOps project configuration with PSRule](https://medium.com/@webtonize/auditing-an-azure-devops-project-configuration-with-psrule-73cf17753827)
