@@ -172,8 +172,8 @@ Assert-PSRule `
 
 ## 2. Rules
 
-Documentation for the implemented rules can be found in the
-[en](src/PSRule.Rules.AzureDevOps/en/) folder in the module folder.
+Documentation (English and Dutch) concerning the rules that are currently implemented as part of this module can be found in the
+[en](src/PSRule.Rules.AzureDevOps/en/) and [nl](src/PSRule.Rules.AzureDevOps/nl/) folders under the src directory.
 
 This [annotated version of the official security best practices](docs/security-best-practices.md)
 provides a reference for how the rules in this module are related to the
@@ -253,7 +253,8 @@ This project is [licensed under the MIT License](LICENSE).
 
 ## 6.Maintainers
 
-- [Roderick Bant](https://github.com/webtonize)
+- [Roderick Bant](https://github.com/webtonize) (does the actual work)
+- [Wouter van den Meulenhof](https://github.com/wouter-van-den-meulenhof)
 
 ## 7. References
 
