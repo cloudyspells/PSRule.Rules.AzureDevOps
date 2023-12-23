@@ -146,5 +146,4 @@ function Get-AzDevOpsProject {
         return $response
     }
 }
-Export-ModuleMember -Function Get-AzDevOpsProject
 # End of Function Get-AzDevOpsProject
