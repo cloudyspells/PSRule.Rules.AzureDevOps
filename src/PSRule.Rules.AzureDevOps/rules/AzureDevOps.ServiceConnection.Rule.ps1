@@ -4,7 +4,6 @@
 Rule 'Azure.DevOps.ServiceConnections.ProductionCheckProtection' `
     -Ref 'ADO-SC-001' `
     -Type 'Azure.DevOps.ServiceConnection' `
-    -With 'IsProduction' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description 'Production service connection should be protected by one or more checks.'
@@ -18,7 +17,6 @@ Rule 'Azure.DevOps.ServiceConnections.ProductionCheckProtection' `
 Rule 'Azure.DevOps.ServiceConnections.ProductionHumanApproval' `
     -Ref 'ADO-SC-002' `
     -Type 'Azure.DevOps.ServiceConnection' `
-    -With 'IsProduction' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description 'Production service connection should be protected by a human approval.'
@@ -80,7 +78,6 @@ Rule 'Azure.DevOps.ServiceConnections.WorkloadIdentityFederation' `
 Rule 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' `
     -Ref 'ADO-SC-006' `
     -Type 'Azure.DevOps.ServiceConnection' `
-    -With 'IsProduction' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description 'Production service connection should be limited to specific branches.'

@@ -4,7 +4,6 @@
 Rule 'Azure.DevOps.Pipelines.Environments.ProductionCheckProtection' `
     -Ref 'ADO-E-001' `
     -Type 'Azure.DevOps.Pipelines.Environment' `
-    -With 'IsProduction' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description: Production environment should be protected by one or more checks
@@ -22,7 +21,6 @@ Rule 'Azure.DevOps.Pipelines.Environments.ProductionCheckProtection' `
 Rule 'Azure.DevOps.Pipelines.Environments.ProductionHumanApproval' `
     -Ref 'ADO-E-002' `
     -Type 'Azure.DevOps.Pipelines.Environment' `
-    -With 'IsProduction' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description 'Production environment should be protected by a human approval'
@@ -51,7 +49,6 @@ Rule 'Azure.DevOps.Pipelines.Environments.Description' `
 Rule 'Azure.DevOps.Pipelines.Environments.ProductionBranchLimit' `
     -Ref 'ADO-E-004' `
     -Type 'Azure.DevOps.Pipelines.Environment' `
-    -With 'IsProduction' `
     -Tag @{ release = 'GA'} `
     -Level Warning {
         # Description 'Production environment should be limited to specific branches'

@@ -1571,11 +1571,6 @@ Describe 'AzureDevOps ' {
     }
 
     Context 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' {
-        It 'Should not touch non-production service connections' {
-            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' -and $_.TargetName -match 'fail$' })
-            $ruleHits.Count | Should -Be 0;
-        }
-
         It 'Should pass for production targets named success' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' -and $_.TargetName -like '*success*' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
@@ -1584,7 +1579,7 @@ Describe 'AzureDevOps ' {
 
         It 'Should be the same with a ReadOnly TokenType' {
             $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' -and $_.TargetName -match 'fail$' })
-            $ruleHits.Count | Should -Be 0;
+            $ruleHits.Count | Should -Be 3;
 
             $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' -and $_.TargetName -like '*success*' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
@@ -1593,7 +1588,7 @@ Describe 'AzureDevOps ' {
 
         It 'Should be the same with a FineGrained TokenType' {
             $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' -and $_.TargetName -match 'fail$' })
-            $ruleHits.Count | Should -Be 0;
+            $ruleHits.Count | Should -Be 3;
 
             $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProductionBranchLimit' -and $_.TargetName -like '*success*' })
             $ruleHits[0].Outcome | Should -Be 'Pass';

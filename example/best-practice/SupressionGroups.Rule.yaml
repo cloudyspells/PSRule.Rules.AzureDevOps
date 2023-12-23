@@ -1,0 +1,84 @@
+---
+# Synopsis: Only main, master, develop, and release branches should be protected
+apiVersion: github.com/microsoft/PSRule/v1
+kind: SuppressionGroup
+metadata:
+  name: 'non-production-branches'
+spec:
+  expiresOn: null
+  rule:
+  - Azure.DevOps.Repos.Branch.BranchPolicyAllowSelfApproval
+  - Azure.DevOps.Repos.Branch.BranchPolicyCommentResolution
+  - Azure.DevOps.Repos.Branch.BranchPolicyEnforceLinkedWorkItems
+  - Azure.DevOps.Repos.Branch.BranchPolicyIsEnabled
+  - Azure.DevOps.Repos.Branch.BranchPolicyMergeStrategy
+  - Azure.DevOps.Repos.Branch.BranchPolicyMinimumReviewers
+  - Azure.DevOps.Repos.Branch.BranchPolicyRequireBuild
+  - Azure.DevOps.Repos.Branch.BranchPolicyResetVotes
+  - Azure.DevOps.Repos.Branch.HasBranchPolicy
+  if:
+    allOf:
+    - name: '.'
+      notContains:
+      - 'refs/heads/main'
+      - 'refs/heads/master'
+      - 'refs/heads/develop'
+      - 'refs/heads/release'
+    - field: 'ObjectType'
+      equals: 'Azure.DevOps.Repo.Branch'
+
+---
+# Synposis: Only accept and production environments and should be protected
+apiVersion: github.com/microsoft/PSRule/v1
+kind: SuppressionGroup
+metadata:
+  name: 'non-production-environments'
+spec:
+  expiresOn: null
+  rule:
+  - Azure.DevOps.Pipelines.Environments.ProductionBranchLimit
+  - Azure.DevOps.Pipelines.Environments.ProductionCheckProtection
+  - Azure.DevOps.Pipelines.Environments.ProductionHumanApproval
+  if:
+    allOf:
+    - name: '.'
+      notContains:
+      - 'acc'
+      - 'accept'
+      - 'acceptance'
+      - 'live'
+      - 'pre'
+      - 'prd'
+      - 'prod'
+      - 'production'
+    - field: 'ObjectType'
+      in:
+      - 'Azure.DevOps.Pipelines.Environment'
+
+---
+# Synposis: Only accept and production service connections should be protected
+apiVersion: github.com/microsoft/PSRule/v1
+kind: SuppressionGroup
+metadata:
+  name: 'non-production-service-connections'
+spec:
+  expiresOn: null
+  rule:
+  - Azure.DevOps.ServiceConnections.ProductionBranchLimit
+  - Azure.DevOps.ServiceConnections.ProductionCheckProtection
+  - Azure.DevOps.ServiceConnections.ProductionHumanApproval
+  if:
+    allOf:
+    - name: '.'
+      notContains:
+      - 'acc'
+      - 'accept'
+      - 'acceptance'
+      - 'live'
+      - 'pre'
+      - 'prd'
+      - 'prod'
+      - 'production'
+    - field: 'ObjectType'
+      in:
+      - 'Azure.DevOps.ServiceConnection'
