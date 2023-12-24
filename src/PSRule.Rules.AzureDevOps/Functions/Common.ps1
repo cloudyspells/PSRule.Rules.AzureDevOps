@@ -58,6 +58,7 @@ Function Connect-AzDevOps {
         [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
         [string]
         $TenantId,
+        [Parameter()]
         [ValidateSet('PAT', 'ServicePrincipal', 'ManagedIdentity')]
         [string]
         $AuthType = 'PAT',
@@ -96,6 +97,7 @@ Function Disconnect-AzDevOps {
     [CmdletBinding()]
     param ()
     Clear-Variable connection -Scope Script -ErrorAction SilentlyContinue
+    Remove-Variable connection -Scope Script -ErrorAction SilentlyContinue
     $script:connection = ""
     $script:connection = $null
 }
@@ -109,19 +111,26 @@ Function Disconnect-AzDevOps {
     Get all Azure DevOps projects for an organization using Azure DevOps Rest API
 
     .EXAMPLE
-    Get-AzDevOpsProjects
+    Get-AzDevOpsProject
 #>
-function Get-AzDevOpsProjects {
+function Get-AzDevOpsProject {
     [CmdletBinding()]
-    [OutputType([System.Object[]])]
-    param ()
+    param (
+        [Parameter()]
+        [string]
+        $Project = ""
+    )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
     }
     $header = $script:connection.GetHeader()
     $Organization = $script:connection.Organization
     Write-Verbose "Getting projects for organization $Organization"
-    $uri = "https://dev.azure.com/$Organization/_apis/projects?api-version=6.0"
+    if([string]::IsNullOrEmpty($Project) -eq $false) {
+        $uri = "https://dev.azure.com/$Organization/_apis/projects/$($Project)?api-version=7.2-preview.4"
+    } else {
+        $uri = "https://dev.azure.com/$Organization/_apis/projects?api-version=7.2-preview.4"
+    }
     Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
@@ -131,9 +140,12 @@ function Get-AzDevOpsProjects {
         }
     }
     catch {
-        Write-Error "Failed to get projects from Azure DevOps"
+        throw "Failed to get projects from Azure DevOps"
     }
-    $projects = $response.value
-    return @($projects)
+    if($response.value) {
+        return $response.value
+    } else {
+        return $response
+    }
 }
-# End of Function Get-AzDevOpsProjects
+# End of Function Get-AzDevOpsProject

@@ -1,0 +1,13 @@
+execution:
+  inconclusiveWarning: false
+  notProcessedWarning: false
+  suppressedRuleWarning: false
+  suppressionGroupExpired: Error
+
+configuration:
+  ProjectAdminsMinMembers: 2
+  ProjectAdminsMaxMembers: 4
+  releaseMinimumProductionApproverCount: 1
+  branchMinimumApproverCount: 1
+  ghasEnabled: true
+  ghasBlockPushesEnabled: true

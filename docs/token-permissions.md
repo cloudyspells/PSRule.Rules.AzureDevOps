@@ -81,7 +81,7 @@ The following table lists the token scopes that are required for each command.
 
 | Rule Function                             | API(s)                                   | Version       | Method | Scope(s)                | PAT Category        | PAT Name        |
 |-------------------------------------------|------------------------------------------|---------------|--------|-------------------------|---------------------|-----------------|
-| Get-AzDevOpsProjects                      | projects                                 | 6.0           | GET    | vso.profile             | User Profile        | Read            |
+| Get-AzDevOpsProject                      | projects                                 | 6.0           | GET    | vso.profile             | User Profile        | Read            |
 |                                           |                                          |               |        | vso.project             | Project and Team    | Read            |
 | Get-AzDevOpsPipelines                     | pipelines                                | 6.0-preview.1 | GET    | vso.build               | Build               | Read            |
 |                                           | pipelines/{pipelineid}                   | 6.0-preview.1 | GET    | vso.build               | Build               | Read            |

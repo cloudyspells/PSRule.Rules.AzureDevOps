@@ -180,6 +180,9 @@ in building the ruleset for this module.
 
 ### Implemented rules
 
+- [Azure.DevOps.Groups.ProjectAdmins.MinMembers](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Groups.ProjectAdmins.MinMembers.md)
+- [Azure.DevOps.Groups.ProjectAdmins.MaxMembers](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Groups.ProjectAdmins.MaxMembers.md)
+- [Azure.DevOps.Groups.ProjectValidUsers.DoNotAssignMemberOfOtherGroups](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Groups.ProjectValidUsers.DoNotAssignMemberOfOtherGroups.md)
 - [Azure.DevOps.Pipelines.Core.InheritedPermissions](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.InheritedPermissions.md)
 - [Azure.DevOps.Pipelines.Core.NoPlainTextSecrets](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.NoPlainTextSecrets.md)
 - [Azure.DevOps.Pipelines.Core.UseYamlDefinition](./src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.UseYamlDefinition.md)

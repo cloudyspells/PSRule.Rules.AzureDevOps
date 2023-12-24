@@ -40,13 +40,23 @@ Function Export-AzDevOpsRuleData {
         [string]
         $OutputPath
     )
+    Write-Verbose "Exporting rule data for project $Project to $OutputPath"
+    Write-Verbose "Exporting repos and branch policies"
     Export-AzDevOpsReposAndBranchPolicies -Project $Project -OutputPath $OutputPath
+    Write-Verbose "Exporting environment checks"
     Export-AzDevOpsEnvironmentChecks -Project $Project -OutputPath $OutputPath
+    Write-Verbose "Exporting service connections"
     Export-AzDevOpsServiceConnections -Project $Project -OutputPath $OutputPath
+    Write-Verbose "Exporting pipelines"
     Export-AzDevOpsPipelines -Project $Project -OutputPath $OutputPath
+    Write-Verbose "Exporting pipelines settings"
     Export-AzDevOpsPipelinesSettings -Project $Project -OutputPath $OutputPath
+    Write-Verbose "Exporting variable groups"
     Export-AzDevOpsVariableGroups -Project $Project -OutputPath $OutputPath
+    Write-Verbose "Exporting release definitions"
     Export-AzDevOpsReleaseDefinitions -Project $Project -OutputPath $OutputPath
+    Write-Verbose "Exporting groups"
+    Export-AzDevOpsGroups -Project $Project -OutputPath $OutputPath
 }
 Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProjectRuleData
 # End of Function Export-AzDevOpsRuleData
@@ -71,7 +81,7 @@ Function Export-AzDevOpsOrganizationRuleData {
         [string]
         $OutputPath
     )
-    $projects = Get-AzDevOpsProjects
+    $projects = Get-AzDevOpsProject
     $projects | ForEach-Object {
         $project = $_
         # Create a subfolder for each project
@@ -85,7 +95,7 @@ Function Export-AzDevOpsOrganizationRuleData {
 Export-ModuleMember -Function Export-AzDevOpsOrganizationRuleData
 # End of Function Export-AzDevOpsOrganizationRuleData
 
-Export-ModuleMember -Function Get-AzDevOpsProjects
+Export-ModuleMember -Function Get-AzDevOpsProject
 Export-ModuleMember -Function Connect-AzDevOps
 Export-ModuleMember -Function Disconnect-AzDevOps
 
