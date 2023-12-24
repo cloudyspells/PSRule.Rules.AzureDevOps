@@ -14,7 +14,7 @@ Rule 'Azure.DevOps.Groups.ProjectAdmins.MinMembers' `
         AllOf {
             $Assert.HasField($TargetObject, "Members", $true)
             $Assert.HasField($TargetObject, "Members.Length", $true)
-            $Assert.GreaterOrEqual($TargetObject, "Members.Length", 2)
+            $Assert.GreaterOrEqual($TargetObject, "Members.Length", $Configuration.GetValueOrDefault('ProjectAdminsMinMembers', 2))
         }
 }
 
@@ -32,7 +32,7 @@ Rule 'Azure.DevOps.Groups.ProjectAdmins.MaxMembers' `
         AllOf {
             $Assert.HasField($TargetObject, "Members", $true)
             $Assert.HasField($TargetObject, "Members.Length", $true)
-            $Assert.LessOrEqual($TargetObject, "Members.Length", 4)
+            $Assert.LessOrEqual($TargetObject, "Members.Length", $Configuration.GetValueOrDefault('ProjectAdminsMaxMembers', 4))
         }
 }
 

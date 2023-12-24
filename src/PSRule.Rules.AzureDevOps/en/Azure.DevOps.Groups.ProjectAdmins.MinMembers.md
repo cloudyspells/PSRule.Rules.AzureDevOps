@@ -17,6 +17,8 @@ The project administrators group should have at least 2 members. This ensures th
 
 Mininum TokenType: `ReadOnly`
 
+This setting is configurable and can be changed to suit your organization's needs with `ProjectAdminsMinMembers` in the `configuration` section of your ps-rule.yaml file.
+
 ## RECOMMENDATION
 
 Consider adding more than one member to the project administrators group.
