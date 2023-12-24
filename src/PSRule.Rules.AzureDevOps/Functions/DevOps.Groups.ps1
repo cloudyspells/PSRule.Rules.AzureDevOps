@@ -148,7 +148,7 @@ Function Export-AzDevOpsGroups {
         $groups = Get-AzDevOpsGroups -Project $Project
     }
     catch {
-        Write-Error "Failed to get groups from Azure DevOps"
+        throw "Failed to get groups from Azure DevOps"
     }
     $groupDetails = @()
     foreach($group in $groups) {

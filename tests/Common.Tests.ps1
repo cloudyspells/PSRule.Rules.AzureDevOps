@@ -206,6 +206,21 @@ Describe "Functions: Common.Tests" {
             $projects | Select -ExpandProperty name | Should -Contain $env:ADO_PROJECT
         }
 
+        It " The projects should have a project named $env:ADO_PROJECT with a description" {
+            $projects | Where-Object { $_.name -eq $env:ADO_PROJECT } | Select -ExpandProperty description | Should -Not -BeNullOrEmpty
+        }
+
+        It " The -Project Parameter should return a single result for $env:ADO_PROJECT" {
+            $project = Get-AzDevOpsProject -Project $env:ADO_PROJECT
+            $project | Should -Not -BeNullOrEmpty
+        }
+
+        It " The -Project Parameter should throw on a non-existing project" {
+            { 
+                Get-AzDevOpsProject -Project 'wrong'
+            } | Should -Throw
+        }
+
         It " The operation should fail with a wrong Organization" {
             { 
                 Connect-AzDevOps -Organization 'wrong' -PAT $env:ADO_PAT

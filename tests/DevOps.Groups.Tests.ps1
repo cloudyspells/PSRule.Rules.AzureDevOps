@@ -208,4 +208,92 @@ Describe "Azure.DevOps.Group" {
             Disconnect-AzDevOps
         }
     }
+
+    Context " Export-AzDevOpsGroups without a connection" {
+        It " Should throw an error" {
+            { 
+                Disconnect-AzDevOps
+                Export-AzDevOpsGroups -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first."
+        }
+    }
+
+    Context " Export-AzDevOpsGroups" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            Export-AzDevOpsGroups -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
+        }
+
+        It " Should export a file" {
+            $file = Get-ChildItem -Path $env:ADO_EXPORT_DIR -Filter "groups.ado.json"
+            $file | Should -Not -BeNullOrEmpty
+        }
+
+        It " Should export a file with content" {
+            $file = Get-ChildItem -Path $env:ADO_EXPORT_DIR -Filter "groups.ado.json"
+            $file | Select-String -Pattern "displayName" | Should -Not -BeNullOrEmpty
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
+
+    Context " Export-AzDevOpsGroups with a ReadOnly PAT" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY
+            Export-AzDevOpsGroups -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
+        }
+
+        It " Should export a file" {
+            $file = Get-ChildItem -Path $env:ADO_EXPORT_DIR -Filter "groups.ado.json"
+            $file | Should -Not -BeNullOrEmpty
+        }
+
+        It " Should export a file with content" {
+            $file = Get-ChildItem -Path $env:ADO_EXPORT_DIR -Filter "groups.ado.json"
+            $file | Select-String -Pattern "displayName" | Should -Not -BeNullOrEmpty
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
+
+    Context " Export-AzDevOpsGroups with a FineGrained PAT" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_FINEGRAINED
+            Export-AzDevOpsGroups -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
+        }
+
+        It " Should export a file" {
+            $file = Get-ChildItem -Path $env:ADO_EXPORT_DIR -Filter "groups.ado.json"
+            $file | Should -Not -BeNullOrEmpty
+        }
+
+        It " Should export a file with content" {
+            $file = Get-ChildItem -Path $env:ADO_EXPORT_DIR -Filter "groups.ado.json"
+            $file | Select-String -Pattern "displayName" | Should -Not -BeNullOrEmpty
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
+
+    Context " Export-AzDevOpsGroups with wrong PAT or Organization" {
+        It " Should throw an error with a wrong PAT" {
+            { 
+                Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT "wrongPAT"
+                Export-AzDevOpsGroups -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
+            } | Should -Throw
+        }
+
+        It " Should throw an error with a wrong Organization" {
+            { 
+                Connect-AzDevOps -Organization "wrongOrganization" -PAT $env:ADO_PAT
+                Export-AzDevOpsGroups -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
+            } | Should -Throw
+        }
+    }
 }
