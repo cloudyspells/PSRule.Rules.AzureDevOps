@@ -37,13 +37,13 @@ Rule 'Azure.DevOps.Groups.ProjectAdmins.MaxMembers' `
 }
 
 # Synopsis: The Project Valid User should only be member of the Project Collection Valid Users group
-Rule 'Azure.DevOps.Groups.ProjectValidUser.DoNotAssignMemberOfOtherGroups' `
+Rule 'Azure.DevOps.Groups.ProjectValidUsers.DoNotAssignMemberOfOtherGroups' `
     -Ref 'ADO-GRP-003' `
     -Type 'Azure.DevOps.Group' `
     -If { $TargetObject.displayName -eq 'Project Valid Users' } `
     -Tag @{ release = 'GA'} `
     -Level Warning {
-        # Description "The Project Valid User should only be member of the Project Collection Valid Users group"
+        # Description "The Project Valid Users group should only be member of the Project Collection Valid Users group"
         Reason "The Project Valid User is member of other groups than the Project Collection Valid Users group"
         Recommend "Consider removing the Project Valid User from other groups than the Project Collection Valid Users group"
         # Links "https://docs.microsoft.com/en-us/azure/devops/organizations/security/permissions?view=azure-devops#project-valid-user"

@@ -1664,4 +1664,28 @@ Describe 'AzureDevOps ' {
             $fileExists | Should -Be $true;
         }
     }
+
+    Context 'Azure.DevOps.Groups.ProjectAdmins.MinMembers' {
+        It 'Should pass once' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Groups.ProjectAdmins.MinMembers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context 'Azure.DevOps.Groups.ProjectAdmins.MaxMembers' {
+        It 'Should pass once' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Groups.ProjectAdmins.MaxMembers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context 'Azure.DevOps.Groups.ProjectValidUsers.DoNotAssignMemberOfOtherGroups' {
+        It 'Should pass once' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Groups.ProjectValidUsers.DoNotAssignMemberOfOtherGroups' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
 }
