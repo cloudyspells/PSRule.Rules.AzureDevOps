@@ -31,9 +31,6 @@ Function Get-AzDevOpsGroups {
     catch {
         throw "Failed to get project details from Azure DevOps"
     }
-    if(!$projectResult) {
-        throw "Project '$Project' not found."
-    }
     $header = $script:connection.GetHeader()
     $Organization = $script:connection.Organization
     # Set the scope descriptor REST API endpoint
