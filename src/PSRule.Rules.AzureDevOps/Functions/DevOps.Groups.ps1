@@ -21,8 +21,8 @@ Function Get-AzDevOpsGroups {
         [string]
         $Project
     )
-    if(!$script:connection) {
-        throw [System.ArgumentException]::new('Not connected to Azure DevOps. Run Connect-AzDevOps first.')
+    if($null -eq $script:connection) {
+        throw 'Not connected to Azure DevOps. Run Connect-AzDevOps first.'
     }
     # Get project id
     try {
@@ -32,7 +32,7 @@ Function Get-AzDevOpsGroups {
         throw "Failed to get project details from Azure DevOps"
     }
     if(!$projectResult) {
-        throw [System.ArgumentException]::new("Project '$Project' not found.")
+        throw "Project '$Project' not found."
     }
     $header = $script:connection.GetHeader()
     $Organization = $script:connection.Organization
@@ -70,8 +70,8 @@ Function Get-AzDevOpsGroupDetails {
         [object]
         $Group
     )
-    if(!$script:connection) {
-        throw [System.ArgumentException]::new('Not connected to Azure DevOps. Run Connect-AzDevOps first.')
+    if($null -eq $script:connection) {
+        throw 'Not connected to Azure DevOps. Run Connect-AzDevOps first.'
     }
     $header = $script:connection.GetHeader()
     $result = $Group
@@ -80,6 +80,9 @@ Function Get-AzDevOpsGroupDetails {
     $memberShipUri = $Group._links.memberships.href
     try {
         $membershipResult = (Invoke-RestMethod -Uri $memberShipUri -Method Get -Headers $header).value
+        if($membershipResult -is [string] -or $null -eq $membershipResult) {
+            throw "Authentication failed or organization not found"
+        }
     }
     catch {
         throw "Failed to get group memberOf details from Azure DevOps"
@@ -95,12 +98,8 @@ Function Get-AzDevOpsGroupDetails {
 
     # Get all members of this group
     $memberUri = "$($Group._links.memberships.href)?direction=down&api-version=7.2-preview.1"
-    try {
-        $memberResult = (Invoke-RestMethod -Uri $memberUri -Method Get -Headers $header).value
-    }
-    catch {
-        throw "Failed to get group members details from Azure DevOps"
-    }
+    $memberResult = (Invoke-RestMethod -Uri $memberUri -Method Get -Headers $header).value
+    
     # Get the self information for each member
     $members = @()
     foreach($item in $memberResult) {
@@ -142,8 +141,8 @@ Function Export-AzDevOpsGroups {
         [string]
         $OutputPath
     )
-    if(!$script:connection) {
-        throw [System.ArgumentException]::new('Not connected to Azure DevOps. Run Connect-AzDevOps first.')
+    if($null -eq $script:connection) {
+        throw 'Not connected to Azure DevOps. Run Connect-AzDevOps first.'
     }
     try {
         $groups = Get-AzDevOpsGroups -Project $Project

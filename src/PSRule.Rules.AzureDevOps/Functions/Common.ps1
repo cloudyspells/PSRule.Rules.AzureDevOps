@@ -58,6 +58,7 @@ Function Connect-AzDevOps {
         [Parameter(ParameterSetName = 'ServicePrincipal', Mandatory=$true)]
         [string]
         $TenantId,
+        [Parameter()]
         [ValidateSet('PAT', 'ServicePrincipal', 'ManagedIdentity')]
         [string]
         $AuthType = 'PAT',
@@ -96,6 +97,7 @@ Function Disconnect-AzDevOps {
     [CmdletBinding()]
     param ()
     Clear-Variable connection -Scope Script -ErrorAction SilentlyContinue
+    Remove-Variable connection -Scope Script -ErrorAction SilentlyContinue
     $script:connection = ""
     $script:connection = $null
 }

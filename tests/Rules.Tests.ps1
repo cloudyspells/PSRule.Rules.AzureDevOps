@@ -49,9 +49,9 @@ BeforeAll {
 
 Describe 'AzureDevOps ' {
     Context 'Base rules ' {
-        It 'Should contain 54 rules' {
+        It 'Should contain 57 rules' {
             $rules = Get-PSRule -Module PSRule.Rules.AzureDevOps;
-            $rules.Count | Should -Be 54;
+            $rules.Count | Should -Be 57;
         }
     }
 
