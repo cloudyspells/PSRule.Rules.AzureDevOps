@@ -206,8 +206,8 @@ Describe "Functions: Common.Tests" {
             $projects | Select -ExpandProperty name | Should -Contain $env:ADO_PROJECT
         }
 
-        It " The projects should have a project named $env:ADO_PROJECT with a description" {
-            $projects | Where-Object { $_.name -eq $env:ADO_PROJECT } | Select -ExpandProperty description | Should -Not -BeNullOrEmpty
+        It " The projects should have a project named $env:ADO_PROJECT with an id" {
+            $projects | Where-Object { $_.name -eq $env:ADO_PROJECT } | Select -ExpandProperty id | Should -Not -BeNullOrEmpty
         }
 
         It " The -Project Parameter should return a single result for $env:ADO_PROJECT" {
