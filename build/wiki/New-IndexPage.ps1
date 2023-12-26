@@ -21,7 +21,7 @@
     Introductory text for the index page
 
     .EXAMPLE
-    ./tools/New-IndexPage.ps1 `
+    ./build/wiki/New-IndexPage.ps1 `
         -InputPath ./src/PSRule.Rules.AzureDevOps/en `
         -OutputPath ./Rules.md `
         -FilterRegex ".*\.md" `
