@@ -57,6 +57,8 @@ Function Export-AzDevOpsRuleData {
     Export-AzDevOpsReleaseDefinitions -Project $Project -OutputPath $OutputPath
     Write-Verbose "Exporting groups"
     Export-AzDevOpsGroups -Project $Project -OutputPath $OutputPath
+    Write-Verbose "Exporting retention settings"
+    Export-AzDevOpsRetentionSettings -Project $Project -OutputPath $OutputPath
 }
 Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProjectRuleData
 # End of Function Export-AzDevOpsRuleData
