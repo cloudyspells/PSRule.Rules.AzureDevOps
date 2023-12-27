@@ -297,3 +297,8 @@ Describe "Azure.DevOps.Group" {
         }
     }
 }
+
+AfterAll {
+    Disconnect-AzDevOps
+    Remove-Module -Name PSRule.Rules.AzureDevOps -Force
+}

@@ -49,9 +49,9 @@ BeforeAll {
 
 Describe 'AzureDevOps ' {
     Context 'Base rules ' {
-        It 'Should contain 57 rules' {
+        It 'Should contain 59 rules' {
             $rules = Get-PSRule -Module PSRule.Rules.AzureDevOps;
-            $rules.Count | Should -Be 57;
+            $rules.Count | Should -Be 59;
         }
     }
 
@@ -1684,6 +1684,22 @@ Describe 'AzureDevOps ' {
     Context 'Azure.DevOps.Groups.ProjectValidUsers.DoNotAssignMemberOfOtherGroups' {
         It 'Should pass once' {
             $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Groups.ProjectValidUsers.DoNotAssignMemberOfOtherGroups' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context 'Azure.DevOps.RetentionSettings.ArtifactMinimumRetentionDays' {
+        It 'Should pass once' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.RetentionSettings.ArtifactMinimumRetentionDays' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context 'Azure.DevOps.RetentionSettings.PullRequestRunsMinimumRetentionDays' {
+        It 'Should pass once' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.RetentionSettings.PullRequestRunsMinimumRetentionDays' })
             $ruleHits[0].Outcome | Should -Be 'Pass';
             $ruleHits.Count | Should -Be 1;
         }
