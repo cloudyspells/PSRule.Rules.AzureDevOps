@@ -12,7 +12,7 @@ Rule 'Azure.DevOps.RetentionSettings.ArtifactMinimumRetentionDays' `
         # Links "https://docs.microsoft.com/en-us/azure/devops/pipelines/policies/retention?view=azure-devops#minimum-retention-days"
         AllOf {
             $Assert.HasField($TargetObject, "RetentionSettings.purgeArtifacts.value", $true)
-            $Assert.GreaterOrEqual($TargetObject, "RetentionSettings.purgeArtifacts.value", 7)
+            $Assert.GreaterOrEqual($TargetObject, "RetentionSettings.purgeArtifacts.value", $Configuration.GetValueOrDefault('ArtifactMinimumRetentionDays', 7))
         }
 }
 
@@ -28,6 +28,6 @@ Rule 'Azure.DevOps.RetentionSettings.PullRequestRunsMinimumRetentionDays' `
         # Links "https://docs.microsoft.com/en-us/azure/devops/pipelines/policies/retention?view=azure-devops#minimum-retention-days"
         AllOf {
             $Assert.HasField($TargetObject, "RetentionSettings.purgePullRequestRuns.value", $true)
-            $Assert.GreaterOrEqual($TargetObject, "RetentionSettings.purgePullRequestRuns.value", 7)
+            $Assert.GreaterOrEqual($TargetObject, "RetentionSettings.purgePullRequestRuns.value", $Configuration.GetValueOrDefault('PullRequestRunsMinimumRetentionDays', 7))
         }
 }

@@ -18,6 +18,10 @@ Retention settings for artifacts should be configured to meet compliance
 requirements. For example, a retention policy of 30 days may be required for
 production environments.
 
+This rule requires a minimum retention period of 7 days. The rule is configurable
+to allow a different minimum retention period with the `ArtifactMinimumRetentionDays`
+conifguration setting.
+
 Mininum TokenType: `ReadOnly`
 
 ## RECOMMENDATION

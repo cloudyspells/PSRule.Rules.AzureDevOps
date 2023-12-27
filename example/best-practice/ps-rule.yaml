@@ -5,6 +5,8 @@ execution:
   suppressionGroupExpired: Error
 
 configuration:
+  ArtifactMinimumRetentionDays: 7
+  PullRequestRunsMinimumRetentionDays: 7
   ProjectAdminsMinMembers: 2
   ProjectAdminsMaxMembers: 4
   releaseMinimumProductionApproverCount: 1

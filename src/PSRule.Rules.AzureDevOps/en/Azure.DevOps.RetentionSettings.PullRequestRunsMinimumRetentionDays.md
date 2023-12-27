@@ -16,6 +16,9 @@ requirements such as 30 days for production environments.
 Retention settings for rull request runs should be configured to meet compliance
 requirements such as 30 days for production environments. 
 
+This rule requires a minimum retention period of 7 days. The rule is configurable
+to allow a different minimum retention period with the 
+`PullRequestRunsMinimumRetentionDays` conifguration setting.
 
 Mininum TokenType: `ReadOnly`
 
