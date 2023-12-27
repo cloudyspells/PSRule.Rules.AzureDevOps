@@ -74,7 +74,7 @@ Describe 'Azure.DevOps.RetentionSettings' {
         It 'should throw an error' {
             { 
                 Disconnect-AzDevOps
-                Export-AzDevOpsRetentionSettings -Project 'MyProject' -OutputPath 'C:\Temp\'
+                Export-AzDevOpsRetentionSettings -Project 'MyProject' -OutputPath $Env:ADO_EXPORT_DIR
             } | Should -Throw 'Not connected to Azure DevOps. Run Connect-AzDevOps first.'
         }
     }
@@ -82,21 +82,21 @@ Describe 'Azure.DevOps.RetentionSettings' {
     Context ' Export-AzDevOpsRetentionSettings' {
         BeforeAll {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
-            Export-AzDevOpsRetentionSettings -Project $env:ADO_PROJECT -OutputPath 'C:\Temp\'
+            Export-AzDevOpsRetentionSettings -Project $env:ADO_PROJECT -OutputPath $Env:ADO_EXPORT_DIR
         }
 
         It 'should export a JSON file' {
-            $file = Get-ChildItem -Path 'C:\Temp\' -Filter "$($env:ADO_PROJECT).ret.ado.json" -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'FullName'
+            $file = Get-ChildItem -Path $Env:ADO_EXPORT_DIR -Filter "$($env:ADO_PROJECT).ret.ado.json" -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'FullName'
             $file | Should -Not -BeNullOrEmpty
         }
 
         It 'should export a JSON file with the correct name' {
-            $file = Get-ChildItem -Path 'C:\Temp\' -Filter "$($env:ADO_PROJECT).ret.ado.json" -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'FullName'
+            $file = Get-ChildItem -Path $Env:ADO_EXPORT_DIR -Filter "$($env:ADO_PROJECT).ret.ado.json" -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'FullName'
             $file | Should -Match "$($env:ADO_PROJECT).ret.ado.json"
         }
 
         It 'should export a JSON file with the correct content' {
-            $file = Get-ChildItem -Path 'C:\Temp\' -Filter "$($env:ADO_PROJECT).ret.ado.json" -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'FullName'
+            $file = Get-ChildItem -Path $Env:ADO_EXPORT_DIR -Filter "$($env:ADO_PROJECT).ret.ado.json" -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'FullName'
             $content = Get-Content -Path $file -Raw
             $content | Should -Match 'RetentionSettings'
             $content | Should -Match 'RetentionPolicy'
@@ -114,7 +114,7 @@ Describe 'Azure.DevOps.RetentionSettings' {
             { 
                 Disconnect-AzDevOps
                 Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT 'wrongPAT'
-                Export-AzDevOpsRetentionSettings -Project $env:ADO_PROJECT -OutputPath 'C:\Temp\'
+                Export-AzDevOpsRetentionSettings -Project $env:ADO_PROJECT -OutputPath $Env:ADO_EXPORT_DIR
             } | Should -Throw "Failed to get retention settings for project '$($env:ADO_PROJECT)' from Azure DevOps"
         }
 
@@ -122,7 +122,7 @@ Describe 'Azure.DevOps.RetentionSettings' {
             { 
                 Disconnect-AzDevOps
                 Connect-AzDevOps -Organization 'wrongOrganization' -PAT $env:ADO_PAT
-                Export-AzDevOpsRetentionSettings -Project $env:ADO_PROJECT -OutputPath 'C:\Temp\'
+                Export-AzDevOpsRetentionSettings -Project $env:ADO_PROJECT -OutputPath $Env:ADO_EXPORT_DIR
             } | Should -Throw "Failed to get retention settings for project '$($env:ADO_PROJECT)' from Azure DevOps"
         }
 
@@ -130,7 +130,7 @@ Describe 'Azure.DevOps.RetentionSettings' {
             { 
                 Disconnect-AzDevOps
                 Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
-                Export-AzDevOpsRetentionSettings -Project 'wrongProject' -OutputPath 'C:\Temp\'
+                Export-AzDevOpsRetentionSettings -Project 'wrongProject' -OutputPath $Env:ADO_EXPORT_DIR
             } | Should -Throw "Failed to get retention settings for project 'wrongProject' from Azure DevOps"
         }
     }
