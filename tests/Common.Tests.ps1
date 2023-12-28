@@ -235,8 +235,56 @@ Describe "Functions: Common.Tests" {
             } | Should -Throw 
         }
     }
+
+    Context " Export-AzDevOpsProject without a connection" {
+        It " should throw an error" {
+            { 
+                Disconnect-AzDevOps
+                Export-AzDevOpsProject -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+        }
+    }
+
+    Context " Export-AzDevOpsProject" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $project = Get-AzDevOpsProject -Project $env:ADO_PROJECT
+            Export-AzDevOpsProject -Project $project.name -OutputPath $env:ADO_EXPORT_DIR
+        }
+
+        It " The output folder should contain a file named $env:ADO_PROJECT.prj.ado.json" {
+            $file = Join-Path -Path $env:ADO_EXPORT_DIR -ChildPath "$env:ADO_PROJECT.prj.ado.json"
+            Test-Path -Path $file | Should -Be $true
+        }
+
+        It " The output folder should contain a file named $env:ADO_PROJECT.prj.ado.json with a size greater than 0" {
+            $file = Join-Path -Path $env:ADO_EXPORT_DIR -ChildPath "$env:ADO_PROJECT.prj.ado.json"
+            (Get-Item $file).length | Should -BeGreaterThan 0
+        }
+
+        It " Should throw on a non-existing project" {
+            { 
+                Export-AzDevOpsProject -Project 'wrong' -OutputPath $env:ADO_EXPORT_DIR
+            } | Should -Throw
+        }
+
+        It " The operation should fail with a wrong Organization" {
+            { 
+                Disconnect-AzDevOps
+                Connect-AzDevOps -Organization 'wrong' -PAT $env:ADO_PAT
+                Export-AzDevOpsProject -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR -ErrorAction Stop
+            } | Should -Throw 
+        }
+
+        It " The operation should fail with a wrong PAT" {
+            { 
+                Disconnect-AzDevOps
+                Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT 'wrong'
+                Export-AzDevOpsProject -Project $env:ADO_PROJECT -OutputPath $env:ADO_EXPORT_DIR -ErrorAction Stop
+            } | Should -Throw 
+        }
+    }
 }
 
 AfterAll {
-    
 }

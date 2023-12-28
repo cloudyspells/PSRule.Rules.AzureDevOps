@@ -41,6 +41,8 @@ Function Export-AzDevOpsRuleData {
         $OutputPath
     )
     Write-Verbose "Exporting rule data for project $Project to $OutputPath"
+    Write-Verbose "Exporting project"
+    Export-AzDevOpsProject -Project $Project -OutputPath $OutputPath
     Write-Verbose "Exporting repos and branch policies"
     Export-AzDevOpsReposAndBranchPolicies -Project $Project -OutputPath $OutputPath
     Write-Verbose "Exporting environment checks"
@@ -98,6 +100,7 @@ Export-ModuleMember -Function Export-AzDevOpsOrganizationRuleData
 # End of Function Export-AzDevOpsOrganizationRuleData
 
 Export-ModuleMember -Function Get-AzDevOpsProject
+Export-ModuleMember -Function Export-AzDevOpsProject
 Export-ModuleMember -Function Connect-AzDevOps
 Export-ModuleMember -Function Disconnect-AzDevOps
 
