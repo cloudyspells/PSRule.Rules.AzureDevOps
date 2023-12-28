@@ -392,6 +392,9 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryGhas
     .PARAMETER OutputPath
     Output path for JSON file
 
+    .PARAMETER PassThru
+    Return the exported repos as objects to the pipeline instead of writing to a file
+
     .EXAMPLE
     Export-AzDevOpsReposAndBranchPolicies -Project $Project -OutputPath $OutputPath
 
@@ -404,9 +407,12 @@ function Export-AzDevOpsReposAndBranchPolicies {
         [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -471,11 +477,15 @@ function Export-AzDevOpsReposAndBranchPolicies {
                 $repoAcls = Get-AzDevOpsRepositoryAcls -ProjectId $repo.project.id -RepositoryId $repo.id
                 $repo | Add-Member -MemberType NoteProperty -Name Acls -Value $repoAcls
             }
-            
-            # Export repo object to JSON file
-            Write-Verbose "Exporting repo $($repo.name) and its branches to JSON as file $($repo.name).ado.repo.json"
             $branches += $repo
-            $branches | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($repo.name).ado.repo.json"
+            # If the PassThru switch is set, return the repo object
+            if ($PassThru) {
+                Write-Output $branches
+            } else {
+                # Export repo object to JSON file
+                Write-Verbose "Exporting repo $($repo.name) and its branches to JSON as file $($repo.name).ado.repo.json"
+                $branches | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($repo.name).ado.repo.json"
+            }
         }
     }
 }

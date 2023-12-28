@@ -54,6 +54,9 @@ Export-ModuleMember -Function Get-AzDevOpsVariableGroups
     .PARAMETER OutputPath
     The path to export variable groups to.
 
+    .PARAMETER PassThru
+    Return the exported variable groups as objects to the pipeline instead of writing to a file.
+
     .EXAMPLE
     Export-AzDevOpsVariableGroups -Project 'myproject' -OutputPath 'C:\temp'
 
@@ -69,9 +72,13 @@ Function Export-AzDevOpsVariableGroups {
         [string]
         $Project,
 
-        [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -83,9 +90,13 @@ Function Export-AzDevOpsVariableGroups {
         $variableGroup | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Tasks.VariableGroup'
         $variableGroup | Add-Member -MemberType NoteProperty -Name 'ObjectName' -Value "$Organization.$Project.$($variableGroup.name)"
         $variableGroupName = $variableGroup.name
-        $variableGroupPath = Join-Path -Path $OutputPath -ChildPath "$variableGroupName.ado.vg.json"
-        Write-Verbose "Exporting variable group $variableGroupName as file $variableGroupName.ado.vg.json"
-        $variableGroup | ConvertTo-Json -Depth 100 | Out-File -FilePath $variableGroupPath -Encoding UTF8
+        if ($PassThru) {
+            Write-Output $variableGroup
+        } else {
+            $variableGroupPath = Join-Path -Path $OutputPath -ChildPath "$variableGroupName.ado.vg.json"
+            Write-Verbose "Exporting variable group $variableGroupName as file $variableGroupName.ado.vg.json"
+            $variableGroup | ConvertTo-Json -Depth 100 | Out-File -FilePath $variableGroupPath -Encoding UTF8
+        }
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsVariableGroups

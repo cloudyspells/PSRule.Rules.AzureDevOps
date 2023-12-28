@@ -122,6 +122,9 @@ Export-ModuleMember -Function Get-AzDevOpsGroupDetails
     .PARAMETER OutputPath
     The folder path to the JSON file to export to
 
+    .PARAMETER PassThru
+    Return the group details as an object instead of exporting to a file
+
     .EXAMPLE
     Export-AzDevOpsGroups -Project 'MyProject' -OutputPath 'C:\Temp\'
 
@@ -134,9 +137,12 @@ Function Export-AzDevOpsGroups {
         [Parameter(Mandatory=$true)]
         [string]
         $Project,
-        [Parameter(Mandatory=$true)]
+        [Parameter(ParameterSetName='JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+        [Parameter(ParameterSetName='PassThru')]
+        [switch]
+        $PassThru
     )
     if($null -eq $script:connection) {
         throw 'Not connected to Azure DevOps. Run Connect-AzDevOps first.'
@@ -157,7 +163,11 @@ Function Export-AzDevOpsGroups {
 
         $groupDetails += $thisGroup
     }
-    $groupDetails | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\groups.ado.json"
+    if($PassThru) {
+        Write-Output $groupDetails
+    } else {
+        $groupDetails | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\groups.ado.json"
+    }
 }
 Export-ModuleMember -Function Export-AzDevOpsGroups
 # End of Function Export-AzDevOpsGroups

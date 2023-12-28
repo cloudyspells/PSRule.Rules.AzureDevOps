@@ -71,6 +71,38 @@ Describe "Functions: DevOps.Pipelines.Settings.Tests" {
             $json.ObjectType | Should -Be "Azure.DevOps.Pipelines.Settings"
         }
     }
+
+    Context " Export-AzDevOpsPipelinesSettings -PassThru" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $settings = Export-AzDevOpsPipelinesSettings -Project $env:ADO_PROJECT -PassThru
+            $ruleResult = $settings | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+        }
+
+        It " should return project pipeline settings" {
+            $settings | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return project pipeline settings that are of type PSObject" {
+            $settings | Should -BeOfType [PSCustomObject]
+        }
+
+        It " should return project pipeline settings with an ObjectType of Azure.DevOps.Pipelines.Settings" {
+            $settings.ObjectType | Should -Be "Azure.DevOps.Pipelines.Settings"
+        }
+
+        It " should return project pipeline settings with an ObjectName of {Organization}.{Project}.PipelineSettings" {
+            $settings.ObjectName | Should -Be ("{0}.{1}.PipelineSettings" -f $env:ADO_ORGANIZATION,$env:ADO_PROJECT)
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+    }
 }
 
 AfterAll {

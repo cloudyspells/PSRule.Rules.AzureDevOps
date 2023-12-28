@@ -203,6 +203,9 @@ Export-ModuleMember -Function Get-AzDevOpsPipelineYaml
     .PARAMETER OutputPath
     Output path for YAML file
 
+    .PARAMETER PassThru
+    Pass the YAML definition to the pipeline object
+
     .EXAMPLE
     Export-AzDevOpsPipelineYaml -Project $Project -PipelineId $PipelineId -OutputPath $OutputPath
 #>
@@ -218,9 +221,12 @@ function Export-AzDevOpsPipelineYaml {
         [Parameter(Mandatory)]
         [string]
         $PipelineName,
-        [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'YamlFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -236,8 +242,12 @@ function Export-AzDevOpsPipelineYaml {
         return $null
     } else {
         $yaml += $yamlTemp}
-    Write-Verbose "Exporting YAML definition to $OutputPath\$PipelineName.yaml"
-    $yaml | Out-File "$OutputPath\$PipelineName.yaml"
+    if ($PassThru) {
+        Write-Output $yaml
+    } else {
+        Write-Verbose "Exporting YAML definition to $OutputPath\$PipelineName.yaml"
+        $yaml | Out-File "$OutputPath\$PipelineName.yaml"
+    }
 }
 Export-ModuleMember -Function Export-AzDevOpsPipelineYaml
 # End of Function Export-AzDevOpsPipelineYaml
@@ -256,6 +266,9 @@ Export-ModuleMember -Function Export-AzDevOpsPipelineYaml
     .PARAMETER OutputPath
     Output path for JSON files
 
+    .PARAMETER PassThru
+    Pass the pipeline object to the pipeline object instead of exporting to a file
+
     .EXAMPLE
     Export-AzDevOpsPipelines -Project $Project -OutputPath $OutputPath
 #>
@@ -265,9 +278,12 @@ function Export-AzDevOpsPipelines {
         [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -290,16 +306,24 @@ function Export-AzDevOpsPipelines {
         } else {
             Write-Verbose "Token Type is set to ReadOnly, no pipeline ACLs will be returned"
         }
-        Write-Verbose "Exporting pipeline $($pipeline.name) to JSON file"
-        Write-Verbose "Exporting pipeline as JSON file to $OutputPath\$($pipeline.name).ado.pl.json"
-        $pipeline | ConvertTo-Json -Depth 100 | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
-        if ($pipeline.configuration.type -eq 'yaml' -and $pipeline.configuration.repository.type -eq 'azureReposGit') {
-            Write-Verbose "Pipeline $($pipeline.name) is a YAML pipeline"
-            Write-Verbose "Getting YAML definition for pipeline $($pipeline.name)"           
-            Export-AzDevOpsPipelineYaml -Project $Project -PipelineId $pipeline.id -PipelineName $pipeline.name -OutputPath $OutputPath
-
+        If ($PassThru) {
+            if ($pipeline.configuration.type -eq 'yaml' -and $pipeline.configuration.repository.type -eq 'azureReposGit') {
+                Write-Verbose "Pipeline $($pipeline.name) is a YAML pipeline"
+                Write-Verbose "Getting YAML definition for pipeline $($pipeline.name)"           
+                Export-AzDevOpsPipelineYaml -Project $Project -PipelineId $pipeline.id -PipelineName $pipeline.name -PassThru
+            }
+            Write-Output $pipeline
+        } else {
+            Write-Verbose "Exporting pipeline $($pipeline.name) to JSON file"
+            Write-Verbose "Exporting pipeline as JSON file to $OutputPath\$($pipeline.name).ado.pl.json"
+            $pipeline | ConvertTo-Json -Depth 100 | Out-File "$OutputPath\$($pipeline.name).ado.pl.json"
+            if ($pipeline.configuration.type -eq 'yaml' -and $pipeline.configuration.repository.type -eq 'azureReposGit') {
+                Write-Verbose "Pipeline $($pipeline.name) is a YAML pipeline"
+                Write-Verbose "Getting YAML definition for pipeline $($pipeline.name)"           
+                
+                Export-AzDevOpsPipelineYaml -Project $Project -PipelineId $pipeline.id -PipelineName $pipeline.name -OutputPath $OutputPath
+            }
         }
-        
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsPipelines

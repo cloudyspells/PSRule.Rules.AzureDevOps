@@ -388,6 +388,39 @@ Describe "Functions: DevOps.Repos.Tests" {
             }
         }
     }
+
+    Context " Export-AzDevOpsReposAndBranchPolicies -PassThru" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $Project = $env:ADO_PROJECT
+            $repos = Export-AzDevOpsReposAndBranchPolicies -Project $Project -PassThru
+            $ruleResult = $repos | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+        }
+
+        It " should return project repos" {
+            $repos | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return project repos that are of type PSObject" {
+            $repos[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It " should return project repos with an ObjectType" {
+            $repos[0].ObjectType | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return project repos with an ObjectName" {
+            $repos[0].ObjectName | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+    }
 }
 
 AfterAll {

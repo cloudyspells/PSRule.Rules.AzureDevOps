@@ -176,6 +176,45 @@ Describe "Functions: DevOps.Pipelines.Releases.Tests" {
             Disconnect-AzDevOps
         }
     }
+
+    Context " Export-AzDevOpsReleaseDefinitions -PassThru" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $Project = $env:ADO_PROJECT
+            $releaseDefinitions = Export-AzDevOpsReleaseDefinitions -Project $Project -PassThru
+            $ruleResult = $releaseDefinitions | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+        }
+
+        It " should return a list of release definitions" {
+            $releaseDefinitions | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return a list of release definitions that are of type PSObject" {
+            $releaseDefinitions[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It " should return a list of release definitions that have an ObjectType" {
+            $releaseDefinitions[0].ObjectType | Should -Not -BeNullOrEmpty
+            $releaseDefinitions[0].ObjectType | Should -BeOfType [string]
+        }
+
+        It " should return a list of release definitions that have an ObjectName" {
+            $releaseDefinitions[0].ObjectName | Should -Not -BeNullOrEmpty
+            $releaseDefinitions[0].ObjectName | Should -BeOfType [string]
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
 }
 
 AfterAll {

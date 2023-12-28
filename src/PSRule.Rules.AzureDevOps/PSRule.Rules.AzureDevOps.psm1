@@ -27,6 +27,9 @@ Get-ChildItem -Path "$PSScriptRoot/Functions/*.ps1" | ForEach-Object {
     .PARAMETER OutputPath
     Output path for JSON files
 
+    .PARAMETER PassThru
+    Return the exported project as objects to the pipeline instead of writing to a file
+
     .EXAMPLE
     Export-AzDevOpsRuleData -Project $Project -OutputPath $OutputPath
 #>
@@ -36,31 +39,61 @@ Function Export-AzDevOpsRuleData {
         [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
     )
-    Write-Verbose "Exporting rule data for project $Project to $OutputPath"
-    Write-Verbose "Exporting project"
-    Export-AzDevOpsProject -Project $Project -OutputPath $OutputPath
-    Write-Verbose "Exporting repos and branch policies"
-    Export-AzDevOpsReposAndBranchPolicies -Project $Project -OutputPath $OutputPath
-    Write-Verbose "Exporting environment checks"
-    Export-AzDevOpsEnvironmentChecks -Project $Project -OutputPath $OutputPath
-    Write-Verbose "Exporting service connections"
-    Export-AzDevOpsServiceConnections -Project $Project -OutputPath $OutputPath
-    Write-Verbose "Exporting pipelines"
-    Export-AzDevOpsPipelines -Project $Project -OutputPath $OutputPath
-    Write-Verbose "Exporting pipelines settings"
-    Export-AzDevOpsPipelinesSettings -Project $Project -OutputPath $OutputPath
-    Write-Verbose "Exporting variable groups"
-    Export-AzDevOpsVariableGroups -Project $Project -OutputPath $OutputPath
-    Write-Verbose "Exporting release definitions"
-    Export-AzDevOpsReleaseDefinitions -Project $Project -OutputPath $OutputPath
-    Write-Verbose "Exporting groups"
-    Export-AzDevOpsGroups -Project $Project -OutputPath $OutputPath
-    Write-Verbose "Exporting retention settings"
-    Export-AzDevOpsRetentionSettings -Project $Project -OutputPath $OutputPath
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    if($PassThru) {
+        Write-Verbose "Exporting rule data for project $Project to $OutputPath"
+        Write-Verbose "Exporting project"
+        Export-AzDevOpsProject -Project $Project -PassThru
+        Write-Verbose "Exporting repos and branch policies"
+        Export-AzDevOpsReposAndBranchPolicies -Project $Project -PassThru
+        Write-Verbose "Exporting environment checks"
+        Export-AzDevOpsEnvironmentChecks -Project $Project -PassThru
+        Write-Verbose "Exporting service connections"
+        Export-AzDevOpsServiceConnections -Project $Project -PassThru
+        Write-Verbose "Exporting pipelines"
+        Export-AzDevOpsPipelines -Project $Project -PassThru
+        Write-Verbose "Exporting pipelines settings"
+        Export-AzDevOpsPipelinesSettings -Project $Project -PassThru
+        Write-Verbose "Exporting variable groups"
+        Export-AzDevOpsVariableGroups -Project $Project -PassThru
+        Write-Verbose "Exporting release definitions"
+        Export-AzDevOpsReleaseDefinitions -Project $Project -PassThru
+        Write-Verbose "Exporting groups"
+        Export-AzDevOpsGroups -Project $Project -PassThru
+        Write-Verbose "Exporting retention settings"
+        Export-AzDevOpsRetentionSettings -Project $Project -PassThru
+    } else {
+        Write-Verbose "Exporting rule data for project $Project to $OutputPath"
+        Write-Verbose "Exporting project"
+        Export-AzDevOpsProject -Project $Project -OutputPath $OutputPath
+        Write-Verbose "Exporting repos and branch policies"
+        Export-AzDevOpsReposAndBranchPolicies -Project $Project -OutputPath $OutputPath
+        Write-Verbose "Exporting environment checks"
+        Export-AzDevOpsEnvironmentChecks -Project $Project -OutputPath $OutputPath
+        Write-Verbose "Exporting service connections"
+        Export-AzDevOpsServiceConnections -Project $Project -OutputPath $OutputPath
+        Write-Verbose "Exporting pipelines"
+        Export-AzDevOpsPipelines -Project $Project -OutputPath $OutputPath
+        Write-Verbose "Exporting pipelines settings"
+        Export-AzDevOpsPipelinesSettings -Project $Project -OutputPath $OutputPath
+        Write-Verbose "Exporting variable groups"
+        Export-AzDevOpsVariableGroups -Project $Project -OutputPath $OutputPath
+        Write-Verbose "Exporting release definitions"
+        Export-AzDevOpsReleaseDefinitions -Project $Project -OutputPath $OutputPath
+        Write-Verbose "Exporting groups"
+        Export-AzDevOpsGroups -Project $Project -OutputPath $OutputPath
+        Write-Verbose "Exporting retention settings"
+        Export-AzDevOpsRetentionSettings -Project $Project -OutputPath $OutputPath
+    }
 }
 Export-ModuleMember -Function Export-AzDevOpsRuleData -Alias Export-AzDevOpsProjectRuleData
 # End of Function Export-AzDevOpsRuleData

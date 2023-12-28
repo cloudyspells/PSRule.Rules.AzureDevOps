@@ -157,6 +157,15 @@ function Get-AzDevOpsProject {
     .DESCRIPTION
     Export the Azure DevOps Project using Azure DevOps Rest API to a JSON file
 
+    .PARAMETER Project
+    Project name for Azure DevOps
+
+    .PARAMETER OutputPath
+    Output path for JSON files
+
+    .PARAMETER PassThru
+    Return the exported project as objects to the pipeline instead of writing to a file
+
     .EXAMPLE
     Export-AzDevOpsProject -Project $Project -OutputPath $OutputPath
 
@@ -170,9 +179,12 @@ function Export-AzDevOpsProject {
         [Parameter(Mandatory=$true)]
         [string]
         $Project,
-        [Parameter(Mandatory=$true)]
+        [Parameter(ParameterSetName = 'JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -188,6 +200,11 @@ function Export-AzDevOpsProject {
     catch {
         throw "Failed to get project $Project from Azure DevOps"
     }
-    $response | ConvertTo-Json | Out-File -FilePath "$OutputPath/$Project.prj.ado.json"
+    if($PassThru) {
+        Write-Output $response
+    } else {
+        Write-Verbose "Exporting project $Project as file $Project.prj.ado.json"
+        $response | ConvertTo-Json | Out-File -FilePath "$OutputPath/$Project.prj.ado.json"
+    }
 }
 # End of Function Export-AzDevOpsProject

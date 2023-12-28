@@ -136,6 +136,41 @@ Describe "Functions: DevOps.ServiceConnections.Tests" {
             }
         }
     }
+
+    Context " Export-AzDevOpsServiceConnections -PassThru" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $Project = $env:ADO_PROJECT
+            $serviceConnections = Export-AzDevOpsServiceConnections -Project $Project -PassThru
+            $ruleResult = $serviceConnections | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+        }
+
+        It " should return a list of service connections" {
+            $serviceConnections | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return a list of service connections that are of type PSObject" {
+            $serviceConnections[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It " should return a list of service connections that have an ObjectName" {
+            $serviceConnections[0].ObjectName | Should -Not -BeNullOrEmpty
+            $serviceConnections[0].ObjectName | Should -BeOfType [string]
+        }
+
+        It " should return a list of service connections that have an ObjectType" {
+            $serviceConnections[0].ObjectType | Should -Not -BeNullOrEmpty
+            $serviceConnections[0].ObjectType | Should -BeOfType [string]
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+    }
 }
 
 AfterAll {

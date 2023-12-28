@@ -104,6 +104,9 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnectionChecks
     .PARAMETER OutputPath
     Output path for JSON files
 
+    .PARAMETER PassThru
+    Return the exported service connections as objects to the pipeline instead of writing to a file
+
     .EXAMPLE
     Export-AzDevOpsServiceConnections -Project $Project -OutputPath $OutputPath
 
@@ -116,9 +119,12 @@ function Export-AzDevOpsServiceConnections {
         [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -135,8 +141,12 @@ function Export-AzDevOpsServiceConnections {
         # Get checks for service connection
         $serviceConnectionChecks = @(Get-AzDevOpsServiceConnectionChecks -Project $Project -ServiceConnectionId $serviceConnection.id)
         $serviceConnection | Add-Member -MemberType NoteProperty -Name Checks -Value $serviceConnectionChecks
-        Write-Verbose "Exporting service connection $($serviceConnection.name) as file $($serviceConnection.name).ado.sc.json"
-        $serviceConnection | ConvertTo-Json -Depth 100 | Out-File "$OutputPath/$($serviceConnection.name).ado.sc.json"
+        if ($PassThru) {
+            Write-Output $serviceConnection
+        } else {
+            Write-Verbose "Exporting service connection $($serviceConnection.name) as file $($serviceConnection.name).ado.sc.json"
+            $serviceConnection | ConvertTo-Json -Depth 100 | Out-File "$OutputPath/$($serviceConnection.name).ado.sc.json"
+        }
     }
 }
 Export-ModuleMember -Function Export-AzDevOpsServiceConnections

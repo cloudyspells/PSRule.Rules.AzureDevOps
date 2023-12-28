@@ -210,6 +210,43 @@ Describe "Functions: Azure.DevOps.Pipelines.Environments.Tests" {
             Disconnect-AzDevOps
         }
     }
+
+    Context " Export-AzDevOpsEnvironmentChecks -PassThru" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $environmentChecks = Export-AzDevOpsEnvironmentChecks -Project $env:ADO_PROJECT -PassThru
+            $ruleResult = $environmentChecks | Invoke-PSRule -Module PSRule.Rules.AzureDevOps -Culture en
+        }
+
+        It " should return a list of environment checks" {
+            $environmentChecks | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return a list of environment checks that are of type PSObject" {
+            $environmentChecks[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It " should return a list of object with an ObjectType property" {
+            $environmentChecks[0].ObjectType | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return a list of object with an ObjectName property" {
+            $environmentChecks[0].ObjectName | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    
+    }
 }
 
 AfterAll {

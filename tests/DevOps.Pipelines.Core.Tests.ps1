@@ -268,6 +268,43 @@ Describe "Functions: DevOps.Pipelines.Core.Tests" {
             Disconnect-AzDevOps
         }
     }
+
+    Context " Export-AzDevOpsPipelines -PassThru" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $pipelines = Export-AzDevOpsPipelines -Project $env:ADO_PROJECT -PassThru
+            $ruleResult = $pipelines | Where-Object { $null -ne $_ } | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+        }
+
+        It " should return a list of pipelines" {
+            $pipelines | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return a list of pipelines that are of type PSObject" {
+            $pipelines[1] | Should -BeOfType [PSCustomObject]
+        }
+
+        It " should return a list of pipelines that have an ObjectType field with a value of Azure.DevOps.Pipeline" {
+            $pipelines[1].ObjectType | Should -Be "Azure.DevOps.Pipeline"
+        }
+
+        It " should return a list of pipelines that have an ObjectName field" {
+            $pipelines[1].ObjectName | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    
+    }
 }
 
 AfterAll {

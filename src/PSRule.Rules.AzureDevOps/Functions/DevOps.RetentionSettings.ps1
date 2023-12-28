@@ -62,6 +62,9 @@ Export-ModuleMember -Function Get-AzDevOpsRetentionSettings
     .PARAMETER OutputPath
     The path to export the retention settings to.
 
+    .PARAMETER PassThru
+    If set, the function will return the retention settings as objects instead of writing them to a file.
+
     .EXAMPLE
     Get-AzDevOpsRetentionSettings -Project 'MyProject' -OutputPath 'C:\Temp\'
 
@@ -75,11 +78,19 @@ Function Export-AzDevOpsRetentionSettings {
         [string]
         $Project,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(ParameterSetName = 'JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
     )
     $settings = Get-AzDevOpsRetentionSettings -Project $Project
-    $settings | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($Project).ret.ado.json"
+    if($PassThru) {
+        Write-Output $settings
+    } else {
+        $settings | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($Project).ret.ado.json"
+    }
 }
 Export-ModuleMember -Function Export-AzDevOpsRetentionSettings

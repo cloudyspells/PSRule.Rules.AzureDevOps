@@ -134,6 +134,46 @@ Describe 'Azure.DevOps.RetentionSettings' {
             } | Should -Throw "Failed to get retention settings for project 'wrongProject' from Azure DevOps"
         }
     }
+
+    Context ' Export-AzDevOpsRetentionSettings -PassThru' {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $settings = Export-AzDevOpsRetentionSettings -Project $env:ADO_PROJECT -PassThru
+            $ruleResult = $settings | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+        }
+
+        It 'should return a hashtable' {
+            $settings | Should -BeOfType [hashtable]
+        }
+
+        It 'should return a hashtable with RetentionSettings property' {
+            $settings.RetentionSettings | Should -Not -BeNullOrEmpty
+        }
+
+        It 'should return a hashtable with RetentionPolicy property' {
+            $settings.RetentionPolicy | Should -Not -BeNullOrEmpty
+        }
+
+        It 'should return a hashtable with ObjectType property' {
+            $settings.ObjectType | Should -Not -BeNullOrEmpty
+        }
+
+        It 'should return a hashtable with ObjectName property' {
+            $settings.ObjectName | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
 }
 
 AfterAll {

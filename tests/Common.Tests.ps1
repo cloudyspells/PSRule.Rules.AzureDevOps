@@ -284,6 +284,39 @@ Describe "Functions: Common.Tests" {
             } | Should -Throw 
         }
     }
+
+    Context " Export-AzDevOpsProject -PassThru" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $project = Get-AzDevOpsProject -Project $env:ADO_PROJECT
+            $projectDetails = Export-AzDevOpsProject -Project $project.name -PassThru
+            $ruleResult = $projectDetails | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+        }
+
+        It " The output should be of type [PSCustomObject]" {
+            $projectDetails | Should -BeOfType [PSCustomObject]
+        }
+
+        It " The output should have a ObjectType property" {
+            $projectDetails | Select -ExpandProperty ObjectType | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have a ObjectName property" {
+            $projectDetails | Select -ExpandProperty ObjectName | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
 }
 
 AfterAll {
