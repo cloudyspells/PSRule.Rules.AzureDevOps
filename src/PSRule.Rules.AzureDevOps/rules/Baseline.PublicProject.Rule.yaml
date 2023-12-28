@@ -1,0 +1,16 @@
+apiVersion: github.com/microsoft/PSRule/v1
+kind: Baseline
+metadata:
+  name: Baseline.PublicProject
+spec:
+  rule:
+    exclude:
+      - 'Azure.DevOps.Project.Visibility'
+      - 'Azure.DevOps.Pipelines.Settings.StatusBadgesPrivate'
+    tag:
+      release: GA
+  configuration:
+    ghasEnabled: true
+    ghasBlockPushesEnabled: true
+    branchMinimumApproverCount: 1
+    releaseMinimumProductionApproverCount: 1

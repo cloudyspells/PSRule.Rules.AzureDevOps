@@ -22,6 +22,9 @@ BeforeAll {
     # Run rules with default token type
     $ruleResult = Invoke-PSRule -InputPath "$($outPath)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en
 
+    # Run rules with the public baseline
+    $ruleResultPublic = Invoke-PSRule -InputPath "$($outPath)/" -Module PSRule.Rules.AzureDevOps -Format Detect -Culture en -Baseline Baseline.PublicProject
+
     # Get temporary test output folder for tests with the ReadOnly TokenType
     $outPathReadOnly = Get-Item -Path (Join-Path -Path $here -ChildPath 'outReadOnly')
     $outPathReadOnly = $outPathReadOnly.FullName
@@ -210,6 +213,36 @@ Describe "Azure.DevOps.Pipelines.Settings rules" {
         It ' should have an English markdown help file' {
             $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Settings.SanitizeShellTaskArguments.md');
             $fileExists | Should -Be $true;
+        }
+    }
+
+    Context ' Azure.DevOps.Pipelines.Settings.StatusBadgesPrivate' {
+        It ' should Pass' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Settings.StatusBadgesPrivate' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should be the same for ReadOnly TokenType' {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Settings.StatusBadgesPrivate' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should be the same for the FineGrained TokenType' {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Settings.StatusBadgesPrivate' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Settings.StatusBadgesPrivate.md');
+            $fileExists | Should -Be $true;
+        }
+
+        It ' should not be present in the PublicProject baseline' {
+            $ruleHits = @($ruleResultPublic | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Settings.StatusBadgesPrivate' })
+            $ruleHits.Count | Should -Be 0;
         }
     }
 }

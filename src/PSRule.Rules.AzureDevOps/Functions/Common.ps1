@@ -149,3 +149,45 @@ function Get-AzDevOpsProject {
     }
 }
 # End of Function Get-AzDevOpsProject
+
+<#
+    .SYNOPSIS
+    Export the Azure DevOps Project
+
+    .DESCRIPTION
+    Export the Azure DevOps Project using Azure DevOps Rest API to a JSON file
+
+    .EXAMPLE
+    Export-AzDevOpsProject -Project $Project -OutputPath $OutputPath
+
+    .NOTES
+    The output file will be named $Project.prj.ado.json
+
+#>
+function Export-AzDevOpsProject {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]
+        $Project,
+        [Parameter(Mandatory=$true)]
+        [string]
+        $OutputPath
+    )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $header = $script:connection.GetHeader()
+    $Organization = $script:connection.Organization
+    Write-Verbose "Getting project $Project for organization $Organization"
+   try {
+        $response = Get-AzDevOpsProject -Project $Project
+        $response | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Project"
+        $response | Add-Member -MemberType NoteProperty -Name ObjectName -Value "$Organization.$Project"
+    }
+    catch {
+        throw "Failed to get project $Project from Azure DevOps"
+    }
+    $response | ConvertTo-Json | Out-File -FilePath "$OutputPath/$Project.prj.ado.json"
+}
+# End of Function Export-AzDevOpsProject

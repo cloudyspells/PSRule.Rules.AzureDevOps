@@ -97,3 +97,17 @@ Rule 'Azure.DevOps.Pipelines.Settings.SanitizeShellTaskArguments' `
         $Assert.HasField($TargetObject, "enableShellTasksArgsSanitizing", $true)
         $Assert.HasFieldValue($TargetObject, "enableShellTasksArgsSanitizing", $true)
 }
+
+# Synopsis: Status badges should be private
+Rule 'Azure.DevOps.Pipelines.Settings.StatusBadgesPrivate' `
+    -Ref 'ADO-PLS-008' `
+    -Type 'Azure.DevOps.Pipelines.Settings' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description: Status badges should be private.
+        Reason 'Status badges are not private.'
+        Recommend 'Enable `Status badges should be private` in Project pipelines settings.'
+        # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#policies
+        $Assert.HasField($TargetObject, "statusBadgesArePrivate", $true)
+        $Assert.HasFieldValue($TargetObject, "statusBadgesArePrivate", $true)
+}
