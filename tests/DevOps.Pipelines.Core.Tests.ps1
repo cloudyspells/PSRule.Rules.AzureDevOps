@@ -273,7 +273,7 @@ Describe "Functions: DevOps.Pipelines.Core.Tests" {
         BeforeAll {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
             $pipelines = Export-AzDevOpsPipelines -Project $env:ADO_PROJECT -PassThru
-            $ruleResult = $pipelines | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+            $ruleResult = $pipelines | Where-Object { $null -ne $_ } | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
         }
 
         It " should return a list of pipelines" {
