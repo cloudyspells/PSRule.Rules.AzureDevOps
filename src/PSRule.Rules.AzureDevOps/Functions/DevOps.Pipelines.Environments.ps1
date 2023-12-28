@@ -126,6 +126,12 @@ Export-ModuleMember -Function Get-AzDevOpsEnvironmentChecks
     .PARAMETER Project
     Project name for Azure DevOps
 
+    .PARAMETER OutputPath
+    Path to output JSON files
+
+    .PARAMETER PassThru
+    Return the exported environments as objects to the pipeline instead of writing to a file
+
     .EXAMPLE
     Export-AzDevOpsEnvironmentChecks -Project $Project
 #>
@@ -136,9 +142,12 @@ function Export-AzDevOpsEnvironmentChecks {
         [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
 
     )
     if ($null -eq $script:connection) {
@@ -159,9 +168,13 @@ function Export-AzDevOpsEnvironmentChecks {
                 $environment | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.{2}" -f $script:connection.Organization,$Project,$environment.name)
                 $checks = @(Get-AzDevOpsEnvironmentChecks -Project $Project -Environment $environment.id)
                 $environment | Add-Member -MemberType NoteProperty -Name checks -Value $checks
-                Write-Verbose "Exporting environment $($environment.name) to JSON"
-                Write-Verbose "Output file: $OutputPath\$($environment.name).ado.env.json"
-                $environment | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($environment.name).ado.env.json"
+                if($PassThru) {
+                    Write-Output $environment
+                } else {
+                    Write-Verbose "Exporting environment $($environment.name) to JSON"
+                    Write-Verbose "Output file: $OutputPath\$($environment.name).ado.env.json"
+                    $environment | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath\$($environment.name).ado.env.json"
+                }
             }
         }
     }

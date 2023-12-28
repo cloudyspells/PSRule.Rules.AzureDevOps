@@ -296,6 +296,38 @@ Describe "Azure.DevOps.Group" {
             } | Should -Throw
         }
     }
+
+    Context " Export-AzDevOpsGroups -PassThru" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $groups = Export-AzDevOpsGroups -Project $env:ADO_PROJECT -PassThru
+            $ruleResult = $groups | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+        }
+
+        It " Should return a list of groups" {
+            $groups | Should -Not -BeNullOrEmpty
+        }
+
+        It " Should return a list of groups with an ObjectType property" {
+            $groups[0].ObjectType | Should -Not -BeNullOrEmpty
+        }
+
+        It " Should return a list of groups with an ObjectName property" {
+            $groups[0].ObjectName | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
 }
 
 AfterAll {

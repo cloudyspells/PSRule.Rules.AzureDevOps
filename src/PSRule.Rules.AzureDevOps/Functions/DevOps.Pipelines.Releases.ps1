@@ -122,6 +122,9 @@ Export-ModuleMember -Function Get-AzDevOpsReleaseDefinitionAcls
     .PARAMETER OutputPath
     The path to the directory where the JSON files will be exported.
 
+    .PARAMETER PassThru
+    If set, the function will return the release definitions as objects instead of writing them to a file.
+
     .EXAMPLE
     Export-AzDevOpsReleaseDefinitions -Project 'myproject' -OutputPath 'C:\temp'
 #>
@@ -131,8 +134,11 @@ Function Export-AzDevOpsReleaseDefinitions {
         [Parameter(Mandatory)]
         [string]$Project,
 
-        [Parameter(Mandatory)]
-        [string]$OutputPath
+        [Parameter(ParameterSetName = 'JsonFile')]
+        [string]$OutputPath,
+
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]$PassThru
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -155,8 +161,6 @@ Function Export-AzDevOpsReleaseDefinitions {
                 throw $_.Exception.Message
             }
             $definitionName = $response.name
-            Write-Verbose "Exporting release definition $definitionName as file $definitionName.ado.rd.json"
-            $definitionPath = Join-Path -Path $OutputPath -ChildPath "$definitionName.ado.rd.json"
             # Add an ObjectType of Azure.DevOps.Pipelines.Releases.Definition to the response
             $response | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Pipelines.Releases.Definition'
             $response | Add-Member -MemberType NoteProperty -Name 'ObjectName' -Value ("{0}.{1}.{2}" -f $script:connection.Organization,$Project,$definitionName)
@@ -178,7 +182,14 @@ Function Export-AzDevOpsReleaseDefinitions {
             } else {
                 Write-Warning "The ReadOnly token type is not supported for ACL export"
             }
-            $response | ConvertTo-Json -Depth 100 | Out-File -FilePath $definitionPath
+            # If the PassThru switch is set, return the response object
+            if ($PassThru) {
+                Write-Output $response
+            } else {
+                Write-Verbose "Exporting release definition $definitionName as file $definitionName.ado.rd.json"
+                $definitionPath = Join-Path -Path $OutputPath -ChildPath "$definitionName.ado.rd.json"
+                $response | ConvertTo-Json -Depth 100 | Out-File -FilePath $definitionPath
+            }
         }
     }
 }

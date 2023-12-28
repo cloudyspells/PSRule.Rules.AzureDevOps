@@ -91,6 +91,41 @@ Describe "Functions: DevOps.Tasks.VariableGroups.Tests" {
             $json.ObjectType | Should -Be "Azure.DevOps.Tasks.VariableGroup"
         }
     }
+
+    Context " Export-AzDevOpsVariableGroups -PassThru" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $Project = $env:ADO_PROJECT
+            $variableGroups = Export-AzDevOpsVariableGroups -Project $Project -PassThru
+            $ruleResult = $variableGroups | Invoke-PSRule -Module @('PSRule.Rules.AzureDevOps') -Culture en
+        }
+
+        It ' should return a list of variable groups' {
+            $variableGroups | Should -Not -BeNullOrEmpty
+        }
+
+        It ' should return a list of variable groups that are of type PSObject' {
+            $variableGroups[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It ' should return a list of variable groups with an ObjectName' {
+            $variableGroups[0].ObjectName | Should -Not -BeNullOrEmpty
+            $variableGroups[0].ObjectName | Should -BeOfType [System.String]
+        }
+
+        It ' should return a list of variable groups with an ObjectType' {
+            $variableGroups[0].ObjectType | Should -Not -BeNullOrEmpty
+            $variableGroups[0].ObjectType | Should -BeOfType [System.String]
+        }
+
+        It " The output should have results with Invoke-PSRule" {
+            $ruleResult | Should -Not -BeNullOrEmpty
+        }
+
+        It " The output should have results with Invoke-PSRule that are of type [PSRule.Rules.RuleRecord]" {
+            $ruleResult[0] | Should -BeOfType [PSRule.Rules.RuleRecord]
+        }
+    }
 }
 
 AfterAll {

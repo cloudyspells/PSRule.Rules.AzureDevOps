@@ -53,6 +53,9 @@ Export-ModuleMember -Function Get-AzDevOpsPipelinesSettings
     .PARAMETER OutputPath
     Output path for JSON files
 
+    .PARAMETER PassThru
+    Return the exported pipelines settings as objects to the pipeline instead of writing to a file
+
     .EXAMPLE
     Export-AzDevOpsPipelinesSettings -Project $Project -OutputPath $OutputPath
 #>
@@ -62,9 +65,12 @@ function Export-AzDevOpsPipelinesSettings {
         [Parameter(Mandatory)]
         [string]
         $Project,
-        [Parameter(Mandatory)]
+        [Parameter(ParameterSetName = 'JsonFile')]
         [string]
-        $OutputPath
+        $OutputPath,
+        [Parameter(ParameterSetName = 'PassThru')]
+        [switch]
+        $PassThru
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -74,7 +80,11 @@ function Export-AzDevOpsPipelinesSettings {
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Pipelines.Settings'
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.PipelineSettings" -f $script:connection.Organization,$Project)
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name Name -Value $Project
-    $pipelinesSettings | ConvertTo-Json -Depth 10 | Out-File (Join-Path -Path $OutputPath -ChildPath "$Project.ado.pls.json")
+    if ($PassThru) {
+        Write-Output $pipelinesSettings
+    } else {
+        $pipelinesSettings | ConvertTo-Json -Depth 10 | Out-File (Join-Path -Path $OutputPath -ChildPath "$Project.ado.pls.json")
+    }
 }
 Export-ModuleMember -Function Export-AzDevOpsPipelinesSettings
 # End of Function Export-AzDevOpsPipelinesSettings
