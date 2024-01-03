@@ -263,6 +263,7 @@ This project is [licensed under the MIT License](LICENSE).
 ## References
 
 - [PSRule](https://microsoft.github.io/PSRule/V2)
+- [PsrAzDo-workbooks](https://github.com/cloudyspells/PsrAzDo-workbooks) - Azure Monitor Workbooks for PSRule.Rules.AzureDevOps
 - [Auditing an Azure DevOps project configuration with PSRule](https://medium.com/@webtonize/auditing-an-azure-devops-project-configuration-with-psrule-73cf17753827)
 - [Audit Azure DevOps configuration with Sarif scan reports from the pipeline](https://medium.com/@webtonize/audit-azure-devops-configuration-with-sarif-scan-reports-from-the-pipeline-4ced6fc47988)
 - [Azure DevOps Security best practices](https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops)
