@@ -437,22 +437,23 @@ function Export-AzDevOpsReposAndBranchPolicies {
             $repo | Add-Member -MemberType NoteProperty -Name ReadmeExists -Value $readmeExists
 
             # Get all branches for the repo
-            $branches = Get-AzDevOpsBranches -Project $Project -Repository $repo.id
+            $branches = @()
+            $branches += Get-AzDevOpsBranches -Project $Project -Repository $repo.id
             # add branch policies for each branch to the branches object
-            $branches = $branches | ForEach-Object {
+            $branches = @($branches | ForEach-Object {
                 $branch = $_
                 $branchPolicy = @(Get-AzDevOpsBranchPolicy -Project $Project -Repository $repo.id -Branch $branch.name)
                 $branch | Add-Member -MemberType NoteProperty -Name BranchPolicy -Value $branchPolicy
                 $branch
-            }
+            })
             # Add an ObjectType Azure.DevOps.Repo.Branch to each branch object
-            $branches = $branches | ForEach-Object {
+            $branches = @($branches | ForEach-Object {
                 $branch = $_
                 $branch | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo.Branch"
                 # Add ObjectName to branch object
                 $branch | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.{2}.{3}" -f $Organization,$Project,$repo.name,$branch.name)
                 $branch
-            }
+            })
 
 
 
