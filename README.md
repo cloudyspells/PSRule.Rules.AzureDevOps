@@ -15,14 +15,26 @@ secure development environment. The module takes best practices from the officia
 [Azure DevOps Security best practices](https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops) documentation. It can
 function as a periodic security scan and check for your Azure DevOps project.
 
-This module is very much in early stage of development and
-should not be considered stable. Any input on the direction
-of the module and included rules is very much appreciated.
-Please consider opening an
+This module is actively developed since August 2023. Although a lot of testing has been
+performed and is built in to the development cycle, up to now little feedback has come
+back from the community yet. Any input on the direction of the module and included rules
+is very much appreciated. Please consider opening an
 [issue](https://github.com/cloudyspells/PSRule.Rules.AzureDevOps/issues)
-with your ideas.
+with your ideas, encountered problems in using the module or other contributions. Any
+feedback is highly appreciated.
 
 ![Screenshot of version 0.0.11 Sarif output in Azure DevOps](assets/media/sarif-0.0.11.png)
+
+### Easy to use spin-off project
+
+If you are looking for an easy to use spin-off project that uses this module and
+gives you a nice dashboard in Azure Monitor, please have a look at the
+[PsrAzDo-workbooks](https://github.com/cloudyspells/PsrAzDo-workbooks) project.
+It is a set of Azure Monitor Workbooks that can be used to visualize the results
+of the PSRule.Rules.AzureDevOps module. The workbooks are easily deployed through
+through the included Bicep template and modules. A Yaml pipeline is included to
+run the PSRule.Rules.AzureDevOps module on a daily basis and upload the results
+to Azure Monitor.
 
 ## Usage
 
