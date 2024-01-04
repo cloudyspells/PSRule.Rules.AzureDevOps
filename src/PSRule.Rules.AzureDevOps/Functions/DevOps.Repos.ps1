@@ -471,7 +471,11 @@ function Export-AzDevOpsReposAndBranchPolicies {
             # Add a property with pipeline permissions
             $pipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -ProjectId $repo.project.id -RepositoryId $repo.id
             $repo | Add-Member -MemberType NoteProperty -Name PipelinePermissions -Value $pipelinePermissions
-
+            $repo.id = @{ 
+                originalId      = $repo.id;
+                project         = $Project;
+                organization    = $Organization
+            } | ConvertTo-Json -Depth 100
             # Add a property with repo ACLs if the token type is not ReadOnly
             if ($TokenType -ne "ReadOnly") {
                 $repoAcls = Get-AzDevOpsRepositoryAcls -ProjectId $repo.project.id -RepositoryId $repo.id
