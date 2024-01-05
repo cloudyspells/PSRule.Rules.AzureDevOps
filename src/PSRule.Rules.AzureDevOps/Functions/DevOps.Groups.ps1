@@ -160,7 +160,12 @@ Function Export-AzDevOpsGroups {
         $thisGroup | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Group' -Force
         # Add the group name to the group object as an ObjectName property with a convention of Organization.Project.GroupName
         $thisGroup | Add-Member -MemberType NoteProperty -Name ObjectName -Value "$($script:connection.Organization).$($Project).$($group.displayName)" -Force
-
+        $id = @{
+            originalId = $null
+            project = $Project
+            organization = $script:connection.Organization
+        } | ConvertTo-Json -Depth 100
+        $thisGroup | Add-Member -MemberType NoteProperty -Name id -Value $id -Force
         $groupDetails += $thisGroup
     }
     if($PassThru) {

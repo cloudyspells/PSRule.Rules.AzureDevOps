@@ -80,6 +80,12 @@ function Export-AzDevOpsPipelinesSettings {
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Pipelines.Settings'
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.PipelineSettings" -f $script:connection.Organization,$Project)
     $pipelinesSettings | Add-Member -MemberType NoteProperty -Name Name -Value $Project
+    $id = @{
+        originalId = $null
+        project = $Project
+        organization = $script:connection.Organization
+    } | ConvertTo-Json -Depth 100
+    $pipelinesSettings | Add-Member -MemberType NoteProperty -Name id -Value $id
     if ($PassThru) {
         Write-Output $pipelinesSettings
     } else {

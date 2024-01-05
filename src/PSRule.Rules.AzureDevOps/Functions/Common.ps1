@@ -196,6 +196,11 @@ function Export-AzDevOpsProject {
         $response = Get-AzDevOpsProject -Project $Project
         $response | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Project"
         $response | Add-Member -MemberType NoteProperty -Name ObjectName -Value "$Organization.$Project"
+        $response.id = @{ 
+            originalId      = $response.id;
+            project         = $Project;
+            organization    = $Organization
+        } | ConvertTo-Json -Depth 100
     }
     catch {
         throw "Failed to get project $Project from Azure DevOps"

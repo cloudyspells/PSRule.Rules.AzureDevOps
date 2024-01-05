@@ -451,6 +451,12 @@ function Export-AzDevOpsReposAndBranchPolicies {
                 $branch | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo.Branch"
                 # Add ObjectName to branch object
                 $branch | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.{2}.{3}" -f $Organization,$Project,$repo.name,$branch.name)
+                $id = @{ 
+                    originalId      = $branch.objectId;
+                    project         = $Project;
+                    organization    = $Organization
+                } | ConvertTo-Json -Depth 100
+                $branch | Add-Member -MemberType NoteProperty -Name id -Value $id
                 $branch
             }
 
