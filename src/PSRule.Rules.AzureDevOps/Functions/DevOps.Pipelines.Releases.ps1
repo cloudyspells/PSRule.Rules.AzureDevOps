@@ -164,6 +164,16 @@ Function Export-AzDevOpsReleaseDefinitions {
             # Add an ObjectType of Azure.DevOps.Pipelines.Releases.Definition to the response
             $response | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Pipelines.Releases.Definition'
             $response | Add-Member -MemberType NoteProperty -Name 'ObjectName' -Value ("{0}.{1}.{2}" -f $script:connection.Organization,$Project,$definitionName)
+
+            # Set the id to the to a hashtable of the organization, project and original id
+            $id = @{
+                originalId = $null
+                resourceName = $definitionName
+                project = $Project
+                organization = $Organization
+            } | ConvertTo-Json -Depth 100
+            $response.id = $id
+
             # Get the project ID from the url in the response
             $projectId = $response.url.Split('/')[4]
             # Get the folder from the path in the response

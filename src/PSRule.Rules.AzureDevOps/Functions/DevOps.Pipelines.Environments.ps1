@@ -166,8 +166,16 @@ function Export-AzDevOpsEnvironmentChecks {
                 # Add a ObjectType indicator for Azure.DevOps.Pipelines.Environment
                 $environment | Add-Member -MemberType NoteProperty -Name ObjectType -Value 'Azure.DevOps.Pipelines.Environment'
                 $environment | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.{2}" -f $script:connection.Organization,$Project,$environment.name)
+
                 $checks = @(Get-AzDevOpsEnvironmentChecks -Project $Project -Environment $environment.id)
                 $environment | Add-Member -MemberType NoteProperty -Name checks -Value $checks
+                # Set the id property to a hash table with the original id, organization and project name
+                $environment.id = @{
+                    originalId = $environment.id
+                    resourceName = $environment.name
+                    project = $Project
+                    organization = $script:connection.Organization
+                } | ConvertTo-Json -Depth 100
                 if($PassThru) {
                     Write-Output $environment
                 } else {

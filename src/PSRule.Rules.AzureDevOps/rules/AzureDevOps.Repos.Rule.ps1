@@ -108,7 +108,7 @@ Rule 'Azure.DevOps.Repos.DefaultBranchPolicyEnforceLinkedWorkItems' `
         Recommend 'Enforce linked work items.'
         # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops#enforce-linked-work-items'
         $Assert.NotNull($TargetObject, "MainBranchPolicy")
-        $Assert.HasField($TargetObject, "MainBranchPolicy[?@type.id == '40e92b44-2fe1-4dd6-b3d8-74a9c21d0c6e'].type", $true)
+        $Assert.HasField($TargetObject, "MainBranchPolicy[?@type.id == '40e92b44-2fe1-4dd6-b3d8-74a9c21d0c6e'].type", $false)
 }
 
 # Synopsis: The default branch policy should enforce comment resolution

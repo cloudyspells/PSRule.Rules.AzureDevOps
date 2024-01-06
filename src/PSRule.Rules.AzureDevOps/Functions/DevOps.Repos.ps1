@@ -452,6 +452,13 @@ function Export-AzDevOpsReposAndBranchPolicies {
                 $branch | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Repo.Branch"
                 # Add ObjectName to branch object
                 $branch | Add-Member -MemberType NoteProperty -Name ObjectName -Value ("{0}.{1}.{2}.{3}" -f $Organization,$Project,$repo.name,$branch.name)
+                $id = @{ 
+                    originalId      = $branch.objectId;
+                    resourceName    = "$($repo.name)/$($branch.name)"
+                    project         = $Project;
+                    organization    = $Organization
+                } | ConvertTo-Json -Depth 100
+                $branch | Add-Member -MemberType NoteProperty -Name id -Value $id
                 $branch
             })
 
@@ -472,10 +479,17 @@ function Export-AzDevOpsReposAndBranchPolicies {
             # Add a property with pipeline permissions
             $pipelinePermissions = Get-AzDevOpsRepositoryPipelinePermissions -ProjectId $repo.project.id -RepositoryId $repo.id
             $repo | Add-Member -MemberType NoteProperty -Name PipelinePermissions -Value $pipelinePermissions
-
+            $repoId = $repo.id
+            # Set the id property to a hash table with the original id, organization and project name
+            $repo.id = @{ 
+                originalId      = $repo.id;
+                resourceName    = $repo.name;
+                project         = $Project;
+                organization    = $Organization
+            } | ConvertTo-Json -Depth 100
             # Add a property with repo ACLs if the token type is not ReadOnly
             if ($TokenType -ne "ReadOnly") {
-                $repoAcls = Get-AzDevOpsRepositoryAcls -ProjectId $repo.project.id -RepositoryId $repo.id
+                $repoAcls = Get-AzDevOpsRepositoryAcls -ProjectId $repo.project.id -RepositoryId $repoId
                 $repo | Add-Member -MemberType NoteProperty -Name Acls -Value $repoAcls
             }
             $branches += $repo

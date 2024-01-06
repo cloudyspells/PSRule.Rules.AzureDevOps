@@ -89,6 +89,13 @@ Function Export-AzDevOpsVariableGroups {
         $variableGroup = $_
         $variableGroup | Add-Member -MemberType NoteProperty -Name 'ObjectType' -Value 'Azure.DevOps.Tasks.VariableGroup'
         $variableGroup | Add-Member -MemberType NoteProperty -Name 'ObjectName' -Value "$Organization.$Project.$($variableGroup.name)"
+        # Set the id to a JSON object with the originalId, project and organization
+        $variableGroup.id = @{
+            originalId = $variableGroup.id
+            resourceName = $variableGroup.name
+            project = $Project
+            organization = $Organization
+        } | ConvertTo-Json -Depth 100
         $variableGroupName = $variableGroup.name
         if ($PassThru) {
             Write-Output $variableGroup
