@@ -172,6 +172,7 @@ function Export-AzDevOpsEnvironmentChecks {
                 # Set the id property to a hash table with the original id, organization and project name
                 $environment.id = @{
                     originalId = $environment.id
+                    resourceName = $environment.name
                     project = $Project
                     organization = $script:connection.Organization
                 } | ConvertTo-Json -Depth 100

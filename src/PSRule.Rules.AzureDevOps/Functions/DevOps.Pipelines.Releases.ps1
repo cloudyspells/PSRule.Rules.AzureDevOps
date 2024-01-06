@@ -168,6 +168,7 @@ Function Export-AzDevOpsReleaseDefinitions {
             # Set the id to the to a hashtable of the organization, project and original id
             $id = @{
                 originalId = $null
+                resourceName = $definitionName
                 project = $Project
                 organization = $Organization
             } | ConvertTo-Json -Depth 100

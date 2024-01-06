@@ -92,6 +92,7 @@ Function Export-AzDevOpsVariableGroups {
         # Set the id to a JSON object with the originalId, project and organization
         $variableGroup.id = @{
             originalId = $variableGroup.id
+            resourceName = $variableGroup.name
             project = $Project
             organization = $Organization
         } | ConvertTo-Json -Depth 100

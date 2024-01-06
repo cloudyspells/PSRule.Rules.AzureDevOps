@@ -145,6 +145,7 @@ function Export-AzDevOpsServiceConnections {
         # Set id field to a JSON object with originalId, project and organization
         $serviceConnection.id = @{
             originalId = $serviceConnection.id
+            resourceName = $serviceConnection.name
             project = $Project
             organization = $Organization
         } | ConvertTo-Json -Depth 100

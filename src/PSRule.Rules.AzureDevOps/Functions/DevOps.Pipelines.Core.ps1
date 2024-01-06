@@ -235,10 +235,13 @@ function Export-AzDevOpsPipelineYaml {
     Write-Verbose "Getting YAML definition for pipeline $PipelineId"
     $yaml = "ObjectType: Azure.DevOps.Pipelines.PipelineYaml`n"
     $yaml += "ObjectName: '$($script:connection.Organization).$Project.$PipelineName.Yaml'`n"
-    $yaml += "id:`n"
-    $yaml += "  originalId: $PipelineId`n"
-    $yaml += "  project: $Project`n"
-    $yaml += "  organization: $($script:connection.Organization)`n"
+    $id = @{
+        originalId      = $PipelineId;
+        resourceName    = $PipelineName;
+        project         = $Project;
+        organization    = $script:connection.Organization
+    } | ConvertTo-Json -Depth 100 -Compress
+    $yaml += "id: '$id'`n"
     $yamlTemp = Get-AzDevOpsPipelineYaml -Project $Project -PipelineId $PipelineId
     # Export the YAML definition to a file if it is not empty
     if ($null -eq $yamlTemp) {
@@ -305,6 +308,7 @@ function Export-AzDevOpsPipelines {
         $pipelineId = $pipeline.id
         $pipeline.id = @{
             originalId      = $pipeline.id;
+            resourceName    = $pipeline.name;
             project         = $Project;
             organization    = $script:connection.Organization
         } | ConvertTo-Json -Depth 100
@@ -315,7 +319,7 @@ function Export-AzDevOpsPipelines {
         # Add the pipeline ACLs to the pipeline object if the token type is not ReadOnly
         if ($TokenType -ne 'ReadOnly') {
             Write-Verbose "Getting pipeline ACLs for pipeline $($pipeline.name)"
-            $pipeline | Add-Member -MemberType NoteProperty -Name Acls -Value (Get-AzDevOpsPipelineAcls -ProjectId $ProjectId -PipelineId $pipeline.id)
+            $pipeline | Add-Member -MemberType NoteProperty -Name Acls -Value (Get-AzDevOpsPipelineAcls -ProjectId $ProjectId -PipelineId $pipelineId)
         } else {
             Write-Verbose "Token Type is set to ReadOnly, no pipeline ACLs will be returned"
         }

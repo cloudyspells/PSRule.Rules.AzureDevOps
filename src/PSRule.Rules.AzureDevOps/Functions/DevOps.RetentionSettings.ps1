@@ -89,10 +89,12 @@ Function Export-AzDevOpsRetentionSettings {
     $settings = Get-AzDevOpsRetentionSettings -Project $Project
     $id = @{
         originalId = $null
+        resourceName = 'RetentionSettings'
         project = $Project
         organization = $script:connection.Organization
     } | ConvertTo-Json -Depth 100
     $settings.Add('id',$id)
+    $settings.Add('name','RetentionSettings')
     if($PassThru) {
         Write-Output $settings
     } else {

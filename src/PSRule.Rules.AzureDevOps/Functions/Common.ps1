@@ -198,6 +198,7 @@ function Export-AzDevOpsProject {
         $response | Add-Member -MemberType NoteProperty -Name ObjectName -Value "$Organization.$Project"
         $response.id = @{ 
             originalId      = $response.id;
+            resourceName    = $response.name;
             project         = $Project;
             organization    = $Organization
         } | ConvertTo-Json -Depth 100
