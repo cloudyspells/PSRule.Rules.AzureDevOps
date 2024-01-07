@@ -26,7 +26,7 @@ jobs:
           Import-Module ./src/PSRule.Rules.AzureDevOps/PSRule.Rules.AzureDevOps.psd1 -Force
           Connect-AzDevOps -Organization ${{ secrets.ADO_ORGANIZATION }} -PAT ${{ secrets.ADO_PAT }}
           New-Item -Path ./data -ItemType Directory -Force
-          Export-AzDevOpsRuleData -Project ${{ secrets.ADO_PROJECT }} -OutputPath ./data
+          Export-AzDevOpsOrganizationRuleData -OutputPath ./data
           $result = Invoke-PSRule -InputPath ./data/ `
             -Module "PSRule.Rules.AzureDevOps","PSRule.Monitor" `
             -Format Detect -Culture en
