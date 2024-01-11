@@ -24,10 +24,9 @@ Rule 'Azure.DevOps.Repos.Branch.BranchPolicyIsEnabled' `
         Reason 'The default branch does not have its branch policy enabled.'
         Recommend 'Protect your main branch with a branch policy.'
         # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#secure-azure-repos
-        $Assert.HasField(($TargetObject.BranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "isEnabled", $true)
-        $Assert.HasFieldValue(($TargetObject.BranchPolicy | Where-Object { $_.type.id -eq 'fa4e907d-c16b-4a4c-9dfa-4906e5d171dd'}), "isEnabled", $true)
+        $Assert.HasField(($TargetObject.BranchPolicy | Where-Object { $_.isEnabled } | Select-Object -First 1), "isEnabled", $true)
+        $Assert.HasFieldValue(($TargetObject.BranchPolicy | Where-Object { $_.isEnabled } | Select-Object -First 1), "isEnabled", $true)
 }
-
 
 # Synopsis: The branch policy should require a minimum number of reviewers
 Rule 'Azure.DevOps.Repos.Branch.BranchPolicyMinimumReviewers' `
