@@ -153,7 +153,7 @@ function Export-AzDevOpsServiceConnections {
             Write-Output $serviceConnection
         } else {
             Write-Verbose "Exporting service connection $($serviceConnection.name) as file $($serviceConnection.name).ado.sc.json"
-            $serviceConnection | ConvertTo-Json -Depth 100 | Out-File "$OutputPath/$($serviceConnection.name).ado.sc.json"
+            $serviceConnection | ConvertTo-Json -Depth 100 | Out-File "$OutputPath/$($serviceConnection.name.replace('/','')).ado.sc.json"
         }
     }
 }
