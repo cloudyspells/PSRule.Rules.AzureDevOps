@@ -50,7 +50,7 @@ stages:
                 Connect-AzDevOps -Organization $(devops_organization) -PAT "$(ADOPAT)"
                 Export-AzDevOpsRuleData `
                   -Project $(devops_project) `
-                  -OutputPath .\Temp `
+                  -OutputPath .\Temp
                 Assert-PSRule -Style AzurePipelines `
                   -Module PSRule.Rules.AzureDevOps `
                   -InputPath '$(Build.SourcesDirectory)/Temp/' `
