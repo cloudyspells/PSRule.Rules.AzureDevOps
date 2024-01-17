@@ -97,3 +97,40 @@ Rule 'Azure.DevOps.Tasks.VariableGroup.NoPlainTextSecrets' `
 
         }
 }
+
+# Synposis: Variable groups should not inherit permissions
+Rule 'Azure.DevOps.Tasks.VariableGroup.InheritedPermissions' `
+    -Ref 'ADO-VG-004' `
+    -Type 'Azure.DevOps.Tasks.VariableGroup' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'Variable groups should not inherit permissions.'
+        Reason 'The variable group inherits permissions.'
+        Recommend 'Do not inherit permissions for the variable group.'
+        AllOf {
+            $Assert.HasField($TargetObject, "Acls", $true)
+            $Assert.HasField($TargetObject.Acls[0], "inheritPermissions", $true)
+            $Assert.HasFieldValue($TargetObject.Acls[0], "inheritPermissions", $false)
+        }
+}
+
+# Synposis: Variable groups should not have direct permissions for Project Valid Users
+Rule 'Azure.DevOps.Tasks.VariableGroup.ProjectValidUsers' `
+    -Ref 'ADO-VG-005' `
+    -Type 'Azure.DevOps.Tasks.VariableGroup' `
+    -Tag @{ release = 'GA' } `
+    -Level Warning {
+        # Description 'Variable groups should not have direct permissions for Project Valid Users.'
+        Reason 'The variable group has direct permissions for Project Valid Users.'
+        Recommend 'Do not grant direct permissions for Project Valid Users for the variable group.'
+        AllOf {
+            # Loop through all the propeties of the first ACL
+            $TargetObject.Acls[0].acesDictionary.psobject.Properties.GetEnumerator() | ForEach-Object {
+                # Assert the property name does not end with -0-0-0-0-3 wich is the Project Valid Users group SID
+                AnyOf {
+                    $Assert.NotMatch($_.Value, "descriptor", "-0-0-0-0-3")
+                    $Assert.HasFieldValue($_.Value, "allow", 1)
+                }
+            }
+        }
+}

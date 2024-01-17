@@ -116,6 +116,66 @@ function Get-AzDevOpsEnvironmentChecks {
     }
 }
 Export-ModuleMember -Function Get-AzDevOpsEnvironmentChecks
+
+<#
+    .SYNOPSIS
+    Get all Azure Pipelines environment ACLs from Azure DevOps project
+
+    .DESCRIPTION
+    Get all Azure Pipelines environment ACLs from Azure DevOps project using Azure DevOps Rest API
+
+    .PARAMETER ProjectId
+    Project Id for Azure DevOps
+
+    .PARAMETER EnvironmentId
+    Environment Id for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsEnvironmentAcls -Project $Project -Environment $Environment
+
+    .NOTES
+    Requires a connection to Azure DevOps with a token type of FullAccess
+#>
+function Get-AzDevOpsEnvironmentAcls {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string]
+        $ProjectId,
+        [Parameter(Mandatory)]
+        [string]
+        $EnvironmentId
+    )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $TokenType = $script:connection.TokenType
+    # If token type is ReadOnly, write a warning and exit the function returing null
+    if($TokenType -eq 'ReadOnly') {
+        Write-Warning "Token type ReadOnly does not have access to Azure DevOps Pipelines Environments"
+        return $null
+    } else {
+        $header = $script:connection.GetHeader()
+        $Organization = $script:connection.Organization
+        Write-Verbose "Getting environment ACLs for environment $Environment"
+        $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/83d4c2e6-e57d-4d6e-892b-b87222b7ad20?api-version=7.2-preview.1&token=Environments/{1}/{2}" -f $Organization, $ProjectId, $EnvironmentId
+        Write-Verbose "URI: $uri"
+        try {
+            $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+            # If the response is a string and not an object, throw an exception for authentication failure or project not found
+            if ($response -is [string]) {
+                throw "Authentication failed or project not found"
+            }
+        }
+        catch {
+            throw $_.Exception.Message
+        }
+        $acls = @($response.value)
+        return $acls
+    }
+}
+Export-ModuleMember -Function Get-AzDevOpsEnvironmentAcls
+
 <#
     .SYNOPSIS
     Export all Azure Pipelines environments to JSON files with their checks as nested objects
@@ -169,6 +229,8 @@ function Export-AzDevOpsEnvironmentChecks {
 
                 $checks = @(Get-AzDevOpsEnvironmentChecks -Project $Project -Environment $environment.id)
                 $environment | Add-Member -MemberType NoteProperty -Name checks -Value $checks
+                $acls = @(Get-AzDevOpsEnvironmentAcls -ProjectId $environment.project.id -EnvironmentId $environment.id)
+                $environment | Add-Member -MemberType NoteProperty -Name Acls -Value $acls
                 # Set the id property to a hash table with the original id, organization and project name
                 $environment.id = @{
                     originalId = $environment.id

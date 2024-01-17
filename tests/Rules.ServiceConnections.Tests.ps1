@@ -249,6 +249,84 @@ Describe "Azure.DevOps.ServiceConnections rules" {
             $fileExists | Should -Be $true;
         }
     }
+
+    Context 'Azure.DevOps.ServiceConnections.InheritedPermissions' {
+        It ' should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.InheritedPermissions' -and $_.TargetName -match 'fail$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 3;
+        }
+
+        It ' should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.InheritedPermissions' -and $_.TargetName -like '*success*' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should be the same with a ReadOnly TokenType' {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.InheritedPermissions' -and $_.TargetName -match 'fail$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 3;
+
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.InheritedPermissions' -and $_.TargetName -like '*success*' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should be the same with a FineGrained TokenType' {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.InheritedPermissions' -and $_.TargetName -match 'fail$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 3;
+
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.InheritedPermissions' -and $_.TargetName -like '*success*' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have an english markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.InheritedPermissions.md');
+            $fileExists | Should -Be $true;
+        }
+    }
+
+    Context 'Azure.DevOps.ServiceConnections.ProjectValidUsers' {
+        It ' should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProjectValidUsers' -and $_.TargetName -match 'fail$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 3;
+        }
+
+        It ' should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProjectValidUsers' -and $_.TargetName -like '*success*' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should be the same with a ReadOnly TokenType' {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProjectValidUsers' -and $_.TargetName -match 'fail$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 3;
+
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProjectValidUsers' -and $_.TargetName -like '*success*' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should be the same with a FineGrained TokenType' {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProjectValidUsers' -and $_.TargetName -match 'fail$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 3;
+
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.ServiceConnections.ProjectValidUsers' -and $_.TargetName -like '*success*' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have an english markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.ServiceConnections.ProjectValidUsers.md');
+            $fileExists | Should -Be $true;
+        }
+    }
 }
 
 AfterAll {

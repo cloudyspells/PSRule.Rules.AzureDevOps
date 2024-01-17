@@ -58,3 +58,41 @@ Rule 'Azure.DevOps.Pipelines.Environments.ProductionBranchLimit' `
         $Assert.HasField($TargetObject, "checks[?@settings.displayName == 'Branch control'].settings.inputs.allowedBranches", $true)
         $Assert.HasFieldValue($TargetObject, "checks[?@settings.displayName == 'Branch control'].settings.inputs.allowedBranches")
 }
+
+# Synopsis: Environment should not have inherited permissions
+Rule 'Azure.DevOps.Pipelines.Environments.InheritedPermissions' `
+    -Ref 'ADO-E-005' `
+    -Type 'Azure.DevOps.Pipelines.Environment' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'Environment should not have inherited permissions'
+        Reason 'The environment has inherited permissions'
+        Recommend 'Remove inherited permissions from the environment'
+        # Links 'https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops#check-gates'
+        AllOf {
+            $Assert.HasField($TargetObject, "Acls", $true)
+            $Assert.HasField($TargetObject.Acls[0], "inheritPermissions", $true)
+            $Assert.HasFieldValue($TargetObject.Acls[0], "inheritPermissions", $false)
+        }
+}
+
+# Synposis: Environments should not have direct permissions for Project Valid Users
+Rule 'Azure.DevOps.Pipelines.Environments.ProjectValidUsers' `
+    -Ref 'ADO-E-006' `
+    -Type 'Azure.DevOps.Pipelines.Environment' `
+    -Tag @{ release = 'GA' } `
+    -Level Warning {
+        # Description 'Environments should not have direct permissions for Project Valid Users.'
+        Reason 'The environment has direct permissions for Project Valid Users.'
+        Recommend 'Do not grant direct permissions for Project Valid Users for the environment.'        
+        AllOf {
+            # Loop through all the propeties of the first ACL
+            $TargetObject.Acls[0].acesDictionary.psobject.Properties.GetEnumerator() | ForEach-Object {
+                # Assert the property name does not end with -0-0-0-0-3 wich is the Project Valid Users group SID
+                AnyOf {
+                    $Assert.NotMatch($_.Value, "descriptor", "-0-0-0-0-3")
+                    $Assert.HasFieldValue($_.Value, "allow", 1)
+                }
+            }
+        }
+}

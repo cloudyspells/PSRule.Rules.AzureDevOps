@@ -58,6 +58,46 @@ Describe "Functions: DevOps.Tasks.VariableGroups.Tests" {
         }
     }
 
+    Context ' Get-AzDevOpsVariableGroupAcls without a connection' {
+        It ' should throw an error' {
+            { 
+                Disconnect-AzDevOps
+                Get-AzDevOpsVariableGroupAcls -ProjectId $env:ADO_PROJECT -VariableGroupId 1
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+        }
+    }
+
+    Context ' Get-AzDevOpsVariableGroupAcls with wrong parameters' {
+        It ' should throw an error with a wrong PAT' {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT 'wrong-pat'
+            { Get-AzDevOpsVariableGroupAcls -ProjectId $env:ADO_PROJECT -VariableGroupId 1 -ErrorAction Stop } | Should -Throw
+        }
+
+        It ' should throw a 404 error with a wrong project and organization' {
+            Connect-AzDevOps -Organization 'wrong-org' -PAT $env:ADO_PAT
+            { Get-AzDevOpsVariableGroupAcls -ProjectId 'wrong-project' -VariableGroupId 1 -ErrorAction Stop } | Should -Throw
+        }
+    }
+
+    Context ' Get-AzDevOpsVariableGroupAcls on a variable group with acls' {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $Project = $env:ADO_PROJECT
+            $variableGroups = Get-AzDevOpsVariableGroups -Project $Project
+            $variableGroupId = $variableGroups[0].id
+            $ProjectId = (Get-AzDevOpsProject -Project $Project).id
+            $variableGroupAcls = Get-AzDevOpsVariableGroupAcls -ProjectId $ProjectId -VariableGroupId $variableGroupId
+        }
+
+        It ' should return a list of variable group acls' {
+            $variableGroupAcls | Should -Not -BeNullOrEmpty
+        }
+
+        It ' should return a list of variable group acls that are of type PSObject' {
+            $variableGroupAcls[0] | Should -BeOfType [PSCustomObject]
+        }
+    }
+
     Context " Export-AzDevOpsVariableGroups without a connection" {
         It ' should throw an error' {
             { 

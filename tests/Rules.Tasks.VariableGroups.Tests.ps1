@@ -128,6 +128,84 @@ Describe "Azure.DevOps.Tasks.VariableGroups rules" {
             $fileExists | Should -Be $true;
         }
     }
+
+    Context 'Azure.DevOps.Tasks.VariableGroup.InheritedPermissions' {
+        It ' should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.InheritedPermissions' -and $_.TargetName -match "failing-variable-group$" })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.InheritedPermissions' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have the same results with a ReadOnly TokenType' {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.InheritedPermissions' -and $_.TargetName -match "failing-variable-group$" })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.InheritedPermissions' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have the same results with a FineGrained TokenType' {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.InheritedPermissions' -and $_.TargetName -match "failing-variable-group$" })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.InheritedPermissions' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Tasks.VariableGroup.InheritedPermissions.md');
+            $fileExists | Should -Be $true;
+        }
+    }
+
+    Context 'Azure.DevOps.Tasks.VariableGroup.ProjectValidUsers' {
+        It ' should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.ProjectValidUsers' -and $_.TargetName -match "failing-variable-group$" })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.ProjectValidUsers' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have the same results with a ReadOnly TokenType' {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.ProjectValidUsers' -and $_.TargetName -match "failing-variable-group$" })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.ProjectValidUsers' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have the same results with a FineGrained TokenType' {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.ProjectValidUsers' -and $_.TargetName -match "failing-variable-group$" })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Tasks.VariableGroup.ProjectValidUsers' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Tasks.VariableGroup.ProjectValidUsers.md');
+            $fileExists | Should -Be $true;
+        }
+    }
 }
 
 AfterAll {

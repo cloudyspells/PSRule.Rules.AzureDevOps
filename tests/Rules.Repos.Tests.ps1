@@ -569,6 +569,40 @@ Describe "Azure.DevOps.Repos rules" {
             $fileExists | Should -Be $true;
         }
     }
+
+    Context 'Azure.DevOps.Repos.ProjectValidUsers' {
+        It ' should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.ProjectValidUsers' -and $_.TargetName -match 'fail-project$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.ProjectValidUsers' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should not be present with the ReadOnly TokenType' {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.ProjectValidUsers' })
+            $ruleHits.Count | Should -Be 0;
+        }
+
+        It ' should be the same as default with a FineGrained TokenType' {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.ProjectValidUsers' -and $_.TargetName -match 'fail-project$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.ProjectValidUsers' -and $_.TargetName -match 'success' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have a markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Repos.ProjectValidUsers.md');
+            $fileExists | Should -Be $true;
+        }
+    }
 }
 
 AfterAll {

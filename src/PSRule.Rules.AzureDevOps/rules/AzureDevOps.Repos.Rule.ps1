@@ -196,3 +196,26 @@ Rule 'Azure.DevOps.Repos.DefaultBranchPolicyRequireBuild' `
         # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops'
         $Assert.HasFieldValue(($TargetObject.MainBranchPolicy | Where-Object { $_.type.id -eq '0609b952-1397-4640-95ec-e00a01b2c241'}), "type.displayName", "Build")
 }
+
+# Synposis: Repos should not have direct permissions for Project Valid Users
+Rule 'Azure.DevOps.Repos.ProjectValidUsers' `
+    -Ref 'ADO-RP-014' `
+    -Type 'Azure.DevOps.Repo' `
+    -If { $null -ne $TargetObject.Acls } `
+    -Tag @{ release = 'GA' } `
+    -Level Warning {
+        # Description 'Repos should not have direct permissions for Project Valid Users.'
+        Reason 'The repository has direct permissions for Project Valid Users.'
+        Recommend 'Do not grant direct permissions for Project Valid Users for the repository.'
+        AllOf {
+            # Loop through all the properties of the first ACL
+            $TargetObject.Acls.acesDictionary.psobject.Properties.GetEnumerator() | ForEach-Object {
+                # Assert the property name does not end with -0-0-0-0-3 wich is the Project Valid Users group SID
+                # or else does not have allow set to something different than 1
+                AnyOf {
+                    $Assert.NotMatch($_.Value, "descriptor", "-0-0-0-0-3")
+                    $Assert.HasFieldValue($_.Value, "allow", 2)
+                }
+            }
+        }
+}

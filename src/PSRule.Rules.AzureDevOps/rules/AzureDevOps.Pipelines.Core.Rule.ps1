@@ -105,3 +105,25 @@ Rule 'Azure.DevOps.Pipelines.Core.NoPlainTextSecrets' `
             }
         }
 }
+
+# Synposis: Pipelines should not have direct permissions for Project Valid Users
+Rule 'Azure.DevOps.Pipelines.Core.ProjectValidUsers' `
+    -Ref 'ADO-PL-004' `
+    -Type 'Azure.DevOps.Pipeline' `
+    -If { $null -ne $TargetObject.Acls } `
+    -Tag @{ release = 'GA' } `
+    -Level Warning {
+        # Description 'Pipelines should not have direct permissions for Project Valid Users.'
+        Reason 'The pipeline has direct permissions for Project Valid Users.'
+        Recommend 'Do not grant direct permissions for Project Valid Users for the pipeline.'
+        AllOf {
+            # Loop through all the propeties of the first ACL
+            $TargetObject.Acls.acesDictionary.psobject.Properties.GetEnumerator() | ForEach-Object {
+                # Assert the property name does not end with -0-0-0-0-3 wich is the Project Valid Users group SID
+                AnyOf {
+                    $Assert.NotMatch($_.Value, "descriptor", "-0-0-0-0-3")
+                    $Assert.HasFieldValue($_.Value, "allow", 1)
+                }
+            }
+        }
+}
