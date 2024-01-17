@@ -215,6 +215,29 @@ Describe "Functions: Azure.DevOps.Pipelines.Environments.Tests" {
         }
     }
 
+    Context " Get-AzDevOpsEnvironmentAcls with a ReadOnly token" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $environments = Get-AzDevOpsEnvironments -Project $env:ADO_PROJECT
+            $environmentId = $environments[1].id
+            Disconnect-AzDevOps
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
+            $environmentAcls = Get-AzDevOpsEnvironmentAcls -ProjectId $environments[1].project.id -EnvironmentId $environmentId -WarningVariable warning
+        }
+
+        It " should return null or empty list of environment acls" {
+            $environmentAcls | Should -BeNullOrEmpty
+        }
+
+        It " should return a warning" {
+            $warning | Should -Not -BeNullOrEmpty
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
+
     Context " Export-AzDevOpsEnvironmentChecks without a connection" {
         It " should throw an error" {
             { 
