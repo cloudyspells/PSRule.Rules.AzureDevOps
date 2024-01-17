@@ -188,3 +188,25 @@ Rule 'Azure.DevOps.Pipelines.Releases.Definition.NoPlainTextSecrets' `
             $Assert.HasField($TargetObject, "variables", $true)
     }
 }
+
+# Synposis: Release definitions should not have direct permissions for Project Valid Users
+Rule 'Azure.DevOps.Pipelines.Releases.Definition.ProjectValidUsers' `
+    -Ref 'ADO-RD-005' `
+    -Type 'Azure.DevOps.Pipelines.Releases.Definition' `
+    -If { $null -ne $TargetObject.Acls } `
+    -Tag @{ release = 'GA' } `
+    -Level Warning {
+        # Description 'Release definitions should not have direct permissions for Project Valid Users.'
+        Reason 'The release definition has direct permissions for Project Valid Users.'
+        Recommend 'Do not grant direct permissions for Project Valid Users for the release definition.'        
+        AllOf {
+            # Loop through all the propeties of the first ACL
+            $TargetObject.Acls.acesDictionary.psobject.Properties.GetEnumerator() | ForEach-Object {
+                # Assert the property name does not end with -0-0-0-0-3 wich is the Project Valid Users group SID
+                AnyOf {
+                    $Assert.NotMatch($_.Value, "descriptor", "-0-0-0-0-3")
+                    $Assert.HasFieldValue($_.Value, "allow", 1)
+                }
+            }
+        }
+}

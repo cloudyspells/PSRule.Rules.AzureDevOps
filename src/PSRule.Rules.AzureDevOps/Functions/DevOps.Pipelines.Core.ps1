@@ -77,7 +77,10 @@ function Get-AzDevOpsPipelineAcls {
         $ProjectId,
         [Parameter(Mandatory=$true)]
         [string]
-        $PipelineId
+        $PipelineId,
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Folder = ""
     )
     if ($null -eq $script:connection) {
         throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
@@ -90,11 +93,16 @@ function Get-AzDevOpsPipelineAcls {
         return $null
     } else {
         $header = $script:connection.GetHeader()
-        $uri = "https://dev.azure.com/$Organization/_apis/accesscontrollists/33344d9c-fc72-4d6f-aba5-fa317101a7e9?api-version=6.0&token=$($ProjectId)/$($PipelineId)"
+        $uri = "https://dev.azure.com/$Organization/_apis/accesscontrollists/33344d9c-fc72-4d6f-aba5-fa317101a7e9?api-version=7.2-preview.1&token=$($ProjectId)/$($PipelineId)"
         Write-Verbose "Getting pipeline ACLs from $uri"
         Write-Verbose "PROJECTID: $ProjectId"
         try {
-            $response = (Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json") #| Where-Object { $_.token -eq "$($ProjectId)/$($PipelineId)" }
+            if ($Folder -eq "") {
+                $response = (Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json") #| Where-Object { $_.token -eq "$($ProjectId)/$($PipelineId)" }
+            }
+            else {
+                $response = (Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json") #| Where-Object { $_.token -eq "$($ProjectId)/$($Folder)/$($PipelineId)" }
+            }
             # if the response is not an object but a string, the authentication failed
             if ($response -is [string]) {
                 throw "Authentication failed or project not found"
@@ -319,7 +327,14 @@ function Export-AzDevOpsPipelines {
         # Add the pipeline ACLs to the pipeline object if the token type is not ReadOnly
         if ($TokenType -ne 'ReadOnly') {
             Write-Verbose "Getting pipeline ACLs for pipeline $($pipeline.name)"
-            $pipeline | Add-Member -MemberType NoteProperty -Name Acls -Value (Get-AzDevOpsPipelineAcls -ProjectId $ProjectId -PipelineId $pipelineId)
+            if ($pipeline.folder -eq '\') {
+                $Folder = ""
+            }
+            else {
+                $Folder = $pipeline.folder.replace('\','/')
+                $Folder = $Folder.Trim('/')
+            }
+            $pipeline | Add-Member -MemberType NoteProperty -Name Acls -Value (Get-AzDevOpsPipelineAcls -ProjectId $ProjectId -PipelineId $pipelineId -Folder $Folder)
         } else {
             Write-Verbose "Token Type is set to ReadOnly, no pipeline ACLs will be returned"
         }

@@ -236,6 +236,45 @@ Describe "Functions: Common.Tests" {
         }
     }
 
+    Context " Get-AzDevOpsProjectAcls without a connection" {
+        It " should throw an error" {
+            { 
+                Disconnect-AzDevOps
+                Get-AzDevOpsProjectAcls -ProjectId $env:ADO_PROJECT
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+        }
+    }
+
+    Context " Get-AzDevOpsProjectAcls" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $project = Get-AzDevOpsProject -Project $env:ADO_PROJECT
+            $acls = Get-AzDevOpsProjectAcls -ProjectId $project.id
+        }
+
+        It " The acls should not be null" {
+            $acls | Should -Not -BeNullOrEmpty
+        }
+
+        It " The acls should be of type [Hashtable]" {
+            $acls | Should -BeOfType [Hashtable]
+        }
+
+        It " The operation should fail with a wrong Organization" {
+            { 
+                Connect-AzDevOps -Organization 'wrong' -PAT $env:ADO_PAT
+                Get-AzDevOpsProjectAcls -ErrorAction Stop -ProjectId $project.id
+            } | Should -Throw 
+        }
+
+        It " The operation should fail with a wrong PAT" {
+            { 
+                Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT 'wrong'
+                Get-AzDevOpsProjectAcls -ErrorAction Stop -ProjectId $project.id
+            } | Should -Throw 
+        }
+    }
+
     Context " Export-AzDevOpsProject without a connection" {
         It " should throw an error" {
             { 

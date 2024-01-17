@@ -85,10 +85,11 @@ Function Get-AzDevOpsReleaseDefinitionAcls {
     } else {
         Write-Verbose "Getting release definition ACLs for release definition $ReleaseDefinitionId"
         if ($Folder -eq '') {
-            $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/c788c23e-1b46-4162-8f5e-d7585343b5de?api-version=6.0&token={1}/{2}" -f $Organization, $ProjectId, $ReleaseDefinitionId
+            $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/c788c23e-1b46-4162-8f5e-d7585343b5de?api-version=7.2-preview.1&token={1}/{2}" -f $Organization, $ProjectId, $ReleaseDefinitionId
         }
         else {
-            $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/c788c23e-1b46-4162-8f5e-d7585343b5de?api-version=6.0&token={1}/{2}/{3}" -f $Organization, $ProjectId, $Folder, $ReleaseDefinitionId
+            $Folder = $Folder.Trim('/')
+            $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/c788c23e-1b46-4162-8f5e-d7585343b5de?api-version=7.2-preview.1&token={1}/{2}/{3}" -f $Organization, $ProjectId, $Folder, $ReleaseDefinitionId
         }
         Write-Verbose "URI: $uri"
         $header = $script:connection.GetHeader()
@@ -167,7 +168,7 @@ Function Export-AzDevOpsReleaseDefinitions {
 
             # Set the id to the to a hashtable of the organization, project and original id
             $id = @{
-                originalId = $null
+                originalId = $definitionId
                 resourceName = $definitionName
                 project = $Project
                 organization = $Organization

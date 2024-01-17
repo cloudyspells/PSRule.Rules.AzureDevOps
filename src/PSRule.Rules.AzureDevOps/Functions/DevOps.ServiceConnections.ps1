@@ -93,6 +93,52 @@ Export-ModuleMember -Function Get-AzDevOpsServiceConnectionChecks
 
 <#
     .SYNOPSIS
+    Get the Acls for an service connection from Azure DevOps project
+
+    .DESCRIPTION
+    Get the Acls for an service connection from Azure DevOps project using Azure DevOps Rest API
+
+    .PARAMETER ProjectId
+    Project Id for Azure DevOps
+
+    .PARAMETER ServiceConnectionId
+    Service connection id for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsServiceConnectionAcls -ProjectId $ProjectId -ServiceConnectionId $ServiceConnectionId
+#>
+function Get-AzDevOpsServiceConnectionAcls {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string]
+        $ProjectId,
+        [Parameter(Mandatory)]
+        [string]
+        $ServiceConnectionId
+    )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $header = $script:connection.GetHeader()
+    $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/49b48001-ca20-4adc-8111-5b60c903a50c?api-version=7.2-preview.1&token=endpoints/{1}/{2}" -f $Organization, $ProjectId, $ServiceConnectionId
+    try {
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        # If the response is not an object but a string, the authentication failed
+        if ($response -is [string]) {
+            throw "Authentication failed or project not found"
+        }
+    }
+    catch {
+        throw $_.Exception.Message
+    }
+    return @($response.value)
+}
+Export-ModuleMember -Function Get-AzDevOpsServiceConnectionAcls
+
+<#
+    .SYNOPSIS
     Export all Azure Resource Manager service connections from Azure DevOps project with checks as nested objects
 
     .DESCRIPTION
@@ -142,6 +188,10 @@ function Export-AzDevOpsServiceConnections {
         # Get checks for service connection
         $serviceConnectionChecks = @(Get-AzDevOpsServiceConnectionChecks -Project $Project -ServiceConnectionId $serviceConnection.id)
         $serviceConnection | Add-Member -MemberType NoteProperty -Name Checks -Value $serviceConnectionChecks
+        # Get acls for service connection
+        $serviceConnectionAcls = @(Get-AzDevOpsServiceConnectionAcls -ProjectId $serviceConnection.serviceEndpointProjectReferences[0].projectReference.id -ServiceConnectionId $serviceConnection.id)
+        $serviceConnection | Add-Member -MemberType NoteProperty -Name Acls -Value $serviceConnectionAcls
+
         # Set id field to a JSON object with originalId, project and organization
         $serviceConnection.id = @{
             originalId = $serviceConnection.id

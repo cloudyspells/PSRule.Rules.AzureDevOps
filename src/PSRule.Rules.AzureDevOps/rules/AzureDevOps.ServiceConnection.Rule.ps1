@@ -112,3 +112,40 @@ Rule 'Azure.DevOps.ServiceConnections.GitHubPAT' `
         Recommend 'Use a GitHub App instead of a PAT.'
         $Assert.NotIn($TargetObject, "authorization.scheme", "Token")
 }
+
+# Synposis: Service Connections should not inherit permissions
+Rule 'Azure.DevOps.ServiceConnections.InheritedPermissions' `
+    -Ref 'ADO-SC-009' `
+    -Type 'Azure.DevOps.ServiceConnection' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description 'Service Connections should not inherit permissions.'
+        Reason 'The service connection inherits permissions.'
+        Recommend 'Do not inherit permissions for the service connection.'
+        AllOf {
+            $Assert.HasField($TargetObject, "Acls", $true)
+            $Assert.HasField($TargetObject.Acls[0], "inheritPermissions", $true)
+            $Assert.HasFieldValue($TargetObject.Acls[0], "inheritPermissions", $false)
+        }
+}
+
+# Synposis: Service connections should not have direct permissions for Project Valid Users
+Rule 'Azure.DevOps.ServiceConnections.ProjectValidUsers' `
+    -Ref 'ADO-SC-010' `
+    -Type 'Azure.DevOps.ServiceConnection' `
+    -Tag @{ release = 'GA' } `
+    -Level Warning {
+        # Description 'Service connections should not have direct permissions for Project Valid Users.'
+        Reason 'The service connection has direct permissions for Project Valid Users.'
+        Recommend 'Do not grant direct permissions for Project Valid Users for the service connection.'
+        AllOf {
+            # Loop through all the propeties of the first ACL
+            $TargetObject.Acls[0].acesDictionary.psobject.Properties.GetEnumerator() | ForEach-Object {
+                # Assert the property name does not end with -0-0-0-0-3 wich is the Project Valid Users group SID
+                AnyOf {
+                    $Assert.NotMatch($_.Value, "descriptor", "-0-0-0-0-3")
+                    $Assert.HasFieldValue($_.Value, "allow", 16)
+                }
+            }
+        }
+}

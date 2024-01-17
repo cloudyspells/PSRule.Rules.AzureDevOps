@@ -65,4 +65,124 @@ Describe "Azure.DevOps.Project rules" {
             $ruleHits.Count | Should -Be 0;
         }
     }
+
+    Context ' Azure.DevOps.Project.MainPipelineAcl.ProjectValidUsers' {
+        It " should pass once" {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainPipelineAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for ReadOnly token type" {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainPipelineAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for FineGrained token type" {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainPipelineAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context ' Azure.DevOps.Project.MainServiceConnectionAcl.ProjectValidUsers' {
+        It " should pass once" {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainServiceConnectionAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for ReadOnly token type" {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainServiceConnectionAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for FineGrained token type" {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainServiceConnectionAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context ' Azure.DevOps.Project.MainRepositoryAcl.ProjectValidUsers' {
+        It " should fail once" {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainRepositoryAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should fail once for ReadOnly token type" {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainRepositoryAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for FineGrained token type" {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainRepositoryAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context ' Azure.DevOps.Project.MainEnvironmentAcl.ProjectValidUsers' {
+        It " should pass once" {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainEnvironmentAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for ReadOnly token type" {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainEnvironmentAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for FineGrained token type" {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainEnvironmentAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context ' Azure.DevOps.Project.MainReleaseDefinitionAcl.ProjectValidUsers' {
+        It " should pass once" {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainReleaseDefinitionAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for ReadOnly token type" {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainReleaseDefinitionAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for FineGrained token type" {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainReleaseDefinitionAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
+
+    Context ' Azure.DevOps.Project.MainVariableGroupAcl.ProjectValidUsers' {
+        It " should pass once" {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainVariableGroupAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for ReadOnly token type" {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainVariableGroupAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It " should pass once for FineGrained token type" {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Project.MainVariableGroupAcl.ProjectValidUsers' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
 }

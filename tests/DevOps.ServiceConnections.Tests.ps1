@@ -98,6 +98,46 @@ Describe "Functions: DevOps.ServiceConnections.Tests" {
         }
     }
 
+    Context "When running Get-AzDevOpsServiceConnectionAcls without a connection" {
+        It " should throw an error" {
+            { 
+                Disconnect-AzDevOps
+                Get-AzDevOpsServiceConnectionAcls -ProjectId $env:ADO_PROJECT -ServiceConnectionId 1
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+        }
+    }
+
+    Context "When running Get-AzDevOpsServiceConnectionAcls on a protected service connection" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $Project = $env:ADO_PROJECT
+            $serviceConnections = Get-AzDevOpsServiceConnections -Project $Project
+            $serviceConnectionId = $serviceConnections[1].id
+            $projectId = $serviceConnections[1].serviceEndpointProjectReferences.projectReference.id
+            $serviceConnectionAcls = Get-AzDevOpsServiceConnectionAcls -ProjectId $ProjectId -ServiceConnectionId $serviceConnectionId
+        }
+
+        It " should return a list of service connection acls" {
+            $serviceConnectionAcls | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return a list of service connection acls that are of type PSObject" {
+            $serviceConnectionAcls[0] | Should -BeOfType [PSCustomObject]
+        }
+    }
+
+    Context "When running Get-AzDevOpsServiceConnectionAcls with wrong parameters" {
+        It " should throw an error with a wrong PAT" {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT "wrong-pat"
+            { Get-AzDevOpsServiceConnectionAcls -ProjectId $env:ADO_PROJECT -ServiceConnectionId 1 -ErrorAction Stop } | Should -Throw
+        }
+
+        It " should throw a 404 error with a wrong project and organization" {
+            Connect-AzDevOps -Organization 'wrong-org' -PAT $env:ADO_PAT
+            { Get-AzDevOpsServiceConnectionAcls -ProjectId "wrong-project" -ServiceConnectionId 1 -ErrorAction Stop } | Should -Throw
+        }
+    }
+
     Context " Export-AzDevOpsServiceConnections without a connection" {
         It " should throw an error" {
             { 

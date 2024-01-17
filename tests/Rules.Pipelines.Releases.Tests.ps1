@@ -188,6 +188,40 @@ Describe "Azure.DevOps.Pipelines.Releases rules" {
             $fileExists | Should -Be $true;
         }
     }
+
+    Context 'Azure.DevOps.Pipelines.Releases.Definition.ProjectValidUsers' {
+        It ' should fail for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Releases.Definition.ProjectValidUsers' -and $_.TargetName -match 'Fail$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should pass for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Releases.Definition.ProjectValidUsers' -and $_.TargetName -match 'Success$' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should not be present with a ReadOnly TokenType' {
+            $ruleHits = @($ruleResultReadOnly | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Releases.Definition.ProjectValidUsers' })
+            $ruleHits.Count | Should -Be 0;
+        }
+
+        It ' should be the same as default with a FineGrained TokenType' {
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Releases.Definition.ProjectValidUsers' -and $_.TargetName -match 'Fail$' })
+            $ruleHits[0].Outcome | Should -Be 'Fail';
+            $ruleHits.Count | Should -Be 1;
+
+            $ruleHits = @($ruleResultFineGrained | Where-Object { $_.RuleName -eq 'Azure.DevOps.Pipelines.Releases.Definition.ProjectValidUsers' -and $_.TargetName -match 'Success$' })
+            $ruleHits[0].Outcome | Should -Be 'Pass';
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should have an English markdown help file' {
+            $fileExists = Test-Path -Path (Join-Path -Path $ourModule -ChildPath 'en/Azure.DevOps.Pipelines.Releases.Definition.ProjectValidUsers.md');
+            $fileExists | Should -Be $true;
+        }
+    }
 }
 
 AfterAll {

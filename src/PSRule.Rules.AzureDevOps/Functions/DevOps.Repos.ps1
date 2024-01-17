@@ -239,14 +239,14 @@ Function Get-AzDevOpsRepositoryAcls {
         return $null
     } else {
         $header = $script:connection.GetHeader()
-        $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/2e9eb7ed-3c0a-47d4-87c1-0ffdd275fd87?api-version=6.0" -f $Organization
+        $uri = "https://dev.azure.com/{0}/_apis/accesscontrollists/2e9eb7ed-3c0a-47d4-87c1-0ffdd275fd87?api-version=7.2-preview.1&token=repoV2/{1}/{2}" -f $Organization, $ProjectId, $RepositoryId
         try {
             $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header -ContentType "application/json"
             # If the response is a string and not an object, throw an exception for authentication failure or project not found
             if ($response -is [string]) {
                 throw "Authentication failed or project not found"
             }
-            $thisRepoPerms = $response.value | where-object {($_.token -eq "repoV2/$($ProjectId)/$($RepositoryId)")}
+            $thisRepoPerms = $response.value
         }
         catch {
             throw $_.Exception.Message

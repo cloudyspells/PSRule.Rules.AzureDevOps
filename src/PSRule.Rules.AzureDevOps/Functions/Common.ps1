@@ -152,6 +152,59 @@ function Get-AzDevOpsProject {
 
 <#
     .SYNOPSIS
+    Get all Azure DevOps Project Acls
+
+    .DESCRIPTION
+    Get all Azure DevOps Project Acls using Azure DevOps Rest API
+
+    .PARAMETER ProjectId
+    Project Id for Azure DevOps
+
+    .EXAMPLE
+    Get-AzDevOpsProjectAcls -ProjectId $ProjectId
+#>
+function Get-AzDevOpsProjectAcls {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string]
+        $ProjectId
+    )
+    if ($null -eq $script:connection) {
+        throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+    }
+    $Organization = $script:connection.Organization
+    $header = $script:connection.GetHeader()
+    $aclInfo = @{
+        'Environments' = "https://dev.azure.com/$Organization/_apis/accesscontrollists/83d4c2e6-e57d-4d6e-892b-b87222b7ad20?api-version=7.2-preview.1&token=Environments/$ProjectId"
+        'Pipelines' = "https://dev.azure.com/$Organization/_apis/accesscontrollists/33344d9c-fc72-4d6f-aba5-fa317101a7e9?api-version=7.2-preview.1&token=$ProjectId"
+        'ReleaseDefinitions' = "https://dev.azure.com/$Organization/_apis/accesscontrollists/c788c23e-1b46-4162-8f5e-d7585343b5de?api-version=7.2-preview.1&token=$ProjectId"
+        'Repositories' = "https://dev.azure.com/$Organization/_apis/accesscontrollists/2e9eb7ed-3c0a-47d4-87c1-0ffdd275fd87?api-version=7.2-preview.1&token=repoV2/$ProjectId"
+        'ServiceConnections' = "https://dev.azure.com/$Organization/_apis/accesscontrollists/49b48001-ca20-4adc-8111-5b60c903a50c?api-version=7.2-preview.1&token=endpoints/$ProjectId"
+        'VariableGroups' = "https://dev.azure.com/$Organization/_apis/accesscontrollists/b7e84409-6553-448a-bbb2-af228e07cbeb?api-version=7.2-preview.1&token=Library/$ProjectId"
+    }
+    $acls = @{}
+    try {
+        # Walk through the aclInfo hashtable and get the acls for each resource
+        foreach($key in $aclInfo.Keys) {
+            $aclUri = $aclInfo[$key]
+            Write-Verbose "Getting $key ACLs for project $ProjectId"
+            $aclResponse = Invoke-RestMethod -Uri $aclUri -Method Get -Headers $header
+            # If the response is not an object but a string, the authentication failed
+            if ($aclResponse -is [string] -or $null -eq $aclResponse.value) {
+                throw "Authentication failed or project not found"
+            }
+            $acls.Add($key,$aclResponse.value)
+        }
+    }
+    catch {
+        throw $_.Exception.Message
+    }
+    return $acls
+}
+
+<#
+    .SYNOPSIS
     Export the Azure DevOps Project
 
     .DESCRIPTION
@@ -196,6 +249,10 @@ function Export-AzDevOpsProject {
         $response = Get-AzDevOpsProject -Project $Project
         $response | Add-Member -MemberType NoteProperty -Name ObjectType -Value "Azure.DevOps.Project"
         $response | Add-Member -MemberType NoteProperty -Name ObjectName -Value "$Organization.$Project"
+        # Add the Project Acls to the response object
+        $acls = Get-AzDevOpsProjectAcls -ProjectId $response.id
+        $response | Add-Member -MemberType NoteProperty -Name ProjectAcls -Value $acls
+        # Add a new id field to the response object
         $response.id = @{ 
             originalId      = $response.id;
             resourceName    = $response.name;
@@ -204,13 +261,13 @@ function Export-AzDevOpsProject {
         } | ConvertTo-Json -Depth 100
     }
     catch {
-        throw "Failed to get project $Project from Azure DevOps"
+        throw $_.Exception.Message
     }
     if($PassThru) {
         Write-Output $response
     } else {
         Write-Verbose "Exporting project $Project as file $Project.prj.ado.json"
-        $response | ConvertTo-Json | Out-File -FilePath "$OutputPath/$Project.prj.ado.json"
+        $response | ConvertTo-Json -Depth 100 | Out-File -FilePath "$OutputPath/$Project.prj.ado.json"
     }
 }
 # End of Function Export-AzDevOpsProject

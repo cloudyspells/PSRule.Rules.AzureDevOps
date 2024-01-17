@@ -169,6 +169,75 @@ Describe "Functions: Azure.DevOps.Pipelines.Environments.Tests" {
         }
     }
 
+    Context " Get-AzDevOpsEnvironmentAcls without a connection" {
+        It " should throw an error" {
+            { 
+                Disconnect-AzDevOps
+                Get-AzDevOpsEnvironmentAcls -ProjectId $env:ADO_PROJECT -EnvironmentId "test"
+            } | Should -Throw "Not connected to Azure DevOps. Run Connect-AzDevOps first"
+        }
+    }
+
+    Context " Get-AzDevOpsEnvironmentAcls on a protected environment" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $environments = Get-AzDevOpsEnvironments -Project $env:ADO_PROJECT
+            $environmentId = $environments[1].id
+            $environmentAcls = Get-AzDevOpsEnvironmentAcls -ProjectId $environments[1].project.id -EnvironmentId $environmentId
+        }
+
+        It " should return a list of environment acls" {
+            $environmentAcls | Should -Not -BeNullOrEmpty
+        }
+
+        It " should return a list of environment acls that are of type PSObject" {
+            $environmentAcls[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
+
+    Context " Get-AzDevOpsEnvironmentAcls with wrong parameters" {
+        It " should throw an error with a wrong PAT" {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT "wrong-pat"
+            { Get-AzDevOpsEnvironmentAcls -ProjectId $env:ADO_PROJECT -EnvironmentId "test" } | Should -Throw
+        }
+
+        It " should throw a 404 error with a wrong project and organization" {
+            Connect-AzDevOps -Organization 'wrong-org' -PAT $env:ADO_PAT
+            { Get-AzDevOpsEnvironmentAcls -ProjectId "wrong-project" -EnvironmentId "test" } | Should -Throw
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
+
+    Context " Get-AzDevOpsEnvironmentAcls with a ReadOnly token" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $environments = Get-AzDevOpsEnvironments -Project $env:ADO_PROJECT
+            $environmentId = $environments[1].id
+            Disconnect-AzDevOps
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT_READONLY -TokenType ReadOnly
+            $environmentAcls = Get-AzDevOpsEnvironmentAcls -ProjectId $environments[1].project.id -EnvironmentId $environmentId -WarningVariable warning
+        }
+
+        It " should return null or empty list of environment acls" {
+            $environmentAcls | Should -BeNullOrEmpty
+        }
+
+        It " should return a warning" {
+            $warning | Should -Not -BeNullOrEmpty
+        }
+
+        AfterAll {
+            Disconnect-AzDevOps
+        }
+    }
+
     Context " Export-AzDevOpsEnvironmentChecks without a connection" {
         It " should throw an error" {
             { 
