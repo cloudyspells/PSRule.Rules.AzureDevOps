@@ -226,7 +226,7 @@ in building the ruleset for this module.
 - [Azure.DevOps.Project.MainRepositoryAcl.ProjectValidUsers](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Project.MainRepositoryAcl.ProjectValidUsers.md)
 - [Azure.DevOps.Project.MainServiceConnectionAcl.ProjectValidUsers](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Project.MainServiceConnectionAcl.ProjectValidUsers.md)
 - [Azure.DevOps.Project.MainVariableGroupAcl.ProjectValidUsers](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Project.MainVariableGroupAcl.ProjectValidUsers.md)
-- [Azure.DevOps.Project.Visibility]
+- [Azure.DevOps.Project.Visibility](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Project.Visibility.md)
 - [Azure.DevOps.Repos.Branch.BranchPolicyAllowSelfApproval](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.Branch.BranchPolicyAllowSelfApproval.md)
 - [Azure.DevOps.Repos.Branch.BranchPolicyCommentResolution](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.Branch.BranchPolicyCommentResolution.md)
 - [Azure.DevOps.Repos.Branch.BranchPolicyEnforceLinkedWorkItems](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.Branch.BranchPolicyEnforceLinkedWorkItems.md)

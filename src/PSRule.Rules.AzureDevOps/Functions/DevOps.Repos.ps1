@@ -271,7 +271,7 @@ Export-ModuleMember -Function Get-AzDevOpsRepositoryAcls
     Repository name for Azure DevOps
 
     .PARAMETER Path
-    Path to file in repo
+    Path to file in repository
 
     .EXAMPLE
     Test-AzDevOpsFileExists -Project $Project -Repository $Repository -Path $Path

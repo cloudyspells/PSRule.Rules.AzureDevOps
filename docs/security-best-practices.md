@@ -71,9 +71,13 @@ The system manages permissions at different levels - individual, collection, pro
 
 - Only give users and services the minimum amount of access needed to perform their business functions.
 - Disable inheritance where possible. Due to the allow-by-default nature of inheritance, unexpected users can get access or permissions. For more information, read about [inheritance](https://learn.microsoft.com/en-us/azure/devops/organizations/security/about-permissions.md#permission-inheritance-and-security-groups).
+  > :o: [**Azure.DevOps.Pipelines.Core.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.InheritedPermissions.md)
+  > :o: [**Azure.DevOps.Pipelines.Environments.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Environments.InheritedPermissions.md)
   > :o: [**Azure.DevOps.Pipelines.Releases.Definition.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Releases.Definition.InheritedPermissions.md)
-  > [**Azure.DevOps.Repos.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.InheritedPermissions.md)
-  > [**Azure.DevOps.Pipelines.Core.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Pipelines.Core.InheritedPermissions.md)
+  > :o: [**Azure.DevOps.Repos.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Repos.InheritedPermissions.md)
+  > :o: [**Azure.DevOps.ServiceConnections.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.InheritedPermissions.md)
+  > :o: [**Azure.DevOps.Tasks.VariableGroup.InheritedPermissions**](../src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.Tasks.VariableGroup.InheritedPermissions.md)
+    
 - Learn more about permissions here:
   - [Permissions and role lookup guide](https://learn.microsoft.com/en-us/azure/devops/organizations/security/permissions-lookup-guide.md)
   - [Permissions, security groups, and service accounts reference](https://learn.microsoft.com/en-us/azure/devops/organizations/security/permissions.md)
@@ -108,9 +112,9 @@ See the following recommendations for assigning permissions to security groups a
 
 |**Do** :::image type="icon" source="../../media/icons/checkmark.png" border="false":::|**Don't** :::image type="icon" source="../../media/icons/delete-icon.png" border="false"::: |
 |---------|---------|
-|Use Azure Active Directory, Active Directory, or Windows security groups when you're managing lots of users.    | Don’t change the default permissions for the *Project Valid Users* group. This group can access and view project information.        |
+|Use Azure Active Directory, Active Directory, or Windows security groups when you're managing lots of users.    | Don’t change the default permissions for the *Project Valid Users* group. This group can access and view project information. :o: [**Azure.DevOps.`*.ProjectValidUsers**](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.ProjectValidUsers.md)      |
 |When you're adding teams, consider what permissions you want to assign to team members who need to create and modify area paths, iteration paths, and queries.   | Don't add users to multiple security groups that contain different permission levels. In certain cases, a *Deny* permission level may override an *Allow* permission level.        |
-|When you're adding many teams, consider creating a *Team Administrators* custom group where you allocate a subset of the permissions available to *Project Administrators*.     | Don't change the default assignments made to the *Project Valid Users* groups. If you remove or set *View instance-level information* to *Deny* for one of the *Project Valid Users* groups, no users in the group can access whatever project, collection, or deployment you set the permission on.        |
+|When you're adding many teams, consider creating a *Team Administrators* custom group where you allocate a subset of the permissions available to *Project Administrators*.     | Don't change the default assignments made to the *Project Valid Users* groups. If you remove or set *View instance-level information* to *Deny* for one of the *Project Valid Users* groups, no users in the group can access whatever project, collection, or deployment you set the permission on. :o: [**Azure.DevOps.`*.ProjectValidUsers**](src/PSRule.Rules.AzureDevOps/en/Azure.DevOps.ServiceConnections.ProjectValidUsers.md)       |
 |Consider granting the work item query folders *Contribute* permission to users or groups who require the ability to create and share work item queries for the project.    | Don't assign permissions that are noted as *Assign only to service accounts* to user accounts.        |
 |Keep groups as small as possible. Access should be restricted, and the groups should be frequently audited.    |         |
 |Take advantage of built-in roles and default to Contributor for developers. Admins get assigned to the Project Administrator security group for elevated permissions, allowing them to configure security permissions.|     |
