@@ -219,3 +219,4 @@ Rule 'Azure.DevOps.Repos.ProjectValidUsers' `
             }
         }
 }
+

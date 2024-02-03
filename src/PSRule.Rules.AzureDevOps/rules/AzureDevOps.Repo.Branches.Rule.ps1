@@ -122,3 +122,20 @@ Rule 'Azure.DevOps.Repos.Branch.BranchPolicyRequireBuild' `
         # Links 'https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops'
         $Assert.HasFieldValue(($TargetObject.BranchPolicy | Where-Object { $_.type.id -eq '0609b952-1397-4640-95ec-e00a01b2c241'}), "type.displayName", "Build")
 }
+
+# Synopsis: The branch should have a commit in the last 90 days
+Rule 'Azure.DevOps.Repos.Branch.CommitRecent' `
+    -Ref 'ADO-RB-014' `
+    -Type 'Azure.DevOps.Repo.Branch' `
+    -Tag @{ release = 'GA'} `
+    -Level Warning {
+        # Description: The branch should have a commit in the last 90 days
+        Reason 'The branch does not have a commit in the last 90 days.'
+        Recommend 'Consider merging the branch or deleting it.'
+        # Links: https://learn.microsoft.com/en-us/azure/devops/organizations/security/security-best-practices?view=azure-devops#repositories-and-branches
+        If ([datetime]$TargetObject.Stats.commit.committer.date -ge (Get-Date).AddDays(-($Configuration.GetValueOrDefault('lastCommitDays', 90)))) {
+            $Assert.Pass()
+        } else {
+            $Assert.Fail('The branch does not have a commit in the last 90 days.')
+        }
+}

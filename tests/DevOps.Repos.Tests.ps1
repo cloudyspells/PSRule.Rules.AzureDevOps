@@ -71,6 +71,20 @@ Describe "Functions: DevOps.Repos.Tests" {
         It " should return a list of branches" {
             $branches | Should -Not -BeNullOrEmpty
         }
+
+        It " should return a list of branches that are of type PSObject" {
+            $branches[0] | Should -BeOfType [PSCustomObject]
+        }
+
+        It " should return a list of branches that have a name" {
+            $branches[0].name | Should -Not -BeNullOrEmpty
+            $branches[0].name | Should -BeOfType [string]
+        }
+
+        It " should return a list of branches that have a commit" {
+            $branches[0].Stats.commit | Should -Not -BeNullOrEmpty
+            $branches[0].Stats.commit | Should -BeOfType [PSCustomObject]
+        }
     }
 
     Context " Get-AzDevOpsBranches with wrong parameters" {
