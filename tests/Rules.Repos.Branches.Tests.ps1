@@ -163,4 +163,18 @@ Describe "Azure.DevOps.Repos.Branch rules" {
             $ruleHits.Count | Should -Be 1;
         }
     }
+
+    # This rule is only checked for hits and not results as it is a pain to maintain at this time
+    # The rule has been tested for results manually and is working as expected
+    Context ' Azure.DevOps.Repos.Branch.CommitRecent' {
+        It ' should hit for targets named fail' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.Branch.CommitRecent' -and $_.TargetName -like '*psrule-fail-project.refs/heads/fail-branch' })
+            $ruleHits.Count | Should -Be 1;
+        }
+
+        It ' should hit for targets named success' {
+            $ruleHits = @($ruleResult | Where-Object { $_.RuleName -eq 'Azure.DevOps.Repos.Branch.CommitRecent' -and $_.TargetName -like '*repository-success.refs/heads/main' })
+            $ruleHits.Count | Should -Be 1;
+        }
+    }
 }

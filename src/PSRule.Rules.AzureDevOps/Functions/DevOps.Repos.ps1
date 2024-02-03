@@ -75,10 +75,12 @@ Function Get-AzDevOpsBranches {
     $Organization = $script:connection.Organization
     $header = $script:connection.GetHeader()
     Write-Verbose "Getting branches for repo $Repository in project $Project"
-    $uri = "https://dev.azure.com/$Organization/_apis/git/repositories/$Repository/refs?filter=heads&api-version=7.2-preview.2"
+    $uri = "https://dev.azure.com/$Organization/_apis/git/repositories/$Repository/refs?filter=heads&includeStatuses=true&latestStatusesOnly=true&api-version=7.2-preview.2"
+    $statsUri = "https://dev.azure.com/$Organization/$Project/_apis/git/repositories/$Repository/stats/branches?api-version=7.2-preview.2"
     Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
+        $statsResponse = Invoke-RestMethod -Uri $statsUri -Method Get -Headers $header
         # If the response is a string and not an object, throw an exception for authentication failure or project not found
         if ($response -is [string]) {
             throw "Authentication failed or project not found"
@@ -87,7 +89,13 @@ Function Get-AzDevOpsBranches {
     catch {
         throw $_.Exception.Message
     }
-    return @($response.value)
+    $result = @($response.value | ForEach-Object {
+        $branch = $_
+        $branchStats = $statsResponse.value | Where-Object {$_.name -eq ($branch.name -replace "refs/heads/","")}
+        $branch | Add-Member -MemberType NoteProperty -Name Stats -Value $branchStats
+        $branch
+    })
+    return @($result)
 }
 Export-ModuleMember -Function Get-AzDevOpsBranches
 

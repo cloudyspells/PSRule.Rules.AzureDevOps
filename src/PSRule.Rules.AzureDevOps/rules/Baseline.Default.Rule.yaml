@@ -11,3 +11,4 @@ spec:
     ghasBlockPushesEnabled: true
     branchMinimumApproverCount: 1
     releaseMinimumProductionApproverCount: 1
+    lastCommitDays: 90
