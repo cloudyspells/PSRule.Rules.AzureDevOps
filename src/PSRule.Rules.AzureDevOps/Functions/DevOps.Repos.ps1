@@ -80,7 +80,6 @@ Function Get-AzDevOpsBranches {
     Write-Verbose "URI: $uri"
     try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $header
-        $statsResponse = Invoke-RestMethod -Uri $statsUri -Method Get -Headers $header
         # If the response is a string and not an object, throw an exception for authentication failure or project not found
         if ($response -is [string]) {
             throw "Authentication failed or project not found"
@@ -89,9 +88,19 @@ Function Get-AzDevOpsBranches {
     catch {
         throw $_.Exception.Message
     }
+    try {
+        $statsResponse = Invoke-RestMethod -Uri $statsUri -Method Get -Headers $header
+    }
+    catch {
+        $statsResponse = $null
+    }
     $result = @($response.value | ForEach-Object {
         $branch = $_
-        $branchStats = $statsResponse.value | Where-Object {$_.name -eq ($branch.name -replace "refs/heads/","")}
+        If($null -eq $statsResponse) {
+            $branchStats = $null
+        } else {
+            $branchStats = $statsResponse.value | Where-Object {$_.name -eq ($branch.name -replace "refs/heads/","")}
+        }
         $branch | Add-Member -MemberType NoteProperty -Name Stats -Value $branchStats
         $branch
     })

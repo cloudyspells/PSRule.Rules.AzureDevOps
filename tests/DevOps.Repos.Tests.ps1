@@ -87,6 +87,18 @@ Describe "Functions: DevOps.Repos.Tests" {
         }
     }
 
+    Context " Get-AzDevOpsBranches on an empty repository" {
+        BeforeAll {
+            Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
+            $repos = Get-AzDevOpsRepos -Project "empty-project"
+            $branches = Get-AzDevOpsBranches -Project "empty-project" -Repository $repos[0].id
+        }
+
+        It " should return an empty list of branches" {
+            $branches | Should -BeNullOrEmpty
+        }
+    }
+
     Context " Get-AzDevOpsBranches with wrong parameters" {
         It " should throw an error with a wrong PAT" {
             Connect-AzDevOps -Organization $env:ADO_ORGANIZATION -PAT $env:ADO_PAT
