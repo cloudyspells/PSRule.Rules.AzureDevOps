@@ -96,10 +96,10 @@ Function Get-AzDevOpsBranches {
     }
     $result = @($response.value | ForEach-Object {
         $branch = $_
-        If($null -ne $statsResponse) {
-            $branchStats = $statsResponse.value | Where-Object {$_.name -eq ($branch.name -replace "refs/heads/","")}
-        } else {
+        If($null -eq $statsResponse) {
             $branchStats = $null
+        } else {
+            $branchStats = $statsResponse.value | Where-Object {$_.name -eq ($branch.name -replace "refs/heads/","")}
         }
         $branch | Add-Member -MemberType NoteProperty -Name Stats -Value $branchStats
         $branch
