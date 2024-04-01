@@ -112,7 +112,9 @@ class AzureDevOpsConnection {
     {
         $header = @{}
         If($env:IDENTITY_HEADER) {
-            $header = @{ 'X-IDENTITY-HEADER' = "$env:IDENTITY_HEADER" }
+            $header = @{ 'X-IDENTITY-HEADER' = "$env:IDENTITY_HEADER" ; Metadata = 'true'}
+        } else {
+            $header = @{ Metadata = 'true' }
         }
         $response = Invoke-RestMethod -Uri $this.TokenEndpoint -Method Get -Headers $header
         $this.Token = "Bearer $($response.access_token)"
