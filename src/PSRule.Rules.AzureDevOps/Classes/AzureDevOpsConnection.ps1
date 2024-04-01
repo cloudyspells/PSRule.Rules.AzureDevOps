@@ -112,7 +112,7 @@ class AzureDevOpsConnection {
     {
         $header = @{}
         If($env:IDENTITY_HEADER) {
-            $header = @{ 'X-IDENTITY-HEADER' = "$env:IDENTITY_HEADER" }
+            $header = @{ 'X-IDENTITY-HEADER' = "$env:IDENTITY_HEADER" ; Metadata = 'true'}
         } else {
             $header = @{ Metadata = 'true' }
         }
